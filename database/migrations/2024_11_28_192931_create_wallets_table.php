@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unsignedBigInteger('balance')->default(0);
-            $table->unsignedBigInteger('bonus_balance')->default(0);
+            $table->unsignedBigInteger('ngn_balance')->default(0);
+            $table->unsignedBigInteger('usdt_balance')->default(0);
 
             $table->timestamps();
         });
