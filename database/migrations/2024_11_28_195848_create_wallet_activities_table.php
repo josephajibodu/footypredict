@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('type')->default('main')->comment('main, reserve');
+            $table->string('currency')->comment('ngn, usdt');
             $table->string('reason');
             $table->bigInteger('amount');
 

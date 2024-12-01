@@ -14,13 +14,17 @@ return new class extends Migration
         Schema::create('bet_matches', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('bet_id');
-            $table->unsignedBigInteger('match_id');
-            $table->enum('predicted_result', ['win', 'draw', 'loss']);
-            $table->enum('actual_result', ['win', 'draw', 'loss'])->nullable();
+            $table->foreignId('bet_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('sport_event_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->string('predicted_result', ['win', 'draw', 'loss'])->comment('BetOutcome');
+            $table->string('actual_result', ['win', 'draw', 'loss'])->nullable();
             $table->boolean('is_correct')->nullable();
-            $table->foreign('bet_id')->references('id')->on('bets')->cascadeOnDelete();
-            $table->foreign('match_id')->references('id')->on('matches')->cascadeOnDelete();
 
             $table->timestamps();
         });

@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
-            $table->decimal('amount', 10, 2);
-            $table->enum('method', ['bank_transfer', 'credit_card', 'paypal', 'cryptocurrency']);
-            $table->enum('status', ['pending', 'completed', 'failed']);
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->unsignedBigInteger('amount');
+            $table->string('method', ['bank_transfer', 'credit_card', 'paypal', 'cryptocurrency']);
+            $table->string('status', ['pending', 'completed', 'failed']);
             $table->string('transaction_reference')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
             $table->timestamps();
         });

@@ -14,13 +14,18 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('bet_id');
-            $table->decimal('amount', 10, 2);
-            $table->enum('type', ['stake', 'winnings']);
-            $table->enum('status', ['pending', 'completed', 'failed']);
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('bet_id')->references('id')->on('bets')->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('bet_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->string('reference');
+            $table->unsignedBigInteger('amount');
+            $table->string('type', ['stake', 'winnings']);
+            $table->string('status', ['pending', 'completed', 'failed']);
 
             $table->timestamps();
         });

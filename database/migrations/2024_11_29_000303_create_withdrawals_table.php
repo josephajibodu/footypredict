@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->string('reference');
             $table->decimal('amount', 10, 2);
-            $table->enum('method', ['bank_transfer', 'paypal', 'cryptocurrency']);
-            $table->enum('status', ['pending', 'processing', 'completed', 'failed']);
+            $table->string('method', ['bank_transfer', 'paypal', 'cryptocurrency']);
+            $table->string('status', ['pending', 'processing', 'completed', 'failed']);
             $table->string('withdrawal_address')->nullable();
-            $table->string('transaction_reference')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
             $table->timestamps();
         });
