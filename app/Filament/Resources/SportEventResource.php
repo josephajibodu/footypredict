@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\SportEventStatus;
+use App\Enums\SportEventType;
 use App\Filament\Resources\SportEventResource\Pages;
 use App\Filament\Resources\SportEventResource\RelationManagers;
 use App\Models\SportEvent;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,77 +15,109 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\HtmlString;
 
 class SportEventResource extends Resource
 {
     protected static ?string $model = SportEvent::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
     protected static ?string $navigationLabel = 'Matches';
+
+    protected static ?string $label = 'Match';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('match_date')
-                    ->required(),
-                Forms\Components\TextInput::make('kickoff_time')
-                    ->required(),
-                Forms\Components\TextInput::make('team1_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('team2_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('league_id')
-                    ->numeric(),
-                Forms\Components\TextInput::make('sport')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
-                Forms\Components\TextInput::make('team1_score')
-                    ->numeric(),
-                Forms\Components\TextInput::make('team2_score')
-                    ->numeric(),
-                Forms\Components\TextInput::make('season'),
-                Forms\Components\TextInput::make('match_week')
-                    ->numeric(),
-            ]);
+                Forms\Components\Section::make()
+                    ->schema([
+
+                        Forms\Components\Select::make('team1_id')
+                            ->relationship(name: 'team1', titleAttribute: 'short_name')
+                            ->searchable(['name', 'short_name', 'short_code'])
+                            ->required(),
+                        Forms\Components\Select::make('team2_id')
+                            ->relationship(name: 'team2', titleAttribute: 'short_name')
+                            ->searchable(['name', 'short_name', 'short_code'])
+                            ->required(),
+
+                        Forms\Components\TextInput::make('team1_score')
+                            ->hidden(fn() => $form->getOperation() === 'create')
+                            ->numeric(),
+
+                        Forms\Components\TextInput::make('team2_score')
+                            ->hidden(fn() => $form->getOperation() === 'create')
+                            ->numeric(),
+
+                    ])->columns(2),
+
+                Forms\Components\Group::make([
+                    Forms\Components\Section::make()
+                        ->schema([
+
+                            Forms\Components\DatePicker::make('match_date')
+                                ->required(),
+                            Forms\Components\TimePicker::make('kickoff_time')
+                                ->required(),
+                            Forms\Components\Select::make('status')
+                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->options(SportEventStatus::class)
+                                ->required(),
+
+                        ])->columnSpan(6),
+
+                    Forms\Components\Section::make()
+                        ->schema([
+
+                            Forms\Components\Select::make('league_id')
+                                ->relationship(name: 'league', titleAttribute: 'short_code')
+                                ->preload()
+                                ->searchable(['name', 'short_code']),
+                            Forms\Components\Select::make('sport')
+                                ->disabled()
+                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->options(SportEventType::class)
+                                ->required(),
+                            Forms\Components\TextInput::make('season')
+                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->helperText('Optional'),
+                            Forms\Components\TextInput::make('match_week')
+                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->helperText('Optional')
+                                ->numeric(),
+
+                        ])->columnSpan(6),
+                ])->columns(12)
+                ->columnSpan(12),
+
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('match_date')
                     ->date()
+                    ->description(fn(SportEvent $record) => Carbon::parse($record->kickoff_time)->format('H:i a'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('kickoff_time'),
-                Tables\Columns\TextColumn::make('team1_id')
+                Tables\Columns\TextColumn::make('team1.short_name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('team2_id')
+                Tables\Columns\TextColumn::make('team2.short_name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('league_id')
+                Tables\Columns\TextColumn::make('league.short_code')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sport')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('team1_score')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('team2_score')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('season')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('match_week')
-                    ->numeric()
-                    ->sortable(),
+                    ->badge(),
+                Tables\Columns\TextColumn::make('score')
+                    ->alignCenter()
+                    ->formatStateUsing(fn(SportEvent $record) => "$record->team1_score : $record->team2_score"),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

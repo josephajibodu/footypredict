@@ -7,7 +7,9 @@ use App\Enums\SportEventStatus;
 use App\Enums\SportEventType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -63,6 +65,21 @@ class SportEvent extends Model
             'sport' => SportEventType::class,
             'status' => SportEventStatus::class,
         ];
+    }
+
+    public function team1(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function team2(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function league(): BelongsTo
+    {
+        return $this->belongsTo(League::class);
     }
 
     public function options(): HasMany
