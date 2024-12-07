@@ -23,29 +23,48 @@ class TeamResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required(),
-                Forms\Components\TextInput::make('short_name'),
-                Forms\Components\TextInput::make('short_code'),
-                Forms\Components\TextInput::make('logo_url'),
-                Forms\Components\TextInput::make('country'),
-            ]);
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required(),
+                        Forms\Components\TextInput::make('short_name')
+                            ->required(),
+                        Forms\Components\TextInput::make('short_code')
+                            ->required(),
+                        Forms\Components\TextInput::make('country')
+                            ->required(),
+                    ])->columnSpan(['md' => 8]),
+
+                Forms\Components\Section::make('League Logo')
+                    ->schema([
+                        Forms\Components\FileUpload::make('logo_url')
+                            ->label('')
+                            ->required()
+                            ->disk('public')
+                            ->directory('leagues')
+                            ->avatar()
+                            ->imageEditor()
+                            ->circleCropper()
+                            ->maxSize(20),
+                    ])->columnSpan(['md' => 4]),
+            ])->columns('12');
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
             ->columns([
+                Tables\Columns\ImageColumn::make('logo_url')
+                    ->label("")
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('short_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('short_code')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('logo_url')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('country')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('country'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

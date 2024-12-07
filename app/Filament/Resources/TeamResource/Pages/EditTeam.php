@@ -16,4 +16,9 @@ class EditTeam extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function getSavedNotificationMessage(): ?string
+    {
+        return "Team details updated";
+    }
 }
