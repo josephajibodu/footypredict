@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum SportEventType
+enum SportEventType: string
 {
-    //
+    case Football = 'football';
 }
