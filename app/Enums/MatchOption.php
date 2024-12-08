@@ -2,8 +2,12 @@
 
 namespace App\Enums;
 
+use App\Traits\HasValues;
+
 enum MatchOption: string
 {
+    use HasValues;
+
     case HOME_WIN = 'home_win';
     case AWAY_WIN = 'away_win';
     case DRAW = 'draw';

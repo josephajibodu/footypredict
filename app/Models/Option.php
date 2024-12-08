@@ -21,6 +21,10 @@ use Illuminate\Support\Carbon;
  */
 class Option extends Model
 {
+    protected $fillable = [
+        'type', 'value'
+    ];
+
     protected function casts(): array
     {
         return [

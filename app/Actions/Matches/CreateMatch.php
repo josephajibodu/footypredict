@@ -2,11 +2,13 @@
 
 namespace App\Actions\Matches;
 
+use App\Enums\MatchOption;
 use App\Enums\SportEventStatus;
 use App\Enums\SportEventType;
 use App\Models\SportEvent;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class CreateMatch
@@ -38,16 +40,27 @@ class CreateMatch
             throw new Exception('A match involving one or both of these teams already exists on this date.');
         }
 
-        return SportEvent::query()->create([
-            'match_date' => $matchDate,
-            'kickoff_time' => $kickoffTime,
-            'team1_id' => $data['team1_id'],
-            'team2_id' => $data['team2_id'],
-            'league_id' => $data['league_id'] ?? null,
-            'sport' => $data['sport'] ?? SportEventType::Football,
-            'status' => SportEventStatus::Pending,
-            'season' => $data['season'] ?? null,
-            'match_week' => $data['match_week'] ?? null,
-        ]);
+        return DB::transaction(function () use ($data, $kickoffTime, $matchDate) {
+            $event = SportEvent::query()->create([
+                'match_date' => $matchDate,
+                'kickoff_time' => $kickoffTime,
+                'team1_id' => $data['team1_id'],
+                'team2_id' => $data['team2_id'],
+                'league_id' => $data['league_id'] ?? null,
+                'sport' => $data['sport'] ?? SportEventType::Football,
+                'status' => SportEventStatus::Pending,
+                'season' => $data['season'] ?? null,
+                'match_week' => $data['match_week'] ?? null,
+            ]);
+
+            foreach (MatchOption::values() as $option) {
+                $event->options()->create([
+                    'type' => $option,
+                    'value' => null
+                ]);
+            }
+
+            return $event;
+        });
     }
 }

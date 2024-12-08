@@ -15,7 +15,7 @@ export default function Welcome() {
         <>
             <Head title="Welcome" />
             <div className="bg-purple-800 text-white dark:bg-black dark:text-white/50 h-screen flex flex-col gap-8 items-center justify-center">
-                <h1 className="text-4xl">Coming Soon</h1>
+                <h1 className="text-4xl border-s-2 border-orange-600 dark:border-orange-300">Coming Soon</h1>
 
                 <Card>
                     <CardHeader>

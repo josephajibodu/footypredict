@@ -1,1 +1,0 @@
-import{j as e,Y as t}from"./app-AIq8ta9C.js";function s(){return e.jsxs(e.Fragment,{children:[e.jsx(t,{title:"Welcome"}),e.jsx("div",{className:"bg-purple-800 text-white dark:bg-black dark:text-white/50 h-screen flex items-center justify-center",children:e.jsx("h1",{className:"text-4xl",children:"Coming Soon"})})]})}export{s as default};
