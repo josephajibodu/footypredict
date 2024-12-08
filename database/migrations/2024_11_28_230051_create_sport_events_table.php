@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('season')->nullable();
             $table->integer('match_week')->nullable();
 
+            $table->unique(['match_date', 'team1_id', 'team2_id'], 'unique_match_per_day');
+
             $table->timestamps();
         });
     }

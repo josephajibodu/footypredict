@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
+use Illuminate\Validation\ValidationException;
 
 class SportEventResource extends Resource
 {
@@ -74,7 +75,8 @@ class SportEventResource extends Resource
                             Forms\Components\Select::make('league_id')
                                 ->relationship(name: 'league', titleAttribute: 'short_code')
                                 ->preload()
-                                ->searchable(['name', 'short_code']),
+                                ->searchable(['name', 'short_code'])
+                                ->required(),
                             Forms\Components\Select::make('sport')
                                 ->disabled()
                                 ->hidden(fn() => $form->getOperation() === 'create')
