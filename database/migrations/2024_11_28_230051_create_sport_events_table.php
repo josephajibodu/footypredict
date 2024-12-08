@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('status')->default(SportEventStatus::Pending);
             $table->integer('team1_score')->nullable();
             $table->integer('team2_score')->nullable();
+            $table->string('main_outcome')->nullable();
 
             $table->string('season')->nullable();
             $table->integer('match_week')->nullable();

@@ -35,6 +35,7 @@ class OptionsRelationManager extends RelationManager
                     ->label('')
                     ->formatStateUsing(fn(MatchOption $state) => $state->label()),
                 Tables\Columns\SelectColumn::make('value')
+                    ->disabled()
                     ->label('Outcome')
                     ->alignCenter()
                     ->options([

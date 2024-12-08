@@ -21,19 +21,4 @@ class EditSportEvent extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-
-    protected function afterSave(): Model
-    {
-        try {
-            return app(UpdateScores::class)($this->record);
-        } catch (Exception $e) {
-            Notification::make()
-                ->danger()
-                ->title('Match cannot be updated')
-                ->body($e->getMessage())
-                ->send();
-
-            $this->halt();
-        }
-    }
 }

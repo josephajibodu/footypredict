@@ -16,10 +16,14 @@ class UpdateScores
      * Update the scores and set the match outcomes.
      *
      * @param SportEvent|Model $match
+     * @param array $data
      * @return SportEvent
      */
-    public function __invoke(SportEvent|Model $match): SportEvent
+    public function __invoke(SportEvent|Model $match, array $data): SportEvent
     {
+        $match->team1_score = $data['team1_score'];
+        $match->team2_score = $data['team2_score'];
+
         // Determine the outcome
         $outcome = $this->determineOutcome($match->team1_score, $match->team2_score);
 
