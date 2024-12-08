@@ -19,6 +19,8 @@ class LeagueResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
+    protected static ?string $navigationGroup = 'Match';
+
     public static function form(Form $form): Form
     {
         return $form

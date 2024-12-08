@@ -24,6 +24,8 @@ class SportEventResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
+    protected static ?string $navigationGroup = 'Match';
+
     protected static ?string $navigationLabel = 'Matches';
 
     protected static ?string $label = 'Match';
