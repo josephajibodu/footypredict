@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+ use App\Enums\UserGender;
  use Carbon\Carbon;
  use Database\Factories\UserFactory;
  use Filament\Models\Contracts\HasName;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Database\Eloquent\Casts\Attribute;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,9 +20,10 @@ use Illuminate\Notifications\Notifiable;
   * @property int $id                The unique identifier for the user.
   * @property string $first_name      The first name of the user.
   * @property string $last_name       The last name of the user.
+  * @property-read string $full_name
   * @property string $username        The unique username of the user.
   * @property string|null $mobile_number The mobile number of the user.
-  * @property string|null $gender      The gender of the user (male, female, other).
+  * @property UserGender|null $gender      The gender of the user (male, female, other).
   * @property string $email           The email address of the user.
   * @property Carbon|null $email_verified_at The timestamp when the email was verified.
   * @property string $nationality     The nationality of the user.
@@ -63,6 +66,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'remember_token',
     ];
 
+    public function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "$this->first_name $this->last_name",
+        );
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -73,6 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'gender' => UserGender::class
         ];
     }
 

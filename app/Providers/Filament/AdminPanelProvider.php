@@ -38,7 +38,12 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\FilamentInfoWidget::class,
+                // Today's match count
+                // Today's bet count
+                // Today's won bets
+                // Today's lost bets
+                // Currently available matches today
             ])
             ->middleware([
                 EncryptCookies::class,

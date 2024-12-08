@@ -141,7 +141,10 @@ class SportEventResource extends Resource
                                 $data['match_date'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('match_date', $date),
                             );
-                    })
+                    }),
+
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(SportEventStatus::class)
             ],  layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
