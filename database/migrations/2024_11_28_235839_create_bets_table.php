@@ -14,13 +14,10 @@ return new class extends Migration
         Schema::create('bets', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->unsignedBigInteger('stake');
             $table->unsignedBigInteger('potential_winnings');
-            $table->string('status', ['pending', 'won', 'lost']);
+            $table->string('status');
 
             $table->timestamps();
         });

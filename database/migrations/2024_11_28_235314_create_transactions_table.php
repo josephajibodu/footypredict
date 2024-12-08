@@ -18,14 +18,11 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('bet_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->string('reference');
+            $table->string('reference')->unique();
             $table->unsignedBigInteger('amount');
-            $table->string('type', ['stake', 'winnings']);
-            $table->string('status', ['pending', 'completed', 'failed']);
+            $table->unsignedBigInteger('balance')->comment('balance after the transaction');
+            $table->string('type');
+            $table->string('status');
 
             $table->timestamps();
         });

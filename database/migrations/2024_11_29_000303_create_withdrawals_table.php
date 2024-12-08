@@ -14,14 +14,7 @@ return new class extends Migration
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->string('reference');
-            $table->decimal('amount', 10, 2);
-            $table->string('method', ['bank_transfer', 'paypal', 'cryptocurrency']);
-            $table->string('status', ['pending', 'processing', 'completed', 'failed']);
+            $table->string('method');
             $table->string('withdrawal_address')->nullable();
 
             $table->timestamps();
