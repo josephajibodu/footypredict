@@ -130,8 +130,19 @@ class SportEventResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\Filter::make('match_date')
+                    ->form([
+                        Forms\Components\DatePicker::make('match_date')
+                            ->default(today()),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['match_date'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('match_date', $date),
+                            );
+                    })
+            ],  layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
