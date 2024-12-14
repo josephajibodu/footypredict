@@ -1,0 +1,1 @@
+import{j as e,M as r}from"./app-11ZZ8o8c.js";import{A as o}from"./AuthenticatedLayout-BmVU9bKf.js";function s(){return e.jsx(e.Fragment,{children:e.jsx(r,{title:"Welcome"})})}s.layout=t=>e.jsx(o,{children:t});export{s as default};
