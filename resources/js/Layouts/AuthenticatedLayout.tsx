@@ -9,8 +9,8 @@ export default function Authenticated({
     const { url } = usePage();
 
     return (
-        <div className="flex h-screen flex-col bg-gray-100 dark:bg-gray-900">
-            <header className="fixed left-0 right-0 flex items-center justify-between bg-white px-2 py-2">
+        <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+            <header className="fixed left-0 right-0 z-10 flex items-center justify-between px-2 py-2 bg-white">
                 <h3 className="font-bold">FootyPredict</h3>
                 <div>
                     <Button variant={'outline'}>NGN 7,543.76</Button>
@@ -19,7 +19,7 @@ export default function Authenticated({
             <main className="relative flex-1 overflow-y-scroll pt-[56px]">
                 {children}
             </main>
-            <nav className="border-b border-gray-100 bg-black text-white dark:bg-gray-800">
+            <nav className="text-white bg-black border-b border-gray-100 dark:bg-gray-800">
                 <ul className="flex items-center justify-between">
                     <li>
                         <Link

@@ -3,7 +3,7 @@ import EventSelectorGroup from './EventSelectorGroup';
 
 export default function SingleEvent({ sn }: { sn: string }) {
     return (
-        <div className="flex items-center justify-between border-b py-2">
+        <div className="flex items-center justify-between py-2 border-b">
             <div className="flex items-center">
                 <span className="w-8 font-bold">{sn}</span>
                 <div className="flex flex-col">

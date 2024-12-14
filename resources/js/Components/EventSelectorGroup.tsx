@@ -12,6 +12,7 @@ export default function EventSelectorGroup({
             {children.map((child, index) => {
                 // Clone each child and pass down props to manage state
                 return React.cloneElement(child, {
+                    key: index,
                     selected: activeIndex === index,
                     onChange: (value: boolean) => {
                         setActiveIndex(value ? index : null);
