@@ -16,7 +16,7 @@ export default function Authenticated({
                     <Button variant={'outline'}>NGN 7,543.76</Button>
                 </div>
             </header>
-            <main className="flex-1 overflow-y-scroll pt-[56px]">
+            <main className="relative flex-1 overflow-y-scroll pt-[56px]">
                 {children}
             </main>
             <nav className="border-b border-gray-100 bg-black text-white dark:bg-gray-800">

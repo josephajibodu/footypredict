@@ -1,3 +1,4 @@
+import Betslip from '@/Components/Betslip';
 import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
@@ -28,6 +29,8 @@ export default function Events() {
                     <SingleEvent key={index} sn={(index + 1).toString()} />
                 ))}
             </div>
+
+            <Betslip />
         </>
     );
 }
