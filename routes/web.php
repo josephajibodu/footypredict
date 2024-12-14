@@ -15,7 +15,7 @@ Route::get('/', function () {
 });
 
 Route::get('/events', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Events');
 })->name('events');
 
 Route::get('/bets', function () {
