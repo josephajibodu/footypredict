@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bet_matches', function (Blueprint $table) {
+        Schema::create('bet_sport_event', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('bet_id')
@@ -22,8 +22,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('predicted_result', ['win', 'draw', 'loss'])->comment('BetOutcome');
-            $table->string('actual_result', ['win', 'draw', 'loss'])->nullable();
+            $table->foreignId('selected_option_id')->constrained('options')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('outcome_option_id')->constrained('options')->cascadeOnDelete()->cascadeOnUpdate();
             $table->boolean('is_correct')->nullable();
 
             $table->timestamps();

@@ -16,8 +16,9 @@ return new class extends Migration
 
             $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->unsignedBigInteger('stake');
+            $table->unsignedInteger('multiplier');
             $table->unsignedBigInteger('potential_winnings');
-            $table->string('status');
+            $table->string('bet_status');
 
             $table->timestamps();
         });
