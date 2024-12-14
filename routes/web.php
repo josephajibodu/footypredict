@@ -14,6 +14,18 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/events', function () {
+    return Inertia::render('Welcome');
+})->name('events');
+
+Route::get('/bets', function () {
+    return Inertia::render('Welcome');
+})->name('bets');
+
+Route::get('/wallet', function () {
+    return Inertia::render('Welcome');
+})->name('wallet');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
