@@ -1,7 +1,7 @@
 import Betslip from '@/Components/Betslip';
 import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Head, InertiaLinkProps, Link, usePage} from '@inertiajs/react';
 import { ReactNode } from 'react';
 import {
     Avatar,
@@ -11,29 +11,47 @@ import {
 import {ArrowRight, ChevronRight, Lock, LogOut, Shield, UserCog} from "lucide-react";
 import {Badge} from "@/Components/ui/badge";
 
-export default function Settings() {
-    const links = [
-        {
-            label: 'Edit Profile',
-            icon: UserCog,
-            url: route('profile.edit')
-        },
-        {
-            label: 'Password',
-            icon: Lock,
-            url: route('profile.edit')
-        },
-        {
-            label: 'Privacy Policy',
-            icon: Shield,
-            url: route('profile.edit')
-        },
-        {
-            label: 'Log Out',
-            icon: LogOut,
-            url: route('profile.edit')
+interface ILink {
+    label: string,
+    icon: ReactNode,
+    props: InertiaLinkProps
+}
+
+const links: ILink[] = [
+    {
+        label: 'Edit Profile',
+        icon: <UserCog size={18} />,
+        props: {
+            href: route('profile.edit'),
         }
-    ];
+    },
+    {
+        label: 'Password',
+        icon: <Lock size={18} />,
+        props: {
+            href: route('profile.edit'),
+        }
+    },
+    {
+        label: 'Privacy Policy',
+        icon: <Shield size={18} />,
+        props: {
+            href: route('profile.edit'),
+        }
+    },
+    {
+        label: 'Log Out',
+        icon: <LogOut size={18} />,
+        props: {
+            href: route('logout'),
+            method: 'post',
+            as: 'post'
+        }
+    }
+];
+
+export default function Settings() {
+    const {auth} = usePage().props;
 
     return (
         <>
@@ -55,20 +73,24 @@ export default function Settings() {
                     <h1 className="font-bold text-lg">Setting</h1>
 
                     <ul>
-                        {links.map((link, index) => (
-                            <li key={index}>
-                                <div className="flex justify-between items-center gap-4 py-2">
+                        {links.map((link, index) => {
+                            if (link.props.href.includes('logout')) return null;
+
+                            return <li key={index}>
+                                <Link { ...(link.props || {})} className={"w-full"}>
+                                    <div className="flex justify-between items-center gap-4 py-2">
                                     <span className="size-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
-                                        <link.icon size={18} />
+                                        {link.icon}
                                     </span>
 
-                                    <div className="flex gap-4 items-center flex-1 justify-between border-b py-4">
-                                        <span>{link.label}</span>
-                                        <ChevronRight />
+                                        <div className="flex gap-4 items-center flex-1 justify-between border-b py-4">
+                                            <span>{link.label}</span>
+                                            <ChevronRight />
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
                             </li>
-                        ))}
+                        })}
                     </ul>
                 </div>
             </div>
