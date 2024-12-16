@@ -5,21 +5,24 @@ import { PropsWithChildren, ReactNode } from 'react';
 
 export default function Authenticated({
     children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+    showHeader = true
+}: PropsWithChildren<{ showHeader?: boolean }>) {
     const { url } = usePage();
 
     return (
         <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
-            <header className="fixed left-0 right-0 z-10 flex items-center justify-between px-2 py-2 bg-white">
+            {showHeader && <header className="fixed left-0 right-0 z-10 flex items-center justify-between px-2 py-2 bg-white">
                 <h3 className="font-bold">FootyPredict</h3>
                 <div>
                     <Button variant={'outline'}>NGN 7,543.76</Button>
                 </div>
-            </header>
-            <main className="relative flex-1 overflow-y-scroll pt-[56px]">
+            </header>}
+            <main className={clsx("relative flex-1 overflow-y-scroll", {
+                "pt-[56px]": showHeader
+            })}>
                 {children}
             </main>
-            <nav className="text-white bg-black border-b border-gray-100 dark:bg-gray-800">
+            <nav className="text-white bg-black border-b border-gray-100 dark:bg-gray-800 fixed bottom-0 right-0 left-0">
                 <ul className="flex items-center justify-between">
                     <li>
                         <Link

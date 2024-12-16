@@ -9,9 +9,10 @@ import {
 } from '@/Components/ui/drawer';
 import { useState } from 'react';
 import { Button } from './ui/button';
+import {Input} from "@/Components/ui/input";
 
 export default function Betslip() {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const events = Array.from({ length: 20 }, (_, i) => i + 1);
 
@@ -30,60 +31,23 @@ export default function Betslip() {
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerContent className="h-[90%]">
                     <DrawerHeader>
-                        <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                        <DrawerTitle>Bet slip</DrawerTitle>
                         <DrawerDescription>
-                            This action cannot be undone.
+                            Selected matches will appear here
                         </DrawerDescription>
                     </DrawerHeader>
                     <div className="flex-1 p-4 overflow-y-auto bg-white">
                         <div className="max-w-md mx-auto space-y-4">
-                            <div
-                                aria-hidden
-                                className="mx-auto mb-8 h-1.5 w-12 flex-shrink-0 rounded-full bg-gray-300"
-                            />
-                            <DrawerTitle className="mb-4 font-medium text-gray-900">
-                                Ira Glass on Taste
-                            </DrawerTitle>
-                            <p className="text-gray-600">
-                                Nobody tells this to people who are beginners, I
-                                wish someone told me. All of us who do creative
-                                work, we get into it because we have good taste.
-                            </p>
-                            <p className="text-gray-600">
-                                But there is this gap. For the first couple
-                                years you make stuff, it’s just not that good.
-                                It’s trying to be good, it has potential, but
-                                it’s not. But your taste, the thing that got you
-                                into the game, is still killer. And your taste
-                                is why your work disappoints you. A lot of
-                                people never get past this phase, they quit.{' '}
-                            </p>
-                            <p className="text-gray-600">
-                                Most people I know who do interesting, creative
-                                work went through years of this. We know our
-                                work doesn’t have this special thing that we
-                                want it to have. We all go through this. And if
-                                you are just starting out or you are still in
-                                this phase, you gotta know its normal and the
-                                most important thing you can do is do a lot of
-                                work
-                            </p>
-                            <p className="text-gray-600">
-                                Put yourself on a deadline so that every week
-                                you will finish one story. It is only by going
-                                through a volume of work that you will close
-                                that gap, and your work will be as good as your
-                                ambitions. And I took longer to figure out how
-                                to do this than anyone I’ve ever met. It’s gonna
-                                take awhile. It’s normal to take awhile. You’ve
-                                just gotta fight your way through.
-                            </p>
+
                         </div>
                     </div>
                     <DrawerFooter>
-                        <Button>Submit</Button>
+                        <div className="flex gap-4">
+                            <Input />
+                            <Button>Place Bet</Button>
+                        </div>
                         <DrawerClose>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="outline">Close</Button>
                         </DrawerClose>
                     </DrawerFooter>
                 </DrawerContent>

@@ -23,7 +23,7 @@ Route::get('/bets', function () {
 })->name('bets');
 
 Route::get('/wallet', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Wallet');
 })->name('wallet');
 
 Route::get('/dashboard', function () {
