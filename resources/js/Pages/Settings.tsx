@@ -74,7 +74,7 @@ export default function Settings() {
 
                     <ul>
                         {links.map((link, index) => {
-                            if (link.props.href.includes('logout')) return null;
+                            if (link.props.href.includes('logout') && !auth?.user) return null;
 
                             return <li key={index}>
                                 <Link { ...(link.props || {})} className={"w-full"}>

@@ -103,7 +103,9 @@ export default function Login({
                </div>
 
                <div className="py-4 text-center">
-                   <Button className="w-full" variant='outline'>Create new account</Button>
+                   <Button asChild className="w-full" variant='outline'>
+                       <Link href={route('register')}>Create new account</Link>
+                   </Button>
                </div>
            </div>
         </>
