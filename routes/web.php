@@ -22,10 +22,6 @@ Route::get('/wallet', function () {
     return Inertia::render('Wallet');
 })->name('wallet');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::prefix('settings')->group(function () {
     Route::get('/', SettingController::class)->name('settings');
 
