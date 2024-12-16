@@ -43,7 +43,7 @@ export default function Betslip() {
                     </div>
                     <DrawerFooter>
                         <div className="flex gap-4">
-                            <Input />
+                            <Input placeholder="500" />
                             <Button>Place Bet</Button>
                         </div>
                         <DrawerClose>

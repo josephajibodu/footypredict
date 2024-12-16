@@ -1,0 +1,80 @@
+import Betslip from '@/Components/Betslip';
+import SingleEvent from '@/Components/SingleEvent';
+import Authenticated from '@/Layouts/AuthenticatedLayout';
+import { Head } from '@inertiajs/react';
+import { ReactNode } from 'react';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/Components/ui/avatar"
+import {ArrowRight, ChevronRight, Lock, LogOut, Shield, UserCog} from "lucide-react";
+import {Badge} from "@/Components/ui/badge";
+
+export default function Settings() {
+    const links = [
+        {
+            label: 'Edit Profile',
+            icon: UserCog,
+            url: route('profile.edit')
+        },
+        {
+            label: 'Password',
+            icon: Lock,
+            url: route('profile.edit')
+        },
+        {
+            label: 'Privacy Policy',
+            icon: Shield,
+            url: route('profile.edit')
+        },
+        {
+            label: 'Log Out',
+            icon: LogOut,
+            url: route('profile.edit')
+        }
+    ];
+
+    return (
+        <>
+            <Head title="Events" />
+
+            <div className="flex flex-col h-full bg-primary">
+                {/* Header */}
+                <div className="bg-primary text-primary-foreground px-4 pt-8 pb-16 flex flex-col items-center">
+                    <Avatar className="size-24">
+                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                        <AvatarFallback>JA</AvatarFallback>
+                    </Avatar>
+                    <h3 className="mt-2 text-lg">Joseph O. Ajibodu</h3>
+                    <Badge variant='secondary' className="text-sm">@josephajibodu</Badge>
+                </div>
+
+                {/* Body */}
+                <div className="flex-1 rounded-t-2xl -mt-8 bg-white px-6 py-8">
+                    <h1 className="font-bold text-lg">Setting</h1>
+
+                    <ul>
+                        {links.map((link, index) => (
+                            <li key={index}>
+                                <div className="flex justify-between items-center gap-4 py-2">
+                                    <span className="size-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                                        <link.icon size={18} />
+                                    </span>
+
+                                    <div className="flex gap-4 items-center flex-1 justify-between border-b py-4">
+                                        <span>{link.label}</span>
+                                        <ChevronRight />
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+        </>
+    );
+}
+
+Settings.layout = (page: ReactNode) => <Authenticated showHeader={false}>{page}</Authenticated>;

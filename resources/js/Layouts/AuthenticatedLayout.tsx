@@ -1,23 +1,35 @@
 import { Button } from '@/Components/ui/button';
-import { Link, usePage } from '@inertiajs/react';
+import {Link, router, usePage} from '@inertiajs/react';
 import clsx from 'clsx';
 import { PropsWithChildren, ReactNode } from 'react';
+import {ChevronLeft} from "lucide-react";
 
 export default function Authenticated({
     children,
-    showHeader = true
-}: PropsWithChildren<{ showHeader?: boolean }>) {
+    showHeader = true,
+    canGoBack = false,
+    title
+}: PropsWithChildren<{ showHeader?: boolean, canGoBack?: boolean, title?: string }>) {
     const { url } = usePage();
+
+    const gotoWallet = () => {
+        router.visit(route('wallet'));
+    }
 
     return (
         <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+            {canGoBack && <header className="fixed left-0 right-0 z-10 h-14 flex items-center gap-4 px-2 py-2 bg-white">
+                <span onClick={() => window.history.back()}><ChevronLeft /></span>
+                <h2 className="text-lg">{title}</h2>
+            </header>}
+
             {showHeader && <header className="fixed left-0 right-0 z-10 flex items-center justify-between px-2 py-2 bg-white">
                 <h3 className="font-bold">FootyPredict</h3>
                 <div>
-                    <Button variant={'outline'}>NGN 7,543.76</Button>
+                    <Button variant={'outline'} onClick={gotoWallet}>NGN 7,543.76</Button>
                 </div>
             </header>}
-            <main className={clsx("relative flex-1 overflow-y-scroll", {
+            <main className={clsx("relative flex-1 overflow-y-scroll pb-12", {
                 "pt-[56px]": showHeader
             })}>
                 {children}
@@ -107,11 +119,11 @@ export default function Authenticated({
                     </li>
                     <li>
                         <Link
-                            href={route('profile.edit')}
+                            href={route('settings')}
                             className={clsx(
                                 'flex flex-col items-center px-4 py-2',
                                 {
-                                    'bg-gray-700': url.startsWith('/profile'),
+                                    'bg-gray-700': url.startsWith('/settings'),
                                 },
                             )}
                         >
