@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use App\Enums\MatchOption;
 use App\Enums\SportEventStatus;
 use App\Enums\SportEventType;
+use App\Models\Option;
 use App\Models\SportEvent;
+use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,84 +19,36 @@ class SportEventSeeder extends Seeder
      */
     public function run(): void
     {
-        $matchDate = Carbon::today(); // All matches will be on this date
+        $teamIds = Team::query()->pluck('id')->toArray();
 
-        $matches = [
-            [
-                'match_date' => $matchDate,
-                'kickoff_time' => '12:00:00',
-                'team1_id' => 1, // Arsenal
-                'team2_id' => 2, // Manchester United
-                'league_id' => 1,
-                'sport' => SportEventType::Football,
-                'status' => SportEventStatus::Pending,
-                'team1_score' => null,
-                'team2_score' => null,
-                'season' => '2023/2024',
-                'match_week' => 17,
-            ],
-            [
-                'match_date' => $matchDate,
-                'kickoff_time' => '14:00:00',
-                'team1_id' => 3,
-                'team2_id' => 4,
-                'league_id' => 1,
-                'sport' => SportEventType::Football,
-                'status' => SportEventStatus::Pending,
-                'team1_score' => null,
-                'team2_score' => null,
-                'season' => '2023/2024',
-                'match_week' => 18,
-            ],
-            [
-                'match_date' => $matchDate,
-                'kickoff_time' => '16:00:00',
-                'team1_id' => 5,
-                'team2_id' => 6,
-                'league_id' => 1,
-                'sport' => SportEventType::Football,
-                'status' => SportEventStatus::Pending,
-                'team1_score' => null,
-                'team2_score' => null,
-                'season' => '2023/2024',
-                'match_week' => 16,
-            ],
-            [
-                'match_date' => $matchDate,
-                'kickoff_time' => '18:00:00',
-                'team1_id' => 7,
-                'team2_id' => 8,
-                'league_id' => 1,
-                'sport' => SportEventType::Football,
-                'status' => SportEventStatus::Pending,
-                'team1_score' => null,
-                'team2_score' => null,
-                'season' => '2023/2024',
-                'match_week' => 15,
-            ],
-        ];
+        shuffle($teamIds);
 
-        foreach ($matches as $match) {
-            $match = SportEvent::query()->create($match);
+        for ($i = 0; $i < 16; $i += 2) {
+            // Skip if we don't have enough teams
+            if (!isset($teamIds[$i]) || !isset($teamIds[$i + 1])) {
+                break;
+            }
 
-            // Create 3 options for each match (1, X, 2)
+            // Create the sport event
+            $sportEvent = SportEvent::factory()->create([
+                'team1_id' => $teamIds[$i],
+                'team2_id' => $teamIds[$i + 1],
+                'kickoff_time' => sprintf('%02d:00:00', rand(12, 21)),
+            ]);
+
+            // Create the three standard options for each match
             $options = [
-                [
-                    'type' => MatchOption::HOME_WIN,
-                    'value' => null,
-                ],
-                [
-                    'type' => MatchOption::DRAW,
-                    'value' => null,
-                ],
-                [
-                    'type' => MatchOption::AWAY_WIN,
-                    'value' => null,
-                ]
+                MatchOption::HOME_WIN,
+                MatchOption::DRAW,
+                MatchOption::AWAY_WIN,
             ];
 
-            foreach ($options as $optionData) {
-                $match->options()->create($optionData);
+            foreach ($options as $option) {
+                Option::query()->create([
+                    'sport_event_id' => $sportEvent->id,
+                    'type' => $option,
+                    'value' => null,
+                ]);
             }
         }
     }

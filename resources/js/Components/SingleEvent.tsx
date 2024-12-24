@@ -1,25 +1,24 @@
 import EventSelector from './EventSelector';
 import EventSelectorGroup from './EventSelectorGroup';
+import {SportEvent} from "@/types";
+import dayjs from "dayjs";
 
-export default function SingleEvent({ sn }: { sn: string }) {
+export default function SingleEvent({ event, sn }: { event: SportEvent, sn: number }) {
     return (
         <div className="flex items-center justify-between py-2 border-b">
             <div className="flex items-center">
                 <span className="w-8 font-bold">{sn}</span>
                 <div className="flex flex-col">
                     <span className="text-sm text-gray-500">
-                        14/12/2024 18:30
+                        {dayjs(event.match_date).format('DD/MM/YYYY')} {dayjs(event.kickoff_time).format('hh:mma')}
                     </span>
-                    <span>Swansea</span>
-                    <span>Sunderland AFC</span>
+                    <span>{event.team1.name}</span>
+                    <span>{event.team2.name}</span>
                 </div>
             </div>
+
             <div className="w-48">
-                <EventSelectorGroup>
-                    <EventSelector>1</EventSelector>
-                    <EventSelector>X</EventSelector>
-                    <EventSelector>2</EventSelector>
-                </EventSelectorGroup>
+                <EventSelectorGroup />
             </div>
         </div>
     );

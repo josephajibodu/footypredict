@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SportEventController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -10,9 +11,7 @@ Route::get('/', function () {
     return redirect()->route('events');
 });
 
-Route::get('/events', function () {
-    return Inertia::render('Events');
-})->name('events');
+Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
 Route::get('/bets', function () {
     return Inertia::render('BetHistory');

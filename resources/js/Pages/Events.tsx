@@ -1,11 +1,16 @@
 import Betslip from '@/Components/Betslip';
 import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Head, usePage} from '@inertiajs/react';
 import { ReactNode } from 'react';
+import {PageProps, SportEvent} from "@/types";
+
+interface EventPageProps extends PageProps {
+    events: SportEvent[]
+}
 
 export default function Events() {
-    const events = Array.from({ length: 20 }, (_, i) => i + 1);
+    const { events } = usePage<EventPageProps>().props;
 
     return (
         <>
@@ -26,8 +31,8 @@ export default function Events() {
                     </div>
                 </div>
                 {/* Event */}
-                {events.map((_, index) => (
-                    <SingleEvent key={index} sn={(index + 1).toString()} />
+                {events.map((event, index) => (
+                    <SingleEvent key={index} event={event} sn={index + 1} />
                 ))}
             </div>
 
