@@ -3,7 +3,9 @@ import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, usePage} from '@inertiajs/react';
 import { ReactNode } from 'react';
-import {PageProps, SportEvent} from "@/types";
+import {BetOptions, PageProps, SportEvent} from "@/types";
+import {useAppDispatch} from "@/store/hooks";
+import {deselectEvent, selectEvent} from "@/store/eventSlice";
 
 interface EventPageProps extends PageProps {
     events: SportEvent[]
@@ -11,6 +13,19 @@ interface EventPageProps extends PageProps {
 
 export default function Events() {
     const { events } = usePage<EventPageProps>().props;
+
+    const dispatch = useAppDispatch();
+
+    const handleGameSelection = (event: SportEvent, value: BetOptions | null) => {
+        if (! value) {
+            dispatch(deselectEvent(event.id))
+        } else {
+            dispatch(selectEvent({
+                ...event,
+                option: value
+            }))
+        }
+    }
 
     return (
         <>
@@ -32,7 +47,7 @@ export default function Events() {
                 </div>
                 {/* Event */}
                 {events.map((event, index) => (
-                    <SingleEvent key={index} event={event} sn={index + 1} />
+                    <SingleEvent key={index} event={event} sn={index + 1} onChange={(value) => handleGameSelection(event, value)} />
                 ))}
             </div>
 

@@ -11,9 +11,6 @@ export interface SportEvent {
     id: number;
     match_date: string;
     kickoff_time: string;
-    team1_id: number;
-    team2_id: number;
-    league_id?: number | null;
     sport: string;
     status: "Pending" | "Completed" | "Cancelled";
     team1_score?: number | null;
@@ -24,6 +21,12 @@ export interface SportEvent {
 
     team1: Team,
     team2: Team
+}
+
+export type BetOptions = '1' | 'X' | '2';
+
+export interface SelectedSportEvent extends SportEvent {
+    option: BetOptions;
 }
 
 export interface Team {

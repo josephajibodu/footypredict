@@ -1,9 +1,10 @@
 import EventSelector from './EventSelector';
 import EventSelectorGroup from './EventSelectorGroup';
-import {SportEvent} from "@/types";
+import {BetOptions, SportEvent} from "@/types";
 import dayjs from "dayjs";
 
-export default function SingleEvent({ event, sn }: { event: SportEvent, sn: number }) {
+export default function SingleEvent({ event, sn, onChange }: { event: SportEvent, sn: number, onChange: (value: BetOptions | null) => void }) {
+
     return (
         <div className="flex items-center justify-between py-2 border-b">
             <div className="flex items-center">
@@ -18,7 +19,7 @@ export default function SingleEvent({ event, sn }: { event: SportEvent, sn: numb
             </div>
 
             <div className="w-48">
-                <EventSelectorGroup />
+                <EventSelectorGroup onChange={onChange} />
             </div>
         </div>
     );

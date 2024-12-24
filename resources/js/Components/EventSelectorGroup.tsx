@@ -1,12 +1,13 @@
 import React, { ReactElement, useState } from 'react';
 import {clsx} from "clsx";
+import {BetOptions} from "@/types";
 
-const betOptions = ['1', 'X', '2'];
+const betOptions: BetOptions[] = ['1', 'X', '2'];
 
 export default function EventSelectorGroup({
     onChange
 }: {
-    onChange?: (value: null | string) => void;
+    onChange?: (value: null | BetOptions) => void;
 }) {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
