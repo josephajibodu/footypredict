@@ -48,7 +48,7 @@ export default function Betslip() {
                     <div className="flex-1 p-4 overflow-y-auto bg-white">
                         <div className="max-w-md mx-auto space-y-4">
                             {events.map((sportEvent, index) => (
-                                <div className="flex items-center justify-between py-2 border-b">
+                                <div key={sportEvent.id} className="flex items-center justify-between py-2 border-b">
                                     <div className="flex items-center">
                                         <div className="flex flex-col">
                                             <span className="text-sm text-gray-500">
@@ -59,7 +59,11 @@ export default function Betslip() {
                                     </div>
 
                                     <div className="w-12 flex justify-between gap-2 h-full">
-                                        <Button onClick={() => handleRemoveSportEvent(sportEvent.id)} variant={'ghost'} className={'text-red-600'}>
+                                        <Button
+                                            onClick={() => handleRemoveSportEvent(sportEvent.id)}
+                                            variant={'ghost'}
+                                            className="text-red-600 active:bg-red-100 active:text-red-600"
+                                        >
                                             <Trash />
                                         </Button>
                                     </div>

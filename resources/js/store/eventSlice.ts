@@ -20,6 +20,12 @@ const sportEventSlice = createSlice({
 
             if (existingEventIndex === -1) {
                 state.selectedEvents.push(action.payload);
+            } else {
+                state.selectedEvents = state.selectedEvents.map((event, index) =>
+                    index === existingEventIndex
+                        ? { ...event, option: action.payload.option }
+                        : event
+                );
             }
         },
         deselectSportEvent: (state, action: PayloadAction<number>) => {

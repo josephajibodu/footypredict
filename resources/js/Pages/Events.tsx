@@ -2,7 +2,7 @@ import Betslip from '@/Components/Betslip';
 import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, usePage} from '@inertiajs/react';
-import { ReactNode } from 'react';
+import {ReactNode, useEffect, useMemo} from 'react';
 import {PageProps, SportEvent} from "@/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
@@ -33,10 +33,12 @@ export default function Events() {
         return selectedEvents.some((event) => event.id === eventId);
     };
 
-    const getSelectedOption = (eventId: number): MatchOption | null => {
-        const selectedEvent = selectedEvents.find((event) => event.id === eventId);
-        return selectedEvent ? selectedEvent.option : null;
-    };
+    const getSelectedOption = useMemo(() => {
+        return (eventId: number): MatchOption | undefined => {
+            const selectedEvent = selectedEvents.find((event) => event.id === eventId);
+            return selectedEvent ? selectedEvent.option : undefined;
+        };
+    }, [selectedEvents]);
 
     return (
         <>
@@ -50,10 +52,10 @@ export default function Events() {
                             <span>Events</span>
                         </div>
                     </div>
-                    <div className="flex justify-between w-48 gap-1 text-sm">
-                        <span>1(Home)</span>
-                        <span>X(Draw)</span>
-                        <span>2(Away)</span>
+                    <div className="flex justify-end w-48 gap-1 text-sm">
+                        <span className="w-14 text-center">1(Home)</span>
+                        <span className="w-14 text-center">X(Draw)</span>
+                        <span className="w-14 text-center">2(Away)</span>
                     </div>
                 </div>
                 {/* Event */}
@@ -63,7 +65,7 @@ export default function Events() {
                         event={event}
                         sn={index + 1}
                         onChange={(value) => handleGameSelection(event, value)}
-                        defaultOption={getSelectedOption(event.id)}
+                        betOption={getSelectedOption(event.id)}
                     />
                 ))}
             </div>

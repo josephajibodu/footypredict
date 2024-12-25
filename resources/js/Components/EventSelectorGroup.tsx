@@ -6,30 +6,29 @@ const betOptions = Object.values(MatchOption);
 
 export default function EventSelectorGroup({
     onChange,
-    defaultOption
+    option
 }: {
     onChange?: (value: null | MatchOption) => void;
-    defaultOption: MatchOption | null;
+    option?: MatchOption;
 }) {
-    const [selectedOption, setSelectedOption] = useState<string | null>(defaultOption);
 
     return (
-        <div className="flex w-full justify-between space-x-0.5">
+        <div className="flex w-full justify-end space-x-0.5">
             {betOptions.map((betOption, index) => (
                 <span
                     key={betOption}
                     className={clsx(
-                        'flex h-8 w-full items-center justify-center bg-gray-400 px-1 text-sm font-bold',
+                        'flex h-8 w-14 items-center justify-center bg-gray-400 px-1 text-sm font-bold',
                         {
-                            'bg-gray-900 text-white': betOption === selectedOption,
+                            'bg-gray-900 text-white': betOption === option,
+                            'rounded-s': index === 0,
+                            'rounded-e': index === betOptions.length - 1
                         },
                     )}
                     onClick={() => {
-                        if (selectedOption === betOption) {
-                            setSelectedOption(null);
+                        if (option === betOption) {
                             onChange && onChange(null);
                         } else {
-                            setSelectedOption(betOption);
                             onChange && onChange(betOption);
                         }
                     }}

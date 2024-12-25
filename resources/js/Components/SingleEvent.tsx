@@ -5,12 +5,12 @@ import {MatchOption} from "@/enums/MatchOption";
 
 export default function SingleEvent(
     {
-        event, sn, onChange, defaultOption
+        event, sn, onChange, betOption
     }: {
         event: SportEvent,
         sn: number,
         onChange: (value: MatchOption | null) => void,
-        defaultOption: MatchOption | null;
+        betOption?: MatchOption;
     }
 ) {
 
@@ -28,7 +28,7 @@ export default function SingleEvent(
             </div>
 
             <div className="w-48">
-                <EventSelectorGroup onChange={onChange} defaultOption={defaultOption}  />
+                <EventSelectorGroup onChange={onChange} option={betOption}  />
             </div>
         </div>
     );
