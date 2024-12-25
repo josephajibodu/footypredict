@@ -14,8 +14,10 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {Trash} from "lucide-react";
 import {MatchOptionLabels} from "@/enums/MatchOption";
 import {deselectSportEvent} from "@/store/eventSlice";
+import {router} from "@inertiajs/react";
 
 export default function Betslip() {
+    const [stake, setStake] = useState(500);
     const events = useAppSelector(state => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
@@ -23,6 +25,19 @@ export default function Betslip() {
 
     const handleRemoveSportEvent = (sportEventId: number) => {
         dispatch(deselectSportEvent(sportEventId))
+    };
+
+    const handlePlaceBet = () => {
+        const data = {
+            amount: stake,
+            events: events.map((event, index) => ({ event_id: event.id, bet_option: event.betOption}))
+        }
+
+        router.post(route('bets'), data, {
+            onSuccess: page => {
+                console.log('came back with this data: ', page)
+            }
+        });
     };
 
     return (
@@ -52,7 +67,7 @@ export default function Betslip() {
                                     <div className="flex items-center">
                                         <div className="flex flex-col">
                                             <span className="text-sm text-gray-500">
-                                                {MatchOptionLabels[sportEvent.option]}
+                                                {MatchOptionLabels[sportEvent.betOption]}
                                             </span>
                                             <span className="line-clamp-1">{sportEvent.team1.name} vs {sportEvent.team2.name}</span>
                                         </div>
@@ -73,8 +88,8 @@ export default function Betslip() {
                     </div>
                     <DrawerFooter>
                         <div className="flex gap-4">
-                            <Input placeholder="500" />
-                            <Button>Place Bet</Button>
+                            <Input type='number' step='0.01' value={stake} onChange={(e) => setStake(Number(e.target.value))} required placeholder="500" />
+                            <Button onClick={handlePlaceBet}>Place Bet</Button>
                         </div>
                         <DrawerClose>
                             <Button variant="outline">Close</Button>

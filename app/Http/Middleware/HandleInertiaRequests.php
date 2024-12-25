@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Settings\BetSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -30,6 +31,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $betSettings = app(BetSetting::class)->toArray();
         return [
             ...parent::share($request),
             'auth' => [
@@ -38,6 +40,9 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
+            ],
+            'settings' => [
+                'bet' => $betSettings
             ],
         ];
     }

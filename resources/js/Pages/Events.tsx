@@ -13,18 +13,23 @@ interface EventPageProps extends PageProps {
 }
 
 export default function Events() {
-    const { events } = usePage<EventPageProps>().props;
+    const { events, settings } = usePage<EventPageProps>().props;
+    const props = usePage<EventPageProps>().props;
 
     const selectedEvents = useAppSelector((state) => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
     const handleGameSelection = (event: SportEvent, value: MatchOption | null) => {
+        if (selectedEvents.length === settings.bet.required_selections) {
+            return alert('Maximum selection reached');
+        }
+
         if (! value) {
             dispatch(deselectSportEvent(event.id))
         } else {
             dispatch(selectSportEvent({
                 ...event,
-                option: value
+                betOption: value
             }))
         }
     }
@@ -36,7 +41,7 @@ export default function Events() {
     const getSelectedOption = useMemo(() => {
         return (eventId: number): MatchOption | undefined => {
             const selectedEvent = selectedEvents.find((event) => event.id === eventId);
-            return selectedEvent ? selectedEvent.option : undefined;
+            return selectedEvent ? selectedEvent.betOption : undefined;
         };
     }, [selectedEvents]);
 

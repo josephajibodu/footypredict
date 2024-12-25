@@ -25,7 +25,7 @@ export interface SportEvent {
 }
 
 export interface SelectedSportEvent extends SportEvent {
-    option: MatchOption;
+    betOption: MatchOption;
 }
 
 export interface Team {
@@ -37,6 +37,14 @@ export interface Team {
     country: string;
 }
 
+export interface BetSetting {
+    required_selections : number;
+    pool_size : number;
+    winning_multiplier : number;
+    min_stake : number;
+    max_stake : number;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
@@ -44,4 +52,7 @@ export type PageProps<
         user: User;
     };
     ziggy: Config & { location: string };
+    settings: {
+        bet: BetSetting
+    }
 };
