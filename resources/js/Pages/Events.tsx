@@ -3,9 +3,10 @@ import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, usePage} from '@inertiajs/react';
 import { ReactNode } from 'react';
-import {BetOptions, PageProps, SportEvent} from "@/types";
-import {useAppDispatch} from "@/store/hooks";
-import {deselectEvent, selectEvent} from "@/store/eventSlice";
+import {PageProps, SportEvent} from "@/types";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
+import {MatchOption} from "@/enums/MatchOption";
 
 interface EventPageProps extends PageProps {
     events: SportEvent[]
@@ -14,18 +15,28 @@ interface EventPageProps extends PageProps {
 export default function Events() {
     const { events } = usePage<EventPageProps>().props;
 
+    const selectedEvents = useAppSelector((state) => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
-    const handleGameSelection = (event: SportEvent, value: BetOptions | null) => {
+    const handleGameSelection = (event: SportEvent, value: MatchOption | null) => {
         if (! value) {
-            dispatch(deselectEvent(event.id))
+            dispatch(deselectSportEvent(event.id))
         } else {
-            dispatch(selectEvent({
+            dispatch(selectSportEvent({
                 ...event,
                 option: value
             }))
         }
     }
+
+    const isEventSelected = (eventId: number) => {
+        return selectedEvents.some((event) => event.id === eventId);
+    };
+
+    const getSelectedOption = (eventId: number): MatchOption | null => {
+        const selectedEvent = selectedEvents.find((event) => event.id === eventId);
+        return selectedEvent ? selectedEvent.option : null;
+    };
 
     return (
         <>
@@ -47,7 +58,13 @@ export default function Events() {
                 </div>
                 {/* Event */}
                 {events.map((event, index) => (
-                    <SingleEvent key={index} event={event} sn={index + 1} onChange={(value) => handleGameSelection(event, value)} />
+                    <SingleEvent
+                        key={index}
+                        event={event}
+                        sn={index + 1}
+                        onChange={(value) => handleGameSelection(event, value)}
+                        defaultOption={getSelectedOption(event.id)}
+                    />
                 ))}
             </div>
 

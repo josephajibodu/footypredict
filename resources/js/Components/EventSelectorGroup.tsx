@@ -1,15 +1,17 @@
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import {clsx} from "clsx";
-import {BetOptions} from "@/types";
+import {MatchOption, MatchOptionLabels, MatchOptionShortCodes} from "@/enums/MatchOption";
 
-const betOptions: BetOptions[] = ['1', 'X', '2'];
+const betOptions = Object.values(MatchOption);
 
 export default function EventSelectorGroup({
-    onChange
+    onChange,
+    defaultOption
 }: {
-    onChange?: (value: null | BetOptions) => void;
+    onChange?: (value: null | MatchOption) => void;
+    defaultOption: MatchOption | null;
 }) {
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+    const [selectedOption, setSelectedOption] = useState<string | null>(defaultOption);
 
     return (
         <div className="flex w-full justify-between space-x-0.5">
@@ -32,7 +34,7 @@ export default function EventSelectorGroup({
                         }
                     }}
                 >
-                {betOption}
+                {MatchOptionShortCodes[betOption]}
             </span>
             ))}
         </div>

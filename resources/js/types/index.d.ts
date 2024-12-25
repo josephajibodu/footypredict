@@ -1,4 +1,5 @@
 import { Config } from 'ziggy-js';
+import {MatchOption} from "@/enums/MatchOption";
 
 export interface User {
     id: number;
@@ -23,10 +24,8 @@ export interface SportEvent {
     team2: Team
 }
 
-export type BetOptions = '1' | 'X' | '2';
-
 export interface SelectedSportEvent extends SportEvent {
-    option: BetOptions;
+    option: MatchOption;
 }
 
 export interface Team {

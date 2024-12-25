@@ -1,9 +1,18 @@
-import EventSelector from './EventSelector';
 import EventSelectorGroup from './EventSelectorGroup';
-import {BetOptions, SportEvent} from "@/types";
+import {SportEvent} from "@/types";
 import dayjs from "dayjs";
+import {MatchOption} from "@/enums/MatchOption";
 
-export default function SingleEvent({ event, sn, onChange }: { event: SportEvent, sn: number, onChange: (value: BetOptions | null) => void }) {
+export default function SingleEvent(
+    {
+        event, sn, onChange, defaultOption
+    }: {
+        event: SportEvent,
+        sn: number,
+        onChange: (value: MatchOption | null) => void,
+        defaultOption: MatchOption | null;
+    }
+) {
 
     return (
         <div className="flex items-center justify-between py-2 border-b">
@@ -19,7 +28,7 @@ export default function SingleEvent({ event, sn, onChange }: { event: SportEvent
             </div>
 
             <div className="w-48">
-                <EventSelectorGroup onChange={onChange} />
+                <EventSelectorGroup onChange={onChange} defaultOption={defaultOption}  />
             </div>
         </div>
     );

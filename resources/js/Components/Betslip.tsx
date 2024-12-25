@@ -10,17 +10,20 @@ import {
 import { useState } from 'react';
 import { Button } from './ui/button';
 import {Input} from "@/Components/ui/input";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store";
-import {useAppSelector} from "@/store/hooks";
-import {SportEvent} from "@/types";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {Trash} from "lucide-react";
+import {MatchOptionLabels} from "@/enums/MatchOption";
+import {deselectSportEvent} from "@/store/eventSlice";
 
 export default function Betslip() {
     const events = useAppSelector(state => state.event.selectedEvents);
+    const dispatch = useAppDispatch();
 
     const [open, setOpen] = useState(false);
 
-    // const events = Array.from({ length: 20 }, (_, i) => i + 1);
+    const handleRemoveSportEvent = (sportEventId: number) => {
+        dispatch(deselectSportEvent(sportEventId))
+    };
 
     return (
         <>
@@ -44,7 +47,24 @@ export default function Betslip() {
                     </DrawerHeader>
                     <div className="flex-1 p-4 overflow-y-auto bg-white">
                         <div className="max-w-md mx-auto space-y-4">
-                            {events.length ? 'has length' : 'none'}
+                            {events.map((sportEvent, index) => (
+                                <div className="flex items-center justify-between py-2 border-b">
+                                    <div className="flex items-center">
+                                        <div className="flex flex-col">
+                                            <span className="text-sm text-gray-500">
+                                                {MatchOptionLabels[sportEvent.option]}
+                                            </span>
+                                            <span className="line-clamp-1">{sportEvent.team1.name} vs {sportEvent.team2.name}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="w-12 flex justify-between gap-2 h-full">
+                                        <Button onClick={() => handleRemoveSportEvent(sportEvent.id)} variant={'ghost'} className={'text-red-600'}>
+                                            <Trash />
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <DrawerFooter>
