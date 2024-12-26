@@ -6,6 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import {Provider} from "react-redux";
 import {store} from "@/store";
+import {Toaster} from "@/Components/ui/toaster";
 
 const appName = import.meta.env.VITE_APP_NAME || 'FootyPredict';
 
@@ -20,6 +21,7 @@ createInertiaApp({
         const WrappedApp = (
             <Provider store={store}>
                 <App {...props} />
+                <Toaster />
             </Provider>
         );
 

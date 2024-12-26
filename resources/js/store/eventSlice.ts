@@ -23,7 +23,7 @@ const sportEventSlice = createSlice({
             } else {
                 state.selectedEvents = state.selectedEvents.map((event, index) =>
                     index === existingEventIndex
-                        ? { ...event, option: action.payload.option }
+                        ? { ...event, option: action.payload.betOption }
                         : event
                 );
             }

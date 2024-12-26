@@ -13,8 +13,12 @@ import {Input} from "@/Components/ui/input";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {Trash} from "lucide-react";
 import {MatchOptionLabels} from "@/enums/MatchOption";
-import {deselectSportEvent} from "@/store/eventSlice";
-import {router, usePage} from "@inertiajs/react";
+import {clearSelectedSportEvents, deselectSportEvent} from "@/store/eventSlice";
+import {Link, router, usePage} from "@inertiajs/react";
+import {useToast} from "@/hooks/use-toast";
+import {ToastAction} from "@/Components/ui/toast";
+
+const DEFAULT_AMOUNT = 500;
 
 export default function Betslip() {
     const { auth } = usePage().props;
@@ -23,6 +27,7 @@ export default function Betslip() {
     const events = useAppSelector(state => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
+    const {toast} = useToast();
     const [open, setOpen] = useState(false);
 
     const handleRemoveSportEvent = (sportEventId: number) => {
@@ -44,10 +49,29 @@ export default function Betslip() {
                 setProcessing(true)
             },
             onSuccess: page => {
-                console.log('came back with this data (success): ', page)
+                dispatch(clearSelectedSportEvents());
+                setOpen(false);
+                setStake(DEFAULT_AMOUNT);
+
+                toast({
+                    title: "Bet Successfully Placed",
+                    description: "Your bet has been placed successfully. You can view the details in your bet history.",
+                    action: <ToastAction altText="View Bet">
+                        <Link href={route('bets')}>View Bet</Link>
+                    </ToastAction>,
+                });
             },
             onError: page => {
-                console.log('came back with this error data: ', page)
+                toast({
+                    title: "Error Placing Bet",
+                    description: "There was an issue placing your bet. Please try again or contact support if the problem persists.",
+                    variant: 'destructive',
+                    action: (
+                        <ToastAction altText="View Bet">
+                            <Link href={route('bets')}>View Bet History</Link>
+                        </ToastAction>
+                    ),
+                });
             },
             onFinish: () => {
                 setProcessing(false)
