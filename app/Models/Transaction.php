@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $amount The amount involved in the transaction.
  * @property TransactionType $type The type of transaction, either 'stake' or 'winnings'.
  * @property TransactionStatus $status The status of the transaction, either 'pending', 'completed', or 'failed'.
+ * @property int $balance
  *
  * @property Carbon|null $created_at Timestamp when the transaction was created.
  * @property Carbon|null $updated_at Timestamp when the transaction was last updated.
@@ -31,6 +32,8 @@ class Transaction extends Model
 {
     /** @use HasFactory<\Database\Factories\TransactionFactory> */
     use HasFactory;
+
+    protected $guarded = ['id'];
 
     protected function casts(): array
     {

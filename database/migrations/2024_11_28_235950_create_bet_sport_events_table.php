@@ -23,7 +23,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('selected_option_id')->constrained('options')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('outcome_option_id')->constrained('options')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('outcome_option_id')->nullable()->constrained('options')->nullOnDelete()->cascadeOnUpdate();
             $table->boolean('is_correct')->nullable();
 
             $table->timestamps();

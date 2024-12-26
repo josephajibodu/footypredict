@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('stake');
             $table->unsignedInteger('multiplier');
             $table->unsignedBigInteger('potential_winnings');
-            $table->string('bet_status');
+            $table->string('status');
 
             $table->timestamps();
         });

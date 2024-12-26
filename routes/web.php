@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportEventController;
@@ -13,9 +14,12 @@ Route::get('/', function () {
 
 Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
-Route::get('/bets', function () {
-    return Inertia::render('BetHistory');
-})->name('bets');
+Route::resource('/bets', BetController::class)
+    ->only(['index', 'store'])
+    ->names([
+        'index' => 'bets',
+        'store' => 'bets.store'
+    ]);
 
 Route::get('/wallet', function () {
     return Inertia::render('Wallet');

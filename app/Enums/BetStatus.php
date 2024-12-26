@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum BetStatus
+enum BetStatus: string
 {
-    //
+    case Pending = 'pending';
 }

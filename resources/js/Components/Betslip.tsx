@@ -14,10 +14,12 @@ import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {Trash} from "lucide-react";
 import {MatchOptionLabels} from "@/enums/MatchOption";
 import {deselectSportEvent} from "@/store/eventSlice";
-import {router} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
 
 export default function Betslip() {
+    const { auth } = usePage().props;
     const [stake, setStake] = useState(500);
+    const [processing, setProcessing] = useState(false);
     const events = useAppSelector(state => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
@@ -28,15 +30,28 @@ export default function Betslip() {
     };
 
     const handlePlaceBet = () => {
+        if (! auth.user) {
+            return router.get(route('login'))
+        }
+
         const data = {
             amount: stake,
             events: events.map((event, index) => ({ event_id: event.id, bet_option: event.betOption}))
         }
 
         router.post(route('bets'), data, {
+            onStart: () => {
+                setProcessing(true)
+            },
             onSuccess: page => {
-                console.log('came back with this data: ', page)
-            }
+                console.log('came back with this data (success): ', page)
+            },
+            onError: page => {
+                console.log('came back with this error data: ', page)
+            },
+            onFinish: () => {
+                setProcessing(false)
+            },
         });
     };
 
@@ -89,7 +104,7 @@ export default function Betslip() {
                     <DrawerFooter>
                         <div className="flex gap-4">
                             <Input type='number' step='0.01' value={stake} onChange={(e) => setStake(Number(e.target.value))} required placeholder="500" />
-                            <Button onClick={handlePlaceBet}>Place Bet</Button>
+                            <Button disabled={processing} onClick={handlePlaceBet}>Place Bet</Button>
                         </div>
                         <DrawerClose>
                             <Button variant="outline">Close</Button>
