@@ -12,10 +12,7 @@ interface EventPageProps extends PageProps {
     events: SportEvent[]
 }
 
-export default function Events() {
-    const { events, settings } = usePage<EventPageProps>().props;
-    const props = usePage<EventPageProps>().props;
-
+export default function Events({ events, settings }: EventPageProps) {
     const selectedEvents = useAppSelector((state) => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 

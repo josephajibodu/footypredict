@@ -1,15 +1,22 @@
 import { Button } from '@/Components/ui/button';
 import {Link, router, usePage} from '@inertiajs/react';
-import clsx from 'clsx';
+import clsx, {ClassValue} from 'clsx';
 import { PropsWithChildren, ReactNode } from 'react';
 import {ChevronLeft} from "lucide-react";
 
+interface AuthLayoutProps extends PropsWithChildren {
+    showHeader?: boolean,
+    canGoBack?: boolean,
+    title?: string,
+    containerClassName?: ClassValue
+}
 export default function Authenticated({
     children,
     showHeader = true,
     canGoBack = false,
-    title
-}: PropsWithChildren<{ showHeader?: boolean, canGoBack?: boolean, title?: string }>) {
+    title,
+    containerClassName
+}: AuthLayoutProps) {
     const { url } = usePage();
 
     const gotoWallet = () => {
@@ -18,19 +25,19 @@ export default function Authenticated({
 
     return (
         <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
-            {canGoBack && <header className="fixed left-0 right-0 z-10 h-14 flex items-center gap-4 px-2 py-2 bg-white">
+            {(canGoBack && !showHeader) && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center gap-4 px-2 py-2 bg-white border-b">
                 <span onClick={() => window.history.back()}><ChevronLeft /></span>
                 <h2 className="text-lg">{title}</h2>
             </header>}
 
-            {showHeader && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center justify-between px-2 py-2 bg-primary">
+            {showHeader && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center justify-between px-2 py-2 bg-primary border-b">
                 <h3 className="font-bold text-white">FootyPredict</h3>
                 <div>
                     <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>NGN 7,543.76</Button>
                 </div>
             </header>}
-            <main className={clsx("relative flex-1 overflow-y-scroll mb-[60px]", {
-                "mt-[64px]": showHeader
+            <main className={clsx(containerClassName, "relative flex-1 overflow-y-scroll mb-[60px]", {
+                "mt-[64px]": showHeader || canGoBack
             })}>
                 {children}
             </main>

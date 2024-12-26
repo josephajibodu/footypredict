@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\BetController;
+use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportEventController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,9 +25,9 @@ Route::middleware(['auth'])->group(function () {
             'store' => 'bets.store'
         ]);
 
-    Route::get('/wallet', function () {
-        return Inertia::render('Wallet');
-    })->name('wallet');
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet');
+
+    Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
 
     Route::prefix('settings')->group(function () {
         Route::get('/', SettingController::class)->name('settings');

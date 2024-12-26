@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Settings\BetSetting;
+use App\Settings\WalletSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -31,7 +32,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $betSettings = app(BetSetting::class)->toArray();
         return [
             ...parent::share($request),
             'auth' => [
@@ -42,7 +42,8 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'settings' => [
-                'bet' => $betSettings
+                'bet' => app(BetSetting::class)->toArray(),
+                'wallet' => app(WalletSetting::class)->toArray()
             ],
         ];
     }

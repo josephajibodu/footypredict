@@ -45,6 +45,12 @@ export interface BetSetting {
     max_stake : number;
 }
 
+
+export interface WalletSetting {
+    minimum_deposit_ngn : number;
+    minimum_deposit_usdt : number;
+}
+
 export interface Bet {
     id: number;
     user_id: number;
@@ -109,6 +115,7 @@ export type PageProps<
     };
     ziggy: Config & { location: string };
     settings: {
-        bet: BetSetting
+        bet: BetSetting,
+        wallet: WalletSetting
     }
 };

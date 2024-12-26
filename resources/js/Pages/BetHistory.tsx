@@ -14,8 +14,7 @@ interface BetHistoryProps extends PageProps {
     bets: Bet[]
 }
 
-export default function BetHistory() {
-    const { bets } = usePage<BetHistoryProps>().props;
+export default function BetHistory({ bets } : BetHistoryProps) {
 
     return (
         <>
@@ -41,8 +40,8 @@ export default function BetHistory() {
 
                         <TabsContent value="all" className="mt-0">
                             <div className="space-y-2">
-                                {bets.map(() => (
-                                    <div className="bg-white py-4 px-4">
+                                {bets.map((bet, index) => (
+                                    <div key={bet.id} className="bg-white py-4 px-4">
                                         <div className="flex justify-between py-2 border-b">
                                             <div className="flex ">
                                                 <ArrowUp size={18} className="text-red-500 me-2" />
