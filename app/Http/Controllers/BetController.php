@@ -11,7 +11,13 @@ class BetController extends Controller
 {
     public function index()
     {
-        return Inertia::render('BetHistory');
+        $user = Auth::user();
+
+        $bets = $user->bets;
+
+        return Inertia::render('BetHistory', [
+            'bets' => $bets
+        ]);
     }
 
     public function store(PlaceBet $placeBet)

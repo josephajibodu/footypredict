@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property int $id The unique identifier for the bet.
  *
+ * @property int $user_id
  * @property int $transaction_id The ID of the transaction associated with the bet.
  * @property int $stake The amount staked on the bet.
  * @property int $multiplier The odds multiplier for the bet.
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Carbon|null $created_at Timestamp when the bet was created.
  * @property Carbon|null $updated_at Timestamp when the bet was last updated.
  *
+ * @property-read User $user
  * @property-read Transaction $transaction The transaction associated with the bet.
  * @property-read SportEvent[] $sportEvents The sport events linked to the bet.
  */
@@ -31,6 +33,7 @@ class Bet extends Model
     use HasTransaction;
 
     protected $fillable = [
+        'user_id',
         'transaction_id',
         'stake',
         'multiplier',

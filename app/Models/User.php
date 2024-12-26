@@ -3,6 +3,8 @@
 namespace App\Models;
 
  use App\Enums\UserGender;
+ use App\Traits\HasBets;
+ use App\Traits\HasWallet;
  use Carbon\Carbon;
  use Database\Factories\UserFactory;
  use Filament\Models\Contracts\HasName;
@@ -10,6 +12,7 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
  use Illuminate\Database\Eloquent\Casts\Attribute;
+ use Illuminate\Database\Eloquent\Collection;
  use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,11 +36,15 @@ use Illuminate\Notifications\Notifiable;
   *
   * @property Carbon|null $created_at The timestamp of when the user was created.
   * @property Carbon|null $updated_at The timestamp of when the user was last updated.
+  *
+  * @property-read Collection<Bet> $bets
   */
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+    use HasWallet;
+    use HasBets;
 
     /**
      * The attributes that are mass assignable.

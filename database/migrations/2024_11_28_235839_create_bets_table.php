@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bets', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->unsignedBigInteger('stake');
             $table->unsignedInteger('multiplier');

@@ -14,24 +14,27 @@ Route::get('/', function () {
 
 Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
-Route::resource('/bets', BetController::class)
-    ->only(['index', 'store'])
-    ->names([
-        'index' => 'bets',
-        'store' => 'bets.store'
-    ]);
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/wallet', function () {
-    return Inertia::render('Wallet');
-})->name('wallet');
+    Route::resource('/bets', BetController::class)
+        ->only(['index', 'store'])
+        ->names([
+            'index' => 'bets',
+            'store' => 'bets.store'
+        ]);
 
-Route::prefix('settings')->group(function () {
-    Route::get('/', SettingController::class)->name('settings');
+    Route::get('/wallet', function () {
+        return Inertia::render('Wallet');
+    })->name('wallet');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('settings')->group(function () {
+        Route::get('/', SettingController::class)->name('settings');
+
+        Route::middleware('auth')->group(function () {
+            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        });
     });
 });
 

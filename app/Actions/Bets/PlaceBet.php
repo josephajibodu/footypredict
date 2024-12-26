@@ -37,6 +37,7 @@ class PlaceBet
 
             // Create the bet
             $bet = Bet::query()->create([
+                'user_id' => $user->id,
                 'transaction_id' => $transaction->id,
                 'stake' => $amountInUnit,
                 'multiplier' => $multiplier,

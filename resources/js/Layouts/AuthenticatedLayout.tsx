@@ -23,14 +23,14 @@ export default function Authenticated({
                 <h2 className="text-lg">{title}</h2>
             </header>}
 
-            {showHeader && <header className="fixed left-0 right-0 z-10 flex items-center justify-between px-2 py-2 bg-white">
-                <h3 className="font-bold">FootyPredict</h3>
+            {showHeader && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center justify-between px-2 py-2 bg-primary">
+                <h3 className="font-bold text-white">FootyPredict</h3>
                 <div>
-                    <Button variant={'outline'} onClick={gotoWallet}>NGN 7,543.76</Button>
+                    <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>NGN 7,543.76</Button>
                 </div>
             </header>}
-            <main className={clsx("relative flex-1 overflow-y-scroll pb-12", {
-                "pt-[56px]": showHeader
+            <main className={clsx("relative flex-1 overflow-y-scroll mb-[60px]", {
+                "mt-[64px]": showHeader
             })}>
                 {children}
             </main>
