@@ -24,6 +24,7 @@ class CollectionData implements Arrayable
             "merchant_name" => $this->merchant_name,
             "amount" => $this->amount,
             "type" => $this->type->value,
+            "reference" => $this->reference,
         ];
     }
 }

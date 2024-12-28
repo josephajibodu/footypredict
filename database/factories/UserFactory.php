@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\Currency;
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -33,6 +36,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'nationality' => fake()->country(),
             'date_of_birth' => fake()->date(),
+            'currency' => Currency::NGN,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
@@ -46,5 +50,12 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function configure(): UserFactory
+    {
+        return $this->afterCreating(function (User $user) {
+            Wallet::query()->create(['user_id' => $user->id]);
+        });
     }
 }

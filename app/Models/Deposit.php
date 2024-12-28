@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id The unique identifier for the transaction.
  *
  * @property DepositMethod $method
+ * @property float $fee
+ * @property array $metadata
  *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

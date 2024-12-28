@@ -122,6 +122,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                             <Input
                                 type="number"
                                 placeholder="Minimum of 100"
+                                step={0.01}
                                 min={settings.wallet.minimum_deposit_ngn}
                                 value={data.amount}
                                 onChange={e => setData('amount', e.target.value)}

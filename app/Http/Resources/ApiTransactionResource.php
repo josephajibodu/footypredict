@@ -23,8 +23,8 @@ class ApiTransactionResource extends JsonResource
             'user_id' => $this->user_id,
             'description' => $this->description,
             'reference' => $this->reference,
-            'amount' => to_money($this->amount, 100, true),
-            'balance' => to_money($this->balance, 100, true),
+            'amount' => $this->amount / 100,
+            'balance' => $this->balance / 100,
             'type' => $this->type->value,
             'status' => $this->status->value,
 

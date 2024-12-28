@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Transactions\CreateDepositTransaction;
+use App\Actions\Transactions\InitiateDepositTransaction;
 use App\Actions\Wallets\CreatePaymentWallet;
 use App\Enums\DepositMethod;
 use App\Integrations\SwervPay\CollectionData;
@@ -15,7 +15,7 @@ use Inertia\Inertia;
 
 class DepositController extends Controller
 {
-    public function store(CreatePaymentWallet $createVBA, CreateDepositTransaction $createDepositTransaction)
+    public function store(CreatePaymentWallet $createVBA, InitiateDepositTransaction $createDepositTransaction)
     {
         $data = request()->validate([
             'amount' => ['required', 'numeric', 'min:1']

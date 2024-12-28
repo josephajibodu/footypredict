@@ -21,10 +21,10 @@ class ApiBetResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'stake' => $this->stake,
+            'stake' => $this->stake / 100,
             'multiplier' => $this->multiplier,
-            'potential_winnings' => $this->potential_winnings,
-            'status' => $this->status->value, // assuming BetStatus is an Enum
+            'potential_winnings' => $this->potential_winnings / 100,
+            'status' => $this->status->value,
             'transaction' => ApiTransactionResource::make($this->whenLoaded('transaction')),
             'sport_events' => ApiSportEventResource::collection($this->whenLoaded('sportEvents')),
             'created_at' => $this->created_at->toIso8601String(),

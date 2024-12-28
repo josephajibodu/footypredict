@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionType;
+use App\Http\Resources\ApiTransactionResource;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,7 +27,7 @@ class TransactionController extends Controller
         $transaction->load('deposit');
 
         return Inertia::render('Deposit', [
-            'transaction' => $transaction
+            'transaction' => ApiTransactionResource::make($transaction)
         ]);
     }
 }

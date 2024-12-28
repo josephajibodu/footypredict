@@ -19,6 +19,7 @@ class WalletController extends Controller
             ->latest()
             ->get();
 
+//        return ApiTransactionResource::collection($transactions);
         return Inertia::render('Wallet', [
             'transactions' => ApiTransactionResource::collection($transactions)
         ]);

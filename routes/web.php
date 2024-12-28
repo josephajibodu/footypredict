@@ -5,6 +5,7 @@ use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportEventController;
+use App\Http\Controllers\SwervPayWebhookController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
@@ -43,5 +44,7 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
+
+Route::post('webhook/swervpay', SwervPayWebhookController::class);
 
 require __DIR__.'/auth.php';

@@ -137,7 +137,7 @@ trait HasWallet
      *
      * @throws Exception
      */
-    protected function getBalanceInCurrency(string $currency): int
+    protected function getBalanceInCurrency(Currency $currency): int
     {
         return match ($currency) {
             Currency::NGN => $this->wallet->ngn_balance,

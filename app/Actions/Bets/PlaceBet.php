@@ -20,7 +20,7 @@ class PlaceBet
             $amountInUnit = $amount * 100;
 
             // Debit User
-            // TODO: $user->debit($amount, "Betting stake");
+            $user->debit($amount, "Betting stake");
 
             // Get multiplier for the type of bet
             $multiplier = 15;
@@ -32,7 +32,7 @@ class PlaceBet
                 'amount' => $amountInUnit,
                 'type' => TransactionType::Bet,
                 'status' => TransactionStatus::Completed,
-                'balance' => 0, // TODO: get the users balance
+                'balance' => $user->balance,
             ]);
 
             // Create the bet
