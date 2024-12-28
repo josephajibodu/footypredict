@@ -1,12 +1,24 @@
 import { Config } from 'ziggy-js';
 import {MatchOption} from "@/enums/MatchOption";
-import {Transaction} from "@/types/transactions";
+import { Transaction } from "@/types/transactions";
 
 export interface User {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    username: string;
     email: string;
-    email_verified_at?: string;
+    mobile_number: string | null;
+    gender: string | null;
+    nationality: string | null;
+    currency: string | null;
+    balance: number;
+    date_of_birth: string | null;
+    email_verified_at: string | null;
+    avatar: string,
+    created_at: string;
+    updated_at: string;
 }
 
 export interface SportEvent {

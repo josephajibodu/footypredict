@@ -34,6 +34,8 @@ class ApiUserResource extends JsonResource
             'balance' => $this->balance,
             'date_of_birth' => $this->date_of_birth,
             'email_verified_at' => $this->email_verified_at,
+            'avatar' => $this->avatar(),
+
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -1,4 +1,3 @@
-import {Bet} from "@/types/index";
 
 export interface Transaction {
     id: number;

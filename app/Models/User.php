@@ -97,6 +97,18 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         ];
     }
 
+    public function avatar(): string
+    {
+        //        if ($this->hasMedia('avatar')) {
+        //            return $this->getFirstMediaUrl('avatar');
+        //        }
+
+        $hash = hash('sha256', $this->email);
+        $default = "https://github.com/shadcn.png";
+        return "https://www.gravatar.com/avatar/$hash?d=$default";
+    }
+
+
     public function canAccessPanel(Panel $panel): bool
     {
         return str_ends_with($this->email, '@footypredict.test') && $this->hasVerifiedEmail();

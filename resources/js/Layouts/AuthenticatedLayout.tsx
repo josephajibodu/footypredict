@@ -3,6 +3,7 @@ import {Link, router, usePage} from '@inertiajs/react';
 import clsx, {ClassValue} from 'clsx';
 import { PropsWithChildren, ReactNode } from 'react';
 import {ChevronLeft} from "lucide-react";
+import {toMoney} from "@/lib/utils";
 
 interface AuthLayoutProps extends PropsWithChildren {
     showHeader?: boolean,
@@ -17,7 +18,7 @@ export default function Authenticated({
     title,
     containerClassName
 }: AuthLayoutProps) {
-    const { url } = usePage();
+    const { url, props: { auth } } = usePage();
 
     const gotoWallet = () => {
         router.visit(route('wallet'));
@@ -33,7 +34,7 @@ export default function Authenticated({
             {showHeader && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center justify-between px-2 py-2 bg-primary border-b">
                 <h3 className="font-bold text-white">FootyPredict</h3>
                 <div>
-                    <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>NGN 7,543.76</Button>
+                    <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>{toMoney(auth.user.balance)}</Button>
                 </div>
             </header>}
             <main className={clsx(containerClassName, "relative flex-1 overflow-y-scroll mb-[60px]", {

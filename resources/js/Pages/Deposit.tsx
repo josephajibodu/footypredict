@@ -14,7 +14,7 @@ interface DepositPageProps extends PageProps {
     transaction: Transaction
 }
 
-export default function Deposit({ settings, transaction }: DepositPageProps) {
+export default function Deposit({ settings, transaction, auth }: DepositPageProps) {
     const [,copyToClipBoard] = useCopyToClipboard();
     const { toast } = useToast();
 
@@ -40,7 +40,7 @@ export default function Deposit({ settings, transaction }: DepositPageProps) {
                             <Wallet2 size={48} />
                             <div>
                                 <p className="text-sm text-gray-600">Wallet Balance</p>
-                                <p className="text-xl font-bold text-gray-800">&#8358;0</p>
+                                <p className="text-xl font-bold text-gray-800">{toMoney(auth.user.balance)}</p>
                             </div>
                         </section>
 

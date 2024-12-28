@@ -3,10 +3,9 @@ import {Head, Link, router, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
 import {HandCoins, TicketSlash, Wallet2} from "lucide-react";
-import {PageProps, Transaction} from "@/types";
+
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
     DrawerDescription,
     DrawerFooter,
@@ -25,13 +24,15 @@ import {
 } from "@/Components/ui/table"
 import {toMoney} from "@/lib/utils";
 import dayjs from "dayjs";
+import {PageProps} from "@/types";
+import {Transaction} from "@/types/transactions";
 
 
 interface WalletPageProps extends PageProps {
     transactions: Transaction[]
 }
 
-export default function Wallet({ transactions, settings }: WalletPageProps) {
+export default function Wallet({ transactions, settings, auth }: WalletPageProps) {
 
     const [openWalletInput, setOpenWalletInput] = useState(false);
     const { post, data, setData, processing, errors } = useForm({ amount: "" })
@@ -51,7 +52,7 @@ export default function Wallet({ transactions, settings }: WalletPageProps) {
                 <div className="bg-primary text-primary-foreground px-4 py-4">
                     <div className="flex justify-between py-4">
                         <h3 className="font-bold">Wallet Balance</h3>
-                        <span className="">&#8358; 7,867.54</span>
+                        <span className="">{toMoney(auth.user.balance)}</span>
                     </div>
 
                     <div className="flex justify-center items-center py-4 gap-4">

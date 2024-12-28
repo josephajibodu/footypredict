@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ApiUserResource;
 use App\Settings\BetSetting;
 use App\Settings\WalletSetting;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => ApiUserResource::make($request->user()),
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

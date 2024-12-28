@@ -61,11 +61,11 @@ export default function Settings() {
                 {/* Header */}
                 <div className="bg-primary text-primary-foreground px-4 pt-8 pb-16 flex flex-col items-center">
                     <Avatar className="size-24">
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                        <AvatarImage src={auth.user.avatar} alt={auth.user.username + " avatar"} />
                         <AvatarFallback>JA</AvatarFallback>
                     </Avatar>
-                    <h3 className="mt-2 text-lg">Joseph O. Ajibodu</h3>
-                    <Badge variant='secondary' className="text-sm">@josephajibodu</Badge>
+                    <h3 className="mt-2 text-lg">{auth.user.full_name}</h3>
+                    <Badge variant='secondary' className="text-sm">@{auth.user.username}</Badge>
                 </div>
 
                 {/* Body */}
