@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionStatus;
+use App\Jobs\ProcessDepositTransactionJob;
 use App\Models\Transaction;
 use Exception;
 use Illuminate\Http\Request;
@@ -55,58 +56,13 @@ class SwervPayWebhookController extends Controller
             return response('Transaction already processed', 200);
         }
 
-        try {
-            DB::transaction(function () use ($transaction, $data) {
-                $this->processTransaction($transaction, $data);
-            });
+        ProcessDepositTransactionJob::dispatch($transaction, $data);
 
-            Log::info('Transaction processed successfully', [
-                'reference' => $transaction->reference,
-                'user_id' => $transaction->user_id,
-                'amount' => $data['amount'] ?? null,
-            ]);
-
-            return response('Transaction processed successfully', 200);
-        } catch (Throwable $e) {
-            Log::error('Error processing transaction', [
-                'reference' => $transaction->reference,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response('Failed to process transaction', 500);
-        }
-    }
-
-    /**
-     * Processes the transaction and updates related models.
-     *
-     * @param Transaction $transaction
-     * @param array $data
-     * @return void
-     * @throws Exception
-     */
-    protected function processTransaction(Transaction $transaction, array $data)
-    {
-        $amountReceived = $data['amount'] ?? 0;
-        $fee = $data['charges'] ?? 0;
-
-        // Credit user wallet
-        $user = $transaction->user;
-        $user->credit($amountReceived, "Wallet Deposit");
-
-        // Update transaction details
-        $transaction->update([
-            'balance' => $user->balance,
-            'amount' => $amountReceived * 100,
-            'status' => TransactionStatus::Completed,
+        Log::info('Transaction job dispatched', [
+            'reference' => $transaction->reference,
+            'data' => $data,
         ]);
 
-        // Update deposit details
-        if ($transaction->deposit) {
-            $transaction->deposit->update([
-                'fee' => $fee * 100,
-            ]);
-        }
+        return response('Transaction processed successfully', 200);
     }
 }
