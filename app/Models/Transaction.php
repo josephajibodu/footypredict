@@ -27,7 +27,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $updated_at Timestamp when the transaction was last updated.
  *
  * @property-read User $user The user who made the transaction.
- * @property-read Bet|null $bet The bet associated with the transaction (nullable).
+ * @property-read Bet|null $bet
+ * @property-read Winning|null $winning
+ * @property-read Withdrawal|null $withdrawal
+ * @property-read Deposit|null $deposit
+ * @property-read Refund|null $refund
  */
 class Transaction extends Model
 {

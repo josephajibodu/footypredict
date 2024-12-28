@@ -23,8 +23,8 @@ use Illuminate\Support\Carbon;
  * @property int $team1_id           The ID of the first team.
  * @property int $team2_id           The ID of the second team.
  * @property int|null $league_id     The ID of the league the match belongs to (nullable).
- * @property string $sport           The type of sport (e.g., football, basketball).
- * @property string $status          The status of the event (e.g., pending, completed).
+ * @property SportEventType $sport           The type of sport (e.g., football, basketball).
+ * @property SportEventStatus $status          The status of the event (e.g., pending, completed).
  * @property int|null $team1_score   The score of the first team (nullable).
  * @property int|null $team2_score   The score of the second team (nullable).
  * @property string|null $season     The season the event belongs to (nullable).

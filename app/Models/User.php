@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+ use App\Enums\Currency;
  use App\Enums\UserGender;
  use App\Traits\HasBets;
  use App\Traits\HasWallet;
@@ -30,6 +31,7 @@ use Illuminate\Notifications\Notifiable;
   * @property string $email           The email address of the user.
   * @property Carbon|null $email_verified_at The timestamp when the email was verified.
   * @property string $nationality     The nationality of the user.
+  * @property Currency $currency
   * @property Carbon $date_of_birth   The date of birth of the user.
   * @property string $password        The password of the user.
   * @property string|null $remember_token The remember token for the user.
@@ -90,7 +92,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'gender' => UserGender::class
+            'gender' => UserGender::class,
+            'currency' => Currency::class,
         ];
     }
 

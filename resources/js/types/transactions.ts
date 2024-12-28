@@ -1,6 +1,9 @@
+import {Bet} from "@/types/index";
+
 export interface Transaction {
     id: number;
     user_id: number;
+    description: string;
     reference: string;
     amount: number;
     balance: number;
@@ -8,7 +11,9 @@ export interface Transaction {
     status: TransactionStatus;
     created_at: string;
     updated_at: string;
+
     deposit?: Deposit;
+    bet?: object
 }
 
 export interface Deposit {

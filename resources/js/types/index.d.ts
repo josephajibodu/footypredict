@@ -1,5 +1,6 @@
 import { Config } from 'ziggy-js';
 import {MatchOption} from "@/enums/MatchOption";
+import {Transaction} from "@/types/transactions";
 
 export interface User {
     id: number;
@@ -67,45 +68,11 @@ export interface Bet {
     sportEvents: SportEvent[];
 }
 
-export interface Transaction {
-    id: number;
-    user_id: number;
-    description: string;
-    reference: string;
-    amount: string;
-    type: TransactionType;
-    status: TransactionStatus;
-    balance: number;
-    created_at: Date | null;
-    updated_at: Date | null;
-
-    user: User;
-    bet: Bet | null;
-    winning: Winning | null;
-    withdrawal: Withdrawal | null;
-    deposit: Deposit | null;
-    refund: Refund | null;
-}
-
 export enum BetStatus {
     Pending = "pending",
     Won = "won",
     Lost = "lost",
     Canceled = "canceled",
-}
-
-export enum TransactionStatus {
-    Pending = "pending",
-    Completed = "completed",
-    Failed = "failed",
-}
-
-export enum TransactionType {
-    Stake = "stake",
-    Winnings = "winnings",
-    Deposit = "deposit",
-    Withdrawal = "withdrawal",
-    Refund = "refund",
 }
 
 export type PageProps<
