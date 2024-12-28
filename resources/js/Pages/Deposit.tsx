@@ -102,7 +102,7 @@ export default function Deposit({ settings, transaction, auth }: DepositPageProp
 }
 
 Deposit.layout = (page: ReactNode) => (
-    <Authenticated canGoBack showHeader={false} title="Deposit Funds">
+    <Authenticated backUrl={route('wallet')} showHeader={false} title="Deposit Funds">
         {page}
     </Authenticated>
 );

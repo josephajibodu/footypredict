@@ -7,14 +7,14 @@ import {toMoney} from "@/lib/utils";
 
 interface AuthLayoutProps extends PropsWithChildren {
     showHeader?: boolean,
-    canGoBack?: boolean,
+    backUrl?: string,
     title?: string,
     containerClassName?: ClassValue
 }
 export default function Authenticated({
     children,
     showHeader = true,
-    canGoBack = false,
+    backUrl,
     title,
     containerClassName
 }: AuthLayoutProps) {
@@ -26,8 +26,8 @@ export default function Authenticated({
 
     return (
         <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
-            {(canGoBack && !showHeader) && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center gap-4 px-2 py-2 bg-white border-b">
-                <span onClick={() => window.history.back()}><ChevronLeft /></span>
+            {(backUrl && !showHeader) && <header className="fixed left-0 right-0 z-10 h-[64px] flex items-center gap-4 px-2 py-2 bg-white border-b">
+                <span onClick={() => router.visit(backUrl)}><ChevronLeft /></span>
                 <h2 className="text-lg">{title}</h2>
             </header>}
 
@@ -38,7 +38,7 @@ export default function Authenticated({
                 </div>
             </header>}
             <main className={clsx(containerClassName, "relative flex-1 overflow-y-scroll mb-[60px]", {
-                "mt-[64px]": showHeader || canGoBack
+                "mt-[64px]": showHeader || backUrl
             })}>
                 {children}
             </main>

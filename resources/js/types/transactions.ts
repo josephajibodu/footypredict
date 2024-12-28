@@ -20,6 +20,7 @@ export interface Deposit {
     transaction_id: number;
     method: "bank_transfer" | "card" | "crypto" | string;
     metadata: SwervPayDepositMetadata;
+    fee: number;
     created_at: string;
     updated_at: string;
 }

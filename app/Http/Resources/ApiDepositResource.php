@@ -21,6 +21,7 @@ class ApiDepositResource extends JsonResource
         return [
             'id' => $this->id,
             'method' => $this->method->value,
+            'fee' => $this->fee / 100,
             'metadata' => $this->metadata
         ];
     }

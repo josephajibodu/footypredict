@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Http\Resources\ApiTransactionResource;
 use App\Models\Transaction;
@@ -24,9 +25,18 @@ class TransactionController extends Controller
 
     public function show(Transaction $transaction)
     {
-        $transaction->load('deposit');
+        if ($transaction->type === TransactionType::Deposit
+            && $transaction->status === TransactionStatus::Pending) {
+            $transaction->load('deposit');
 
-        return Inertia::render('Deposit', [
+            return Inertia::render('Deposit', [
+                'transaction' => ApiTransactionResource::make($transaction)
+            ]);
+        }
+
+        $transaction->load(['deposit', 'bet', 'withdrawal', 'winning', 'refund']);
+
+        return Inertia::render('TransactionShow', [
             'transaction' => ApiTransactionResource::make($transaction)
         ]);
     }

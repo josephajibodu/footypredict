@@ -1,5 +1,5 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, router, useForm} from '@inertiajs/react';
+import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
 import {HandCoins, TicketSlash, Wallet2} from "lucide-react";
@@ -13,19 +13,11 @@ import {
     DrawerTitle,
 } from "@/Components/ui/drawer"
 import {Input} from "@/Components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/Components/ui/table"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/Components/ui/table"
 import {toMoney} from "@/lib/utils";
 import dayjs from "dayjs";
 import {PageProps} from "@/types";
-import {Transaction} from "@/types/transactions";
+import {Transaction, TransactionStatus} from "@/types/transactions";
 
 
 interface WalletPageProps extends PageProps {
@@ -91,7 +83,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                         <TableBody>
                             {transactions.map((transaction, index) => (
 
-                                <TableRow >
+                                <TableRow key={transaction.id}>
                                     <TableCell className="font-medium">
                                         <Link href={route('transaction.show', {transaction})}>
                                             <span className="text-sm text-primary/70">{transaction.description}</span>
@@ -131,7 +123,9 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                         </div>
 
                         <DrawerFooter className="pb-8">
-                            <Button disabled={processing} type={"submit"} size={'lg'}>Continue</Button>
+                            <Button disabled={processing} type={"submit"} size={'lg'}>
+                                {processing ? "Processing..." : "Continue to Payment"}
+                            </Button>
                             {/*<DrawerClose>*/}
                             {/*    <Button variant="outline">Cancel</Button>*/}
                             {/*</DrawerClose>*/}
