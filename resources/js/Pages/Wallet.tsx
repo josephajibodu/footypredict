@@ -1,8 +1,8 @@
 import Betslip from '@/Components/Betslip';
 import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, router, usePage} from '@inertiajs/react';
-import {ReactNode, useState} from 'react';
+import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
+import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
 import {HandCoins, TicketSlash, Wallet2} from "lucide-react";
 import {PageProps, Transaction} from "@/types";
@@ -24,16 +24,14 @@ interface WalletPageProps extends PageProps {
 }
 
 export default function Wallet({ transactions, settings }: WalletPageProps) {
+
     const [openWalletInput, setOpenWalletInput] = useState(false);
-    const [depositAmount, setDepositAmount] = useState<number>();
+    const { post, data, setData, processing, errors } = useForm({ amount: "" })
 
-    const handleContinue = () => {
-        if (!depositAmount) {
-            setOpenWalletInput(false);
-            return;
-        }
+    const handleContinue = (e: FormEvent) => {
+        e.preventDefault();
 
-        router.get(route('deposit', { amount: depositAmount }));
+        post(route('deposit.store'));
     }
 
     return (
@@ -73,7 +71,9 @@ export default function Wallet({ transactions, settings }: WalletPageProps) {
                     )}
 
                     {transactions.map((transaction, index) => (
-                        <div>Transaction</div>
+                        <div className="py-2 px-4">
+                            <a href={route('deposit.show', { deposit: transaction })}>{transaction.reference}</a>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -84,15 +84,25 @@ export default function Wallet({ transactions, settings }: WalletPageProps) {
                         <DrawerTitle>Fund Wallet</DrawerTitle>
                         <DrawerDescription>How much do you to add?</DrawerDescription>
                     </DrawerHeader>
-                    <div className="px-4 pb-8">
-                        <Input value={depositAmount} onChange={(e) => setDepositAmount(Number(e.target.value))} placeholder="Minimum of 100" min={settings.wallet.minimum_deposit_ngn}  />
-                    </div>
-                    <DrawerFooter className="pb-8">
-                        <Button onClick={handleContinue} size={'lg'}>Continue</Button>
-                        {/*<DrawerClose>*/}
-                        {/*    <Button variant="outline">Cancel</Button>*/}
-                        {/*</DrawerClose>*/}
-                    </DrawerFooter>
+                    <form onSubmit={handleContinue}>
+                        <div className="px-4 pb-8">
+                            <Input
+                                type="number"
+                                placeholder="Minimum of 100"
+                                min={settings.wallet.minimum_deposit_ngn}
+                                value={data.amount}
+                                onChange={e => setData('amount', e.target.value)}
+                            />
+                            <small className="text-destructive">{errors && errors.amount}</small>
+                        </div>
+
+                        <DrawerFooter className="pb-8">
+                            <Button disabled={processing} type={"submit"} size={'lg'}>Continue</Button>
+                            {/*<DrawerClose>*/}
+                            {/*    <Button variant="outline">Cancel</Button>*/}
+                            {/*</DrawerClose>*/}
+                        </DrawerFooter>
+                    </form>
                 </DrawerContent>
             </Drawer>
 

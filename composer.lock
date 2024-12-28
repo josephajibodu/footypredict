@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ada6c26db9b4506e98b501def64e100",
+    "content-hash": "9f79b8db3daf4655c92f638bb8625afd",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5386,60 +5386,6 @@
                 }
             ],
             "time": "2023-12-25T11:46:58+00:00"
-        },
-        {
-            "name": "swervpaydev/sdk",
-            "version": "v0.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Swerv-Ltd/swervpay-php.git",
-                "reference": "56e4a0ec86ae29b2f1e217093a09e45c996ce31d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Swerv-Ltd/swervpay-php/zipball/56e4a0ec86ae29b2f1e217093a09e45c996ce31d",
-                "reference": "56e4a0ec86ae29b2f1e217093a09e45c996ce31d",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.5.7|^7.4.4",
-                "php": "^8.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/Swervpay.php"
-                ],
-                "psr-4": {
-                    "Swervpaydev\\SDK\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Muhideen Mujeeb Adeoye",
-                    "email": "mujeeb.muhideen@gmail.com"
-                }
-            ],
-            "description": "PHP Client for Swervpay",
-            "keywords": [
-                "Payin",
-                "Swervpay",
-                "Swyftpay",
-                "card",
-                "identity",
-                "issuing",
-                "payout"
-            ],
-            "support": {
-                "issues": "https://github.com/Swerv-Ltd/swervpay-php/issues",
-                "source": "https://github.com/Swerv-Ltd/swervpay-php/tree/v0.0.2"
-            },
-            "time": "2024-02-21T13:36:36+00:00"
         },
         {
             "name": "symfony/clock",

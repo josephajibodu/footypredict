@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet');
 
     Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
+    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
+    Route::get('/deposit/{deposit:reference}', [DepositController::class, 'show'])->name('deposit.show');
 
     Route::prefix('settings')->group(function () {
         Route::get('/', SettingController::class)->name('settings');

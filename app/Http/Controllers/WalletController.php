@@ -13,7 +13,7 @@ class WalletController extends Controller
     {
         $transactions = Transaction::query()
             ->where('type', TransactionType::Deposit)
-            ->where('type', TransactionType::Withdrawal)
+            ->orWhere('type', TransactionType::Withdrawal)
             ->get();
 
         return Inertia::render('Wallet', [

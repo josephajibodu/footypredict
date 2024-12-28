@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->string('method');
             $table->string('withdrawal_address')->nullable();
 

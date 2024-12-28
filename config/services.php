@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'misc' => [
+        'swervpay' => [
+            'secret_key' => env('SWERVPAY_SECRET_KEY'),
+            'business_id' => env('SWERVPAY_BUSINESS_ID'),
+            'sandbox' => env('SWERVPAY_SANDBOX'),
+        ]
+    ]
 ];

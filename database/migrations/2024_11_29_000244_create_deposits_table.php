@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->string('method');
-            $table->string('status');
+            $table->text('metadata')->nullable();
 
             $table->timestamps();
         });
