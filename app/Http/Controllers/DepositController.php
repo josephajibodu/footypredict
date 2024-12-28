@@ -10,34 +10,11 @@ use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DepositController extends Controller
 {
-    public function index()
-    {
-        $bankPaymentDetails = session('bankPaymentDetails');
-        $amount = session('amount');
-
-        if (!$amount || !is_numeric($amount)) {
-            return redirect()->route('wallet')->with('error', 'Amount is required to make a deposit.');
-        }
-
-        return Inertia::render('Deposit', [
-            'amount' => $amount,
-            'bankPaymentDetails' => $bankPaymentDetails,
-        ]);
-    }
-
-    public function show(Transaction $deposit)
-    {
-        $deposit->load('deposit');
-
-        return Inertia::render('Deposit', [
-            'transaction' => $deposit
-        ]);
-    }
-
     public function store(CreatePaymentWallet $createVBA, CreateDepositTransaction $createDepositTransaction)
     {
         $data = request()->validate([
@@ -48,11 +25,13 @@ class DepositController extends Controller
 
         $user = Auth::user();
 
+        DB::beginTransaction();
+
         try {
             // Create transactions table for deposit
             $transaction = $createDepositTransaction([
                 'amount' => $data['amount'],
-                'method' => DepositMethod::BankTransfer
+                'method' => DepositMethod::BankTransfer->value
             ]);
 
             $bankPaymentDetails = $createVBA(new CollectionData(
@@ -64,12 +43,12 @@ class DepositController extends Controller
                 'metadata' => json_encode($bankPaymentDetails)
             ]);
 
-            return to_route('deposit')->with([
-                'bankPaymentDetails' => $bankPaymentDetails,
-                'amount' => $data['amount']
-            ]);
+            DB::commit();
+
+            return to_route('transaction.show', [$transaction]);
         } catch (\Exception $ex) {
-            throw $ex;
+            DB::rollBack();
+
             report($ex);
 
             return back()->with([

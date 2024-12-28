@@ -19,6 +19,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('reference')->unique();
+            $table->string('description');
             $table->unsignedBigInteger('amount');
             $table->unsignedBigInteger('balance')->comment('balance after the transaction');
             $table->string('type');

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @property int $user_id The ID of the user who made the transaction.
  *
+ * @property string $description
  * @property string $reference The unique reference for the transaction.
  * @property string $amount The amount involved in the transaction.
  * @property TransactionType $type The type of transaction, either 'stake' or 'winnings'.

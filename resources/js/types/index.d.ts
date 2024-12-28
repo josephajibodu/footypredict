@@ -70,6 +70,7 @@ export interface Bet {
 export interface Transaction {
     id: number;
     user_id: number;
+    description: string;
     reference: string;
     amount: string;
     type: TransactionType;

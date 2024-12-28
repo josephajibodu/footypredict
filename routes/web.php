@@ -5,6 +5,7 @@ use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportEventController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,9 +28,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet');
 
-    Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
+    Route::get('/transaction/{transaction:reference}', [TransactionController::class, 'show'])->name('transaction.show');
+
     Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
-    Route::get('/deposit/{deposit:reference}', [DepositController::class, 'show'])->name('deposit.show');
 
     Route::prefix('settings')->group(function () {
         Route::get('/', SettingController::class)->name('settings');

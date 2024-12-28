@@ -9,7 +9,6 @@ use App\Integrations\SwervPay\SwervePay;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Swervpaydev\SDK\Swervpay;
 use Throwable;
 
 class CreatePaymentWallet

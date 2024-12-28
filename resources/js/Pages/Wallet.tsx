@@ -1,7 +1,5 @@
-import Betslip from '@/Components/Betslip';
-import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
+import {Head, Link, router, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
 import {HandCoins, TicketSlash, Wallet2} from "lucide-react";
@@ -14,9 +12,19 @@ import {
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
-    DrawerTrigger,
 } from "@/Components/ui/drawer"
 import {Input} from "@/Components/ui/input";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table"
+import {toMoney} from "@/lib/utils";
+import dayjs from "dayjs";
 
 
 interface WalletPageProps extends PageProps {
@@ -70,11 +78,35 @@ export default function Wallet({ transactions, settings }: WalletPageProps) {
                         </div>
                     )}
 
-                    {transactions.map((transaction, index) => (
-                        <div className="py-2 px-4">
-                            <a href={route('deposit.show', { deposit: transaction })}>{transaction.reference}</a>
-                        </div>
-                    ))}
+                    <h2 className="px-4 pt-4 font-bold text-lg">Transactions</h2>
+
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="h-1">
+                                <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
+                                <TableHead className="h-4" aria-description="Date"></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {transactions.map((transaction, index) => (
+
+                                <TableRow >
+                                    <TableCell className="font-medium">
+                                        <Link href={route('transaction.show', {transaction})}>
+                                            <span className="text-sm text-primary/70">{transaction.description}</span>
+                                            <div className="">{toMoney(Number(transaction.amount))}</div>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell className={'text-right'}>
+                                        <span className="text-xs text-primary/70">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                    </TableCell>
+                                </TableRow>
+
+                            ))}
+                        </TableBody>
+                    </Table>
+
+
                 </div>
             </div>
 
