@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TransactionStatus;
 use App\Jobs\ProcessDepositTransactionJob;
+use App\Jobs\ProcessWithdrawalJob;
 use App\Models\Transaction;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,10 +32,16 @@ class SwervPayWebhookController extends Controller
         }
 
         $data = $request->input('data', []);
+        $event = $request->input('event');
         $reference = $data['reference'] ?? null;
 
         if (!$reference) {
             Log::warning('Missing transaction reference in SwervPay webhook');
+            return response('Missing reference', 400);
+        }
+
+        if (!$event) {
+            Log::warning('Missing event type in SwervPay webhook');
             return response('Missing reference', 400);
         }
 
@@ -54,6 +61,21 @@ class SwervPayWebhookController extends Controller
                 'status' => $transaction->status,
             ]);
             return response('Transaction already processed', 200);
+        }
+
+        switch ($event) {
+            case 'collection.completed':
+                ProcessDepositTransactionJob::dispatch($transaction, $data);
+                break;
+            case 'payout.completed':
+                ProcessWithdrawalJob::dispatch($transaction, $data);
+                break;
+            default:
+                Log::info('Event type not identified', [
+                    'reference' => $transaction->reference,
+                    'event' => $event,
+                    'data' => $data
+                ]);
         }
 
         ProcessDepositTransactionJob::dispatch($transaction, $data);
