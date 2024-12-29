@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\WithdrawalAccountType;
 use App\Enums\WithdrawalMethod;
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
@@ -12,8 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id The unique identifier for the transaction.
  *
- * @property WithdrawalMethod $method
- * @property string $withdrawal_address
+ * @property string|int $transaction_id
+ * @property WithdrawalAccountType $type
+ *
+ * @property string|null $withdrawal_address
+ *
+ * @property string|null $account_name
+ * @property string|null $bank_name
+ * @property string|null $account_number
  *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -27,7 +34,7 @@ class Withdrawal extends Model
     protected function casts(): array
     {
         return [
-            'method' => WithdrawalMethod::class
+            'type' => WithdrawalAccountType::class,
         ];
     }
 }

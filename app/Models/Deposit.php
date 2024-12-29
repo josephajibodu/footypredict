@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id The unique identifier for the transaction.
  *
  * @property DepositMethod $method
+ * @property float $amount_received
  * @property float $fee
  * @property array $metadata
  *
@@ -34,7 +35,6 @@ class Deposit extends Model
     {
         return [
             'method' => DepositMethod::class,
-            'status' => DepositStatus::class,
             'metadata' => 'array',
         ];
     }

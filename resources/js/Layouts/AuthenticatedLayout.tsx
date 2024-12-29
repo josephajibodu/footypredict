@@ -45,7 +45,7 @@ export default function Authenticated({
             </section>
 
             <main className={clsx(containerClassName,
-                "relative flex-1 overflow-y-scroll mb-[60px] w-full max-w-md mx-auto bg-secondary",
+                "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto bg-secondary",
                 {
                     "mt-[64px]": showHeader || backUrl
                 }

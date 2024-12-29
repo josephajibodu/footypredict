@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->string('method');
-            $table->unsignedBigInteger('fee')->nullable();
-            $table->text('metadata')->nullable();
+            $table->unsignedBigInteger('amount_received')->nullable();
+            $table->unsignedBigInteger('fee')->nullable();$table->text('metadata')->nullable();
 
             $table->timestamps();
         });

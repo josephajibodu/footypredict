@@ -65,23 +65,6 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
             <Head title="Withdraw" />
 
             <div className="flex flex-col px-4 py-4">
-
-                <div className="mb-4">
-                    <p className="mb-2 text-end">Balance: {toMoney(auth.user.balance)}</p>
-                    <div className="relative">
-                        <label htmlFor='amount'>
-                            <Wallet className="absolute size-8 top-3 start-3 text-gray-400" />
-                        </label>
-                        <Input
-                            id="amount"
-                            placeholder="Amount to Withdraw"
-                            className={'h-14 ps-[3.75rem]'}
-                            type="number"
-                            step="0.01"
-                        />
-                    </div>
-                </div>
-
                 <div className="relative mb-4">
                     <label htmlFor="bank">
                         <Landmark className="absolute size-8 top-3 start-3 text-gray-400" />
@@ -96,6 +79,29 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
                     />
                 </div>
 
+                <div className="relative">
+                    <label htmlFor='account_number'>
+                        <UserCircle className="absolute size-8 top-3 start-3 text-gray-400" />
+                    </label>
+                    <Input id="account_number" placeholder="Account Number"  className={'h-14 ps-[3.75rem]'} />
+                </div>
+
+
+                <div className="mt-12">
+                    <p className="mb-2 text-end">Balance: {toMoney(auth.user.balance)}</p>
+                    <div className="relative">
+                        <label htmlFor='amount'>
+                            <Wallet className="absolute size-8 top-3 start-3 text-gray-400" />
+                        </label>
+                        <Input
+                            id="amount"
+                            placeholder="Amount to Withdraw"
+                            className={'h-14 ps-[3.75rem]'}
+                            type="number"
+                            step="0.01"
+                        />
+                    </div>
+                </div>
 
                 <Button onClick={handleWithdraw} className="text-lg h-14 mt-8">Withdraw</Button>
             </div>

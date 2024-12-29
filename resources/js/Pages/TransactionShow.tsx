@@ -68,6 +68,11 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
                                 {(transaction.type === TransactionType.Deposit && transaction.deposit) && (
                                     <>
                                         <div>
+                                            <div className="text-sm text-muted-foreground">Amount Received</div>
+                                            <div className="font-medium">{toMoney(transaction.deposit?.amount_received ?? 0)}</div>
+                                        </div>
+
+                                        <div>
                                             <div className="text-sm text-muted-foreground">Fee</div>
                                             <div className="font-medium">{toMoney(transaction.deposit?.fee ?? 0)}</div>
                                         </div>
@@ -86,7 +91,12 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
 }
 
 TransactionShow.layout = (page: ReactNode) => (
-    <Authenticated backUrl={route('wallet')} showHeader={false} title="Transaction Details">
+    <Authenticated
+        backUrl={route('wallet')}
+        showHeader={false}
+        title="Transaction Details"
+        hideBottomNav={true}
+    >
         {page}
     </Authenticated>
 );

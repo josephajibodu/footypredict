@@ -7,6 +7,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SportEventController;
 use App\Http\Controllers\SwervPayWebhookController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\VerifyBankAccountController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Foundation\Application;
@@ -36,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
 
     Route::get('/withdraw', [WithdrawalController::class, 'create'])->name('withdraw');
+
+    Route::post('/resolve-bank', VerifyBankAccountController::class)->name('resolve-bank');
 
     Route::prefix('settings')->group(function () {
         Route::get('/', SettingController::class)->name('settings');

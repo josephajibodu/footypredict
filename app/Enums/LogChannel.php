@@ -8,8 +8,8 @@ enum LogChannel: string
 {
     use HasValues;
 
-    case Default = 'default';
     case Deposits = 'deposits';
     case Withdrawals = 'withdrawals';
     case Bet = 'bet';
+    case ExternalAPI = 'external-api';
 }

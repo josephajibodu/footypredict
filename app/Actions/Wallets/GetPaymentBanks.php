@@ -6,38 +6,38 @@ use App\Enums\LogChannel;
 use App\Integrations\SwervPay\CollectionData;
 use App\Integrations\SwervPay\SwervePay;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class GetPaymentBanks
 {
+    const CACHE_KEY = 'payment_banks';
+    const CACHE_TTL = 1440;
+
     /**
      * @throws Exception
      */
-    public function __invoke(CollectionData $collectionData)
+    public function __invoke()
     {
-        try {
-            $config = [
-                'secret_key' => config('services.swervpay.secret_key'),
-                'business_id' => config('services.swervpay.business_id'),
-                'sandbox' => config('services.swervpay.sandbox'),
-            ];
+        return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
+            try {
+                $swervpay = new SwervePay();
+                $banks = $swervpay->getBanks();
 
-            $swervpay = new SwervePay();
+                Log::channel(LogChannel::ExternalAPI->value)
+                    ->info("Fetched banks from SwervPay API", ['res' => $banks]);
 
-            $res = $swervpay->createCollection($collectionData->toArray());
+                if (!is_array($banks) || empty($banks)) {
+                    throw new Exception('Invalid bank data received');
+                }
 
-            Log::channel(LogChannel::Deposits->value)->info("Response from swervpay", [
-                'res' => $res,
-                'user' => auth()->user()
-            ]);
-
-            return $res;
-
-        } catch (Throwable $ex) {
-            report($ex);
-
-            throw new Exception('Error creating a dedicated bank account for you');
-        }
+                return $banks;
+            } catch (Throwable $ex) {
+                Log::channel(LogChannel::ExternalAPI->value)
+                    ->error("Error fetching banks: {$ex->getMessage()}");
+                throw new Exception('Could not fetch list of banks');
+            }
+        });
     }
 }

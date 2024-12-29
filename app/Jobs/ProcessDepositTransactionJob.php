@@ -32,6 +32,15 @@ class ProcessDepositTransactionJob implements ShouldQueue
         try {
             DB::transaction(function () {
 
+                if ($this->transaction->status !== TransactionStatus::Pending) {
+                    Log::info('[JOB] Transaction already processed', [
+                        'reference' => $this->transaction->reference,
+                        'status' => $this->transaction->status,
+                    ]);
+
+                    return;
+                }
+
                 $amountReceived = $this->data['amount'] ?? 0;
                 $fee = $this->data['charges'] ?? 0;
 
@@ -41,13 +50,14 @@ class ProcessDepositTransactionJob implements ShouldQueue
 
                 $this->transaction->update([
                     'balance' => $user->balance,
-                    'amount' => $amountReceived * 100,
+                    'amount' => ($amountReceived) * 100,
                     'status' => TransactionStatus::Completed,
                 ]);
 
                 if ($this->transaction->deposit) {
                     $this->transaction->deposit->update([
                         'fee' => $fee * 100,
+                        'amount_received' => $amountReceived * 100
                     ]);
                 }
 

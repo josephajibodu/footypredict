@@ -127,6 +127,38 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        \App\Enums\LogChannel::Deposits->value => [
+            'driver' => 'daily',
+            'path' => storage_path("logs/deposits.log"),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
+        \App\Enums\LogChannel::ExternalAPI->value => [
+            'driver' => 'daily',
+            'path' => storage_path("logs/external-api.log"),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
+        \App\Enums\LogChannel::Withdrawals->value => [
+            'driver' => 'daily',
+            'path' => storage_path("logs/withdrawals.log"),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
+        \App\Enums\LogChannel::Bet->value => [
+            'driver' => 'daily',
+            'path' => storage_path("logs/bets.log"),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];
