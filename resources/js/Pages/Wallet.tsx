@@ -53,9 +53,11 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                             Deposit
                         </Button>
 
-                        <Button variant="secondary" size="lg" className="text-base">
-                            <HandCoins size={12} />
-                            Withdraw
+                        <Button variant="secondary" size="lg" className="text-base" asChild>
+                            <Link href={route('withdraw')}>
+                                <HandCoins size={12} />
+                                Withdraw
+                            </Link>
                         </Button>
                     </div>
                 </div>

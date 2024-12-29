@@ -10,6 +10,10 @@ class WalletSetting extends Settings
 
     public int $minimum_deposit_usdt;
 
+    public int $minimum_withdrawal_ngn;
+
+    public int $minimum_withdrawal_usdt;
+
     public static function group(): string
     {
         return 'wallet';

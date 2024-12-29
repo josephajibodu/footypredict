@@ -8,6 +8,7 @@ use App\Http\Controllers\SportEventController;
 use App\Http\Controllers\SwervPayWebhookController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\WithdrawalController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaction/{transaction:reference}', [TransactionController::class, 'show'])->name('transaction.show');
 
     Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
+
+    Route::get('/withdraw', [WithdrawalController::class, 'create'])->name('withdraw');
 
     Route::prefix('settings')->group(function () {
         Route::get('/', SettingController::class)->name('settings');
