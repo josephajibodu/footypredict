@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Transactions\InitiateFundWithdrawal;
+use App\Actions\Wallets\CreatePayoutToBankAccount;
 use App\Actions\Wallets\GetPaymentBanks;
+use App\Enums\LogChannel;
+use App\Enums\WithdrawalAccountType;
 use App\Http\Resources\ApiWithdrawalAccountResource;
+use App\Integrations\SwervPay\PayoutData;
+use App\Models\WithdrawalAccount;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Throwable;
 
 class WithdrawalController extends Controller
 {
@@ -23,13 +33,53 @@ class WithdrawalController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CreatePayoutToBankAccount $payoutToBankAccount, InitiateFundWithdrawal $initiateFundWithdrawal)
     {
         $data = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
-            'account_id' => ['required', 'string'],
+            'account_id' => ['required', 'numeric'],
         ]);
 
-        return $data;
+        DB::beginTransaction();
+
+        try {
+            // Validate withdrawal account ownership
+            $bank = WithdrawalAccount::query()
+                ->where('id', $data['account_id'])
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (! $bank) {
+                Log::error('Invalid withdrawal account for user', [
+                    'data' => $data,
+                    'user_id' => auth()->id(),
+                ]);
+
+                return back()->withErrors(['account_id' => 'Invalid bank details.']);
+            }
+
+            // Initiate fund withdrawal
+            $transaction = $initiateFundWithdrawal($data['amount'], $bank, 'swervpay');
+
+            // Payout to bank
+            $payoutTransaction = $payoutToBankAccount(new PayoutData(
+                bank_code: $bank->bank_code,
+                account_number: $bank->account_number,
+                amount: $data['amount'],
+                currency: 'NGN',
+                reference: $transaction->reference,
+                narration: "Wallet payout to {$bank->account_name} at {$bank->bank_name}",
+            ));
+
+            DB::commit();
+
+            return to_route('wallet')->with(['success' => 'You should get your funds in your bank account soon.']);
+        } catch (Throwable $ex) {
+            DB::rollBack();
+
+            report($ex);
+
+            return back()->withErrors($ex->getMessage() ?? 'Funds withdrawal failed.');
+        }
     }
 }

@@ -79,6 +79,27 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
 
                                     </>
                                 )}
+
+                                {/* For Withdrawals */}
+                                {(transaction.type === TransactionType.Withdrawal && transaction.withdrawal) && (
+                                    <>
+                                        <div>
+                                            <div className="text-sm text-muted-foreground">Account Name</div>
+                                            <div className="font-medium">{transaction.withdrawal.account_name ?? '-'}</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="text-sm text-muted-foreground">Account Number</div>
+                                            <div className="font-medium">{transaction.withdrawal.account_number ?? '-'}</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="text-sm text-muted-foreground">Bank Name</div>
+                                            <div className="font-medium line-clamp-1">{transaction.withdrawal.bank_name ?? '-'}</div>
+                                        </div>
+
+                                    </>
+                                )}
                             </div>
                         </div>
 

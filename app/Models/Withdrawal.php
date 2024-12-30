@@ -25,6 +25,8 @@ class Withdrawal extends Model
 {
     use HasTransaction;
 
+    protected $guarded = ['id'];
+
     protected function casts(): array
     {
         return [

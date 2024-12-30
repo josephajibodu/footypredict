@@ -3,7 +3,7 @@ import {Head, router} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {PageProps} from '@/types';
 import {Button} from "@/Components/ui/button";
-import {Ban, Landmark, Loader, UserCircle} from "lucide-react";
+import {Ban, Check, Landmark, Loader, UserCircle} from "lucide-react";
 import {Input} from "@/Components/ui/input";
 import {
     Drawer,
@@ -110,7 +110,6 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                 })
             },
             onSuccess: page => {
-                console.log('it is success full', page)
                 toast({
                     title: page.props.flash.success ?? 'Bank account added successfully',
                     variant: 'success',
@@ -151,7 +150,14 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                     />
                 </div>
 
-                <Button onClick={handleResolveAccountNumber} className="text-lg h-14 mt-8">Add Bank</Button>
+                <Button
+                    onClick={handleResolveAccountNumber}
+                    className="text-lg h-14 mt-8"
+                    disabled={loading}
+                >
+                    {loading && <Loader className="animate-spin" />}
+                    Add Bank
+                </Button>
             </div>
 
             <Drawer
@@ -169,10 +175,11 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                             {banks.map((bank) => (
                                 <li
                                     key={bank.bank_code}
-                                    className="p-4 cursor-pointer hover:bg-gray-100"
+                                    className="p-4 flex justify-between cursor-pointer hover:bg-gray-100"
                                     onClick={() => handleBankSelect(bank)}
                                 >
                                     {bank.bank_name}
+                                    {(bank.bank_code === selectedBank?.bank_code) && <Check/>}
                                 </li>
                             ))}
                         </ul>
@@ -225,7 +232,6 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                             className="rounded-none"
                             disabled={loading}
                         >
-                            <Ban className="w-full" />
                             Cancel
                         </Button>
                         <Button
@@ -246,7 +252,7 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
 
 Withdraw.layout = (page: ReactNode) => (
     <Authenticated
-        backUrl={route('wallet')}
+        backUrl={route('withdraw')}
         showHeader={false}
         hideBottomNav={true}
         title="Add New Bank Account"

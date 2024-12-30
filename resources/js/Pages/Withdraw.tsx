@@ -3,10 +3,10 @@ import {Head, Link, router} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {PageProps} from '@/types';
 import {Transaction, TransactionStatus, TransactionType, WithdrawalAccount} from "@/types/transactions";
-import {cn, toMoney} from "@/lib/utils";
+import {cn, extractErrorMessage, toMoney} from "@/lib/utils";
 import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
-import {Landmark, Phone, Plus, UserCircle, Wallet, XIcon} from "lucide-react";
+import {Check, Landmark, Loader, Phone, Plus, UserCircle, Wallet, XIcon} from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import {Input} from "@/Components/ui/input";
@@ -23,11 +23,6 @@ import {useToast} from "@/hooks/use-toast";
 
 dayjs.extend(localizedFormat);
 
-interface Bank {
-    bank_name: string,
-    bank_code: string
-}
-
 interface WithdrawPageProps extends PageProps {
     accounts: WithdrawalAccount[]
     defaultAccount?: WithdrawalAccount
@@ -35,10 +30,11 @@ interface WithdrawPageProps extends PageProps {
 
 export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPageProps) {
     const {toast} = useToast();
-
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const [loading, setLoading] = useState(false);
     const [selectedBank, setSelectedBank] = useState<WithdrawalAccount | undefined>(defaultAccount);
-    const [amount, setAmount] = useState<number>();
+    const [amount, setAmount] = useState<string>();
 
     const openDrawer = () => setDrawerOpen(true);
     const closeDrawer = () => setDrawerOpen(false);
@@ -63,15 +59,26 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
             })
         }
 
-        router.post(route('resolve-bank'), {
-            account_number: '0040987133',
-            bank_code: selectedBank?.bank_code
+        router.post(route('withdrawal.store'), {
+            amount: Number(amount),
+            account_id: selectedBank.id
         }, {
-            onSuccess: params => {
-                console.log("success:", params)
+            onStart: () => setLoading(true),
+            onFinish: () => setLoading(false),
+            onSuccess: page => {
+                toast({
+                    title: 'Withdrawal successful',
+                    description: page.props.flash.success,
+                    variant: 'success',
+                })
             },
-            onError: params => {
-                console.log("error occurred:", params)
+            onError: error => {
+                const message = extractErrorMessage(error);
+
+                toast({
+                    title: message ?? 'Withdrawal failed',
+                    variant: 'destructive'
+                })
             }
         })
     }
@@ -91,7 +98,7 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                         <Input
                             id="amount"
                             value={amount}
-                            onChange={(e) => setAmount(Number(e.target.value))}
+                            onChange={(e) => setAmount(e.target.value)}
                             placeholder="Amount to Withdraw"
                             className={'h-14 ps-[3.75rem]'}
                             type="number"
@@ -115,7 +122,10 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                 </div>
 
 
-                <Button onClick={handleWithdraw} className="text-lg h-14 mt-8">Withdraw</Button>
+                <Button disabled={loading} onClick={handleWithdraw} className="text-lg h-14 mt-8">
+                    {loading && <Loader className={'animate-spin'} />}
+                    Withdraw
+                </Button>
             </div>
 
             <Drawer
@@ -131,13 +141,24 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                         <ul className="divide-y divide-gray-200">
                             {accounts.length > 0 ? (
                                 <ul className="divide-y divide-gray-200">
-                                    {accounts.map((account) => (
+                                    {accounts.map((account, index) => (
                                         <li
                                             key={account.bank_code}
-                                            className="p-4 cursor-pointer hover:bg-gray-100"
+                                            className={cn(
+                                                "p-4 flex justify-between items-center cursor-pointer hover:bg-gray-100",
+                                                {
+                                                    "border-t": index === 0,
+                                                    "border-b": index === (accounts.length - 1),
+                                                    "bg-primary/10": account.id === selectedBank?.id
+                                                }
+                                            )}
                                             onClick={() => handleBankSelect(account)}
                                         >
-                                            {account.bank_name}
+                                            <div className="flex flex-col">
+                                                <span>{account.bank_name}</span>
+                                                <span className="text-sm text-gray-500">{account.account_number}</span>
+                                            </div>
+                                            {(account.id === selectedBank?.id) && <Check/>}
                                         </li>
                                     ))}
                                 </ul>

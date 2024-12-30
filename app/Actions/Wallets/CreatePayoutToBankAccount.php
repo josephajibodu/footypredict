@@ -3,7 +3,7 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\CollectionData;
+use App\Integrations\SwervPay\PayoutData;
 use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -14,20 +14,14 @@ class CreatePayoutToBankAccount
     /**
      * @throws Exception
      */
-    public function __invoke(CollectionData $collectionData)
+    public function __invoke(PayoutData $payoutData)
     {
         try {
-            $config = [
-                'secret_key' => config('services.swervpay.secret_key'),
-                'business_id' => config('services.swervpay.business_id'),
-                'sandbox' => config('services.swervpay.sandbox'),
-            ];
-
             $swervpay = new SwervePay;
 
-            $res = $swervpay->createCollection($collectionData->toArray());
+            $res = $swervpay->createPayout($payoutData->toArray());
 
-            Log::channel(LogChannel::Deposits->value)->info('Response from swervpay', [
+            Log::channel(LogChannel::ExternalAPI->value)->info('Response from swervpay', [
                 'res' => $res,
                 'user' => auth()->user(),
             ]);
@@ -37,7 +31,7 @@ class CreatePayoutToBankAccount
         } catch (Throwable $ex) {
             report($ex);
 
-            throw new Exception('Error creating a dedicated bank account for you');
+            throw new Exception('Error initiating withdrawals');
         }
     }
 }

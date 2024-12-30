@@ -18,7 +18,7 @@ class TransactionController extends Controller
             ->get();
 
         return Inertia::render('Wallet', [
-            'transactions' => $transactions,
+            'transactions' => ApiTransactionResource::make($transactions),
         ]);
     }
 

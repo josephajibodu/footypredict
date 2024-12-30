@@ -13,7 +13,8 @@ export interface Transaction {
     updated_at: string;
 
     deposit?: Deposit;
-    bet?: object
+    bet?: object,
+    withdrawal?: Withdrawal;
 }
 
 export interface Deposit {

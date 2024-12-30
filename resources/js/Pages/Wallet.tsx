@@ -2,7 +2,7 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
-import {HandCoins, TicketSlash, Wallet2} from "lucide-react";
+import {HandCoins, Loader, TicketSlash, Wallet2} from "lucide-react";
 
 import {
     Drawer,
@@ -79,7 +79,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                         <TableHeader>
                             <TableRow className="h-1">
                                 <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
-                                <TableHead className="h-4" aria-description="Date"></TableHead>
+                                <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -88,11 +88,11 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                                 <TableRow key={transaction.id}>
                                     <TableCell className="font-medium">
                                         <Link href={route('transaction.show', {transaction})}>
-                                            <span className="text-sm text-primary/70">{transaction.description}</span>
+                                            <span className="text-sm text-primary/70 line-clamp-1">{transaction.description}</span>
                                             <div className="">{toMoney(Number(transaction.amount))}</div>
                                         </Link>
                                     </TableCell>
-                                    <TableCell className={'text-right'}>
+                                    <TableCell className={'text-right ps-0'}>
                                         <span className="text-xs text-primary/70">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
                                     </TableCell>
                                 </TableRow>
@@ -126,7 +126,8 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
 
                         <DrawerFooter className="pb-8">
                             <Button disabled={processing} type={"submit"} size={'lg'}>
-                                {processing ? "Processing..." : "Continue to Payment"}
+                                {processing && <Loader className="animate-spin" /> }
+                                Continue to Payment
                             </Button>
                             {/*<DrawerClose>*/}
                             {/*    <Button variant="outline">Cancel</Button>*/}

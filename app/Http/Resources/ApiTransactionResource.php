@@ -30,7 +30,7 @@ class ApiTransactionResource extends JsonResource
 
             'bet' => $this->whenLoaded('bet'),
             'winning' => $this->whenLoaded('winning'),
-            'withdrawal' => $this->whenLoaded('withdrawal'),
+            'withdrawal' => ApiWithdrawalResource::make($this->whenLoaded('withdrawal')),
             'deposit' => ApiDepositResource::make($this->whenLoaded('deposit')),
             'refund' => $this->whenLoaded('refund'),
 
