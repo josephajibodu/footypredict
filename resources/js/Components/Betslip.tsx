@@ -41,13 +41,14 @@ export default function Betslip() {
 
         const data = {
             amount: stake,
-            events: events.map((event, index) => ({ event_id: event.id, bet_option: event.betOption}))
+            events: events.map((event, index) => ({
+                event_id: event.id,
+                bet_option: event.betOption
+            }))
         }
 
         router.post(route('bets'), data, {
-            onStart: () => {
-                setProcessing(true)
-            },
+            onStart: () => setProcessing(true),
             onSuccess: page => {
                 dispatch(clearSelectedSportEvents());
                 setOpen(false);
@@ -73,17 +74,16 @@ export default function Betslip() {
                     ),
                 });
             },
-            onFinish: () => {
-                setProcessing(false)
-            },
+            onFinish: () => setProcessing(false),
         });
     };
 
     return (
         <>
             <div
-                className="fixed right-0 flex flex-col items-center justify-center w-12 h-16 bg-gray-900 rounded-l bottom-20"
+                className="fixed right-0 flex flex-col items-center justify-center w-12 h-16 bg-gray-900 rounded-l bottom-20 cursor-pointer"
                 onClick={() => setOpen(true)}
+                aria-label="Open bet slip"
             >
                 <span className="flex items-center justify-center w-6 h-6 text-sm text-white rounded-full bg-destructive">
                     {events.length}
@@ -94,29 +94,31 @@ export default function Betslip() {
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerContent className="h-[90%]">
                     <DrawerHeader>
-                        <DrawerTitle>Bet slip</DrawerTitle>
+                        <DrawerTitle>Bet Slip</DrawerTitle>
                         <DrawerDescription>
-                            Selected matches will appear here
+                            Selected matches will appear here.
                         </DrawerDescription>
                     </DrawerHeader>
+
                     <div className="flex-1 p-4 overflow-y-auto bg-white">
                         <div className="max-w-md mx-auto space-y-4">
-                            {events.map((sportEvent, index) => (
+                            {events.map((sportEvent) => (
                                 <div key={sportEvent.id} className="flex items-center justify-between py-2 border-b">
-                                    <div className="flex items-center">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm text-gray-500">
-                                                {MatchOptionLabels[sportEvent.betOption]}
-                                            </span>
-                                            <span className="line-clamp-1">{sportEvent.team1.name} vs {sportEvent.team2.name}</span>
-                                        </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm text-gray-500">
+                                            {MatchOptionLabels[sportEvent.betOption]}
+                                        </span>
+                                        <span className="line-clamp-1">
+                                            {sportEvent.team1.name} vs {sportEvent.team2.name}
+                                        </span>
                                     </div>
 
                                     <div className="w-12 flex justify-between gap-2 h-full">
                                         <Button
                                             onClick={() => handleRemoveSportEvent(sportEvent.id)}
-                                            variant={'ghost'}
+                                            variant="ghost"
                                             className="text-red-600 active:bg-red-100 active:text-red-600"
+                                            aria-label={`Remove ${sportEvent.team1.name} vs ${sportEvent.team2.name}`}
                                         >
                                             <Trash />
                                         </Button>
@@ -125,10 +127,25 @@ export default function Betslip() {
                             ))}
                         </div>
                     </div>
+
                     <DrawerFooter>
                         <div className="flex gap-4">
-                            <Input type='number' step='0.01' value={stake} onChange={(e) => setStake(Number(e.target.value))} required placeholder="500" />
-                            <Button disabled={processing} onClick={handlePlaceBet}>Place Bet</Button>
+                            <Input
+                                type="number"
+                                step="0.01"
+                                value={stake}
+                                onChange={(e) => setStake(Number(e.target.value))}
+                                required
+                                placeholder={DEFAULT_AMOUNT.toString()}
+                                aria-label="Enter stake amount"
+                            />
+                            <Button
+                                disabled={processing}
+                                onClick={handlePlaceBet}
+                                aria-label="Place your bet"
+                            >
+                                Place Bet
+                            </Button>
                         </div>
                         <DrawerClose>
                             <Button variant="outline">Close</Button>

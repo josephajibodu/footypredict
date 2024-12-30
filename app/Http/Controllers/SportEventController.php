@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ApiSportEventResource;
 use App\Models\SportEvent;
 use Inertia\Inertia;
 
@@ -14,7 +15,7 @@ class SportEventController extends Controller
             ->whereDay('match_date', today())->get();
 
         return Inertia::render('Events', [
-            'events' => $events,
+            'events' => ApiSportEventResource::collection($events),
         ]);
     }
 }

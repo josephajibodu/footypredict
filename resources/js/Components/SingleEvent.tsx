@@ -13,7 +13,6 @@ export default function SingleEvent(
         betOption?: MatchOption;
     }
 ) {
-
     return (
         <div className="flex items-center justify-between py-2 border-b">
             <div className="flex items-center">

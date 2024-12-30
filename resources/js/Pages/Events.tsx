@@ -60,16 +60,38 @@ export default function Events({ events, settings }: EventPageProps) {
                         <span className="w-14 text-center">2(Away)</span>
                     </div>
                 </div>
-                {/* Event */}
-                {events.map((event, index) => (
-                    <SingleEvent
-                        key={index}
-                        event={event}
-                        sn={index + 1}
-                        onChange={(value) => handleGameSelection(event, value)}
-                        betOption={getSelectedOption(event.id)}
-                    />
-                ))}
+                {/* Empty State */}
+                {events.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-16 text-center">
+                        <svg
+                            className="w-16 h-16 text-gray-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 17v-2a4 4 0 01.879-2.57l.87-.87a4 4 0 015.682 0l.87.87A4 4 0 0115 15v2M12 7v.01M12 12h.01"
+                            />
+                        </svg>
+                        <p className="mt-4 text-lg font-medium text-gray-600">No Events Available</p>
+                        <p className="mt-2 text-sm text-gray-500">Currently, there are no events to display. Please check back later.</p>
+                    </div>
+                ) : (
+                    /* Event List */
+                    events.map((event, index) => (
+                        <SingleEvent
+                            key={index}
+                            event={event}
+                            sn={index + 1}
+                            onChange={(value) => handleGameSelection(event, value)}
+                            betOption={getSelectedOption(event.id)}
+                        />
+                    ))
+                )}
             </div>
 
             <Betslip />
