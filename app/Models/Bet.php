@@ -13,17 +13,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class Bet
  *
  * @property int $id The unique identifier for the bet.
- *
  * @property int $user_id
  * @property int $transaction_id The ID of the transaction associated with the bet.
  * @property int $stake The amount staked on the bet.
  * @property int $multiplier The odds multiplier for the bet.
  * @property int $potential_winnings The calculated potential winnings.
  * @property BetStatus $status The status of the bet (e.g., 'pending', 'won', 'lost').
- *
  * @property Carbon|null $created_at Timestamp when the bet was created.
  * @property Carbon|null $updated_at Timestamp when the bet was last updated.
- *
  * @property-read User $user
  * @property-read Transaction $transaction The transaction associated with the bet.
  * @property-read SportEvent[] $sportEvents The sport events linked to the bet.
@@ -44,7 +41,7 @@ class Bet extends Model
     protected function casts(): array
     {
         return [
-            'status' => BetStatus::class
+            'status' => BetStatus::class,
         ];
     }
 
@@ -66,4 +63,3 @@ class Bet extends Model
         return $this->belongsTo(Transaction::class);
     }
 }
-

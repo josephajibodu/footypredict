@@ -16,8 +16,7 @@ class ProcessWithdrawalJob implements ShouldQueue
     public function __construct(
         public Transaction $transaction,
         public array $data,
-    )
-    {}
+    ) {}
 
     /**
      * Execute the job.

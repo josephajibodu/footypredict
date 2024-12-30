@@ -14,19 +14,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Class Transaction
  *
  * @property int $id The unique identifier for the transaction.
- *
  * @property int $user_id The ID of the user who made the transaction.
- *
  * @property string $description
  * @property string $reference The unique reference for the transaction.
  * @property string $amount The amount involved in the transaction.
  * @property TransactionType $type The type of transaction, either 'stake' or 'winnings'.
  * @property TransactionStatus $status The status of the transaction, either 'pending', 'completed', or 'failed'.
  * @property int $balance
- *
  * @property Carbon|null $created_at Timestamp when the transaction was created.
  * @property Carbon|null $updated_at Timestamp when the transaction was last updated.
- *
  * @property-read User $user The user who made the transaction.
  * @property-read Bet|null $bet
  * @property-read Winning|null $winning
@@ -45,7 +41,7 @@ class Transaction extends Model
     {
         return [
             'type' => TransactionType::class,
-            'status' => TransactionStatus::class
+            'status' => TransactionStatus::class,
         ];
     }
 

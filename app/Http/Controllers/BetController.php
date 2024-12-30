@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Bets\PlaceBet;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -16,7 +15,7 @@ class BetController extends Controller
         $bets = $user->bets;
 
         return Inertia::render('BetHistory', [
-            'bets' => $bets
+            'bets' => $bets,
         ]);
     }
 
@@ -29,7 +28,7 @@ class BetController extends Controller
             'events.*.event_id' => ['required', 'integer', 'exists:sport_events,id'],
             'events.*.bet_option' => ['required', 'string', 'in:home_win,draw,away_win'],
         ], [
-            'events.min' => 'Please select at least 4 events.'
+            'events.min' => 'Please select at least 4 events.',
         ]);
 
         $user = Auth::user();

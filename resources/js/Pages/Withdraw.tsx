@@ -1,12 +1,12 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Head, router} from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {PageProps} from '@/types';
-import {Transaction, TransactionStatus, TransactionType} from "@/types/transactions";
+import {Transaction, TransactionStatus, TransactionType, WithdrawalAccount} from "@/types/transactions";
 import {cn, toMoney} from "@/lib/utils";
 import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
-import {Landmark, Phone, UserCircle, Wallet} from "lucide-react";
+import {Landmark, Phone, Plus, UserCircle, Wallet, XIcon} from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import {Input} from "@/Components/ui/input";
@@ -19,6 +19,7 @@ import {
     DrawerHeader,
     DrawerTitle
 } from "@/Components/ui/drawer";
+import {useToast} from "@/hooks/use-toast";
 
 dayjs.extend(localizedFormat);
 
@@ -28,25 +29,40 @@ interface Bank {
 }
 
 interface WithdrawPageProps extends PageProps {
-    banks: Bank[]
+    accounts: WithdrawalAccount[]
+    defaultAccount?: WithdrawalAccount
 }
 
-export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps) {
-    const [drawerOpen, setDrawerOpen] = useState(false);
-    const [selectedBank, setSelectedBank] = useState<Bank | undefined>();
+export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPageProps) {
+    const {toast} = useToast();
 
-    const [defaultBank, setDefaultBank] = useState();
-    const [availableBanks, setAvailableBanks] = useState();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [selectedBank, setSelectedBank] = useState<WithdrawalAccount | undefined>(defaultAccount);
+    const [amount, setAmount] = useState<number>();
 
     const openDrawer = () => setDrawerOpen(true);
     const closeDrawer = () => setDrawerOpen(false);
 
-    const handleBankSelect = (bank: Bank) => {
-        setSelectedBank(bank);
+    const handleBankSelect = (account: WithdrawalAccount) => {
+        setSelectedBank(account);
         closeDrawer();
     };
 
     const handleWithdraw = () => {
+        if (! amount) {
+            return toast({
+                title: 'Amount to withdraw is required',
+                variant: 'destructive'
+            })
+        }
+
+        if (! selectedBank) {
+            return toast({
+                title: 'Please select an account',
+                variant: 'destructive'
+            })
+        }
+
         router.post(route('resolve-bank'), {
             account_number: '0040987133',
             bank_code: selectedBank?.bank_code
@@ -74,6 +90,8 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
                         </label>
                         <Input
                             id="amount"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
                             placeholder="Amount to Withdraw"
                             className={'h-14 ps-[3.75rem]'}
                             type="number"
@@ -107,22 +125,50 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
             >
                 <DrawerContent>
                     <DrawerHeader>
-                        <DrawerTitle>Fund Wallet</DrawerTitle>
-                        <DrawerDescription>How much do you to add?</DrawerDescription>
+                        <DrawerTitle>Select Bank</DrawerTitle>
                     </DrawerHeader>
-                    <div className="h-[65vh] overflow-y-auto">
+                    <div className="min-h-[30vh] overflow-y-auto">
                         <ul className="divide-y divide-gray-200">
-                            {banks.map((bank) => (
-                                <li
-                                    key={bank.bank_code}
-                                    className="p-4 cursor-pointer hover:bg-gray-100"
-                                    onClick={() => handleBankSelect(bank)}
-                                >
-                                    {bank.bank_name}
-                                </li>
-                            ))}
+                            {accounts.length > 0 ? (
+                                <ul className="divide-y divide-gray-200">
+                                    {accounts.map((account) => (
+                                        <li
+                                            key={account.bank_code}
+                                            className="p-4 cursor-pointer hover:bg-gray-100"
+                                            onClick={() => handleBankSelect(account)}
+                                        >
+                                            {account.bank_name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-center py-16 text-gray-500">
+                                    <XIcon className="size-8 mb-4" />
+                                    <p>No accounts found</p>
+                                    <Button variant="link" asChild>
+                                        <Link href={route('add-withdrawal-account')} className="mt-4">
+                                            <Plus className="mr-2" />
+                                            Add a New Account
+                                        </Link>
+                                    </Button>
+                                </div>
+                            )}
                         </ul>
+
                     </div>
+
+                    <DrawerFooter>
+                        {accounts.length > 0 && (
+                            <DrawerFooter>
+                                <Button asChild>
+                                    <Link href={route('add-withdrawal-account')}>
+                                        <Plus />
+                                        Add a New Account
+                                    </Link>
+                                </Button>
+                            </DrawerFooter>
+                        )}
+                    </DrawerFooter>
                 </DrawerContent>
             </Drawer>
         </>

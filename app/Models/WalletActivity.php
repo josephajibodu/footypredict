@@ -12,10 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property string $reason
  * @property int $amount
- *
  * @property Carbon $created_at Timestamp when the activity was created
  * @property Carbon $updated_at Timestamp when the activity was last updated
- *
  * @property-read User $user
  */
 class WalletActivity extends Model
@@ -25,7 +23,7 @@ class WalletActivity extends Model
     protected function casts(): array
     {
         return [
-            'currency' => Currency::class
+            'currency' => Currency::class,
         ];
     }
 

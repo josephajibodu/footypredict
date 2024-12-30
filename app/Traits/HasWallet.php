@@ -108,6 +108,7 @@ trait HasWallet
 
         return DB::transaction(function () use ($amount, $reason) {
             $this->updateWalletBalance($amount);
+
             return $this->walletActivities()->create([
                 'amount' => $amount * static::BALANCE_UNIT,
                 'reason' => $reason,

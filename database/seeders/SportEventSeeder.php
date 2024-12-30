@@ -3,13 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\MatchOption;
-use App\Enums\SportEventStatus;
-use App\Enums\SportEventType;
 use App\Models\Option;
 use App\Models\SportEvent;
 use App\Models\Team;
-use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SportEventSeeder extends Seeder
@@ -25,7 +21,7 @@ class SportEventSeeder extends Seeder
 
         for ($i = 0; $i < 16; $i += 2) {
             // Skip if we don't have enough teams
-            if (!isset($teamIds[$i]) || !isset($teamIds[$i + 1])) {
+            if (! isset($teamIds[$i]) || ! isset($teamIds[$i + 1])) {
                 break;
             }
 

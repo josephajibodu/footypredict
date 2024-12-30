@@ -6,11 +6,8 @@ use App\Enums\TransactionStatus;
 use App\Jobs\ProcessDepositTransactionJob;
 use App\Jobs\ProcessWithdrawalJob;
 use App\Models\Transaction;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class SwervPayWebhookController extends Controller
 {
@@ -35,13 +32,15 @@ class SwervPayWebhookController extends Controller
         $event = $request->input('event');
         $reference = $data['reference'] ?? null;
 
-        if (!$reference) {
+        if (! $reference) {
             Log::warning('Missing transaction reference in SwervPay webhook');
+
             return response('Missing reference', 400);
         }
 
-        if (!$event) {
+        if (! $event) {
             Log::warning('Missing event type in SwervPay webhook');
+
             return response('Missing reference', 400);
         }
 
@@ -50,8 +49,9 @@ class SwervPayWebhookController extends Controller
          */
         $transaction = Transaction::query()->where('reference', $reference)->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             Log::error('Transaction not found for reference', ['reference' => $reference]);
+
             return response('Transaction not found', 404);
         }
 
@@ -60,6 +60,7 @@ class SwervPayWebhookController extends Controller
                 'reference' => $transaction->reference,
                 'status' => $transaction->status,
             ]);
+
             return response('Transaction already processed', 200);
         }
 
@@ -74,7 +75,7 @@ class SwervPayWebhookController extends Controller
                 Log::info('Event type not identified', [
                     'reference' => $transaction->reference,
                     'event' => $event,
-                    'data' => $data
+                    'data' => $data,
                 ]);
         }
 

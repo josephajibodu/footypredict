@@ -11,9 +11,13 @@ use Throwable;
 class SwervePay
 {
     protected string $businessId;
+
     protected string $secretKey;
+
     protected string $baseUrl;
+
     protected bool $isSandbox;
+
     protected string $cacheKey = 'swervpay_access_token';
 
     public function __construct()
@@ -34,11 +38,11 @@ class SwervePay
             return $cachedToken;
         }
 
-        $credentials = base64_encode($this->businessId . ':' . $this->secretKey);
+        $credentials = base64_encode($this->businessId.':'.$this->secretKey);
 
         $response = Http::withHeaders([
-            'Authorization' => 'Basic ' . $credentials,
-        ])->post($this->baseUrl . '/auth')->json();
+            'Authorization' => 'Basic '.$credentials,
+        ])->post($this->baseUrl.'/auth')->json();
 
         if (isset($response['access_token'])) {
             $token = $response['access_token'];
@@ -68,13 +72,13 @@ class SwervePay
         $bearerToken = $this->getAccessToken();
 
         $headers = [
-            'Authorization' => 'Bearer ' . $bearerToken,
+            'Authorization' => 'Bearer '.$bearerToken,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
 
         return Http::withHeaders($headers)
-            ->$method($this->baseUrl . $endpoint, $data)
+            ->$method($this->baseUrl.$endpoint, $data)
             ->json();
     }
 

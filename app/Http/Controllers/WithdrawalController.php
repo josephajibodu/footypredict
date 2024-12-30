@@ -3,26 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Wallets\GetPaymentBanks;
+use App\Http\Resources\ApiWithdrawalAccountResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class WithdrawalController extends Controller
 {
     public function create(GetPaymentBanks $getPaymentBanks)
     {
-        try {
-            $banks = $getPaymentBanks();
+        $user = Auth::user();
 
-        } catch (\Exception $e) {
-            return Inertia::render('Withdraw', [
-                'banks' => []
-            ])->with([
-                'error' => 'Could not fetch banks'
-            ]);
-        }
+        $withdrawalAccounts = $user->withdrawalAccounts()->get();
+        $defaultWithdrawalAccount = $withdrawalAccounts->where('is_default', true)->first();
 
         return Inertia::render('Withdraw', [
-            'banks' => $banks
+            'accounts' => ApiWithdrawalAccountResource::collection($withdrawalAccounts),
+            'defaultAccount' => $defaultWithdrawalAccount ? ApiWithdrawalAccountResource::make($defaultWithdrawalAccount) : null,
         ]);
     }
 
@@ -30,7 +27,7 @@ class WithdrawalController extends Controller
     {
         $data = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
-            'bank_id' => ['required', 'string'],
+            'account_id' => ['required', 'string'],
         ]);
 
         return $data;

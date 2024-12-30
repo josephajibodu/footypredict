@@ -14,7 +14,6 @@ enum SportEventStatus: string implements HasLabel
     case Postponed = 'postponed';
     case Cancelled = 'cancelled';
 
-
     public function getLabel(): ?string
     {
         return match ($this) {

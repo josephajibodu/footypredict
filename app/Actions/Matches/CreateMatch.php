@@ -9,15 +9,12 @@ use App\Models\SportEvent;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class CreateMatch
 {
     /**
      * Create a new match (sport event).
      *
-     * @param array $data
-     * @return SportEvent
      * @throws Exception
      */
     public function __invoke(array $data): SportEvent
@@ -56,7 +53,7 @@ class CreateMatch
             foreach (MatchOption::values() as $option) {
                 $event->options()->create([
                     'type' => $option,
-                    'value' => null
+                    'value' => null,
                 ]);
             }
 

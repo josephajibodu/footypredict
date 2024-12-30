@@ -19,6 +19,6 @@ class EditTeam extends EditRecord
 
     protected function getSavedNotificationMessage(): ?string
     {
-        return "Team details updated";
+        return 'Team details updated';
     }
 }

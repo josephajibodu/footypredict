@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait HasBets
 {
-    public function bets() : HasMany
+    public function bets(): HasMany
     {
         return $this->hasMany(Bet::class);
     }

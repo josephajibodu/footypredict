@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddWithdrawalAccountController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProfileController;
@@ -10,9 +11,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\VerifyBankAccountController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
     return redirect()->route('events');
@@ -26,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
         ->only(['index', 'store'])
         ->names([
             'index' => 'bets',
-            'store' => 'bets.store'
+            'store' => 'bets.store',
         ]);
 
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet');
@@ -37,6 +36,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
 
     Route::get('/withdraw', [WithdrawalController::class, 'create'])->name('withdraw');
+    Route::post('/withdraw', [WithdrawalController::class, 'store'])->name('withdrawal.store');
+
+    Route::get('/add-withdrawal-account', [AddWithdrawalAccountController::class, 'create'])->name('add-withdrawal-account');
+    Route::post('/add-withdrawal-account', [AddWithdrawalAccountController::class, 'store'])->name('add-withdrawal-account.store');
 
     Route::post('/resolve-bank', VerifyBankAccountController::class)->name('resolve-bank');
 

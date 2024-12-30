@@ -27,7 +27,7 @@ class InitiateDepositTransaction
         $transaction = Transaction::query()->create([
             'user_id' => $user->id,
             'reference' => $reference,
-            'description' => "Funds Deposit",
+            'description' => 'Funds Deposit',
             'amount' => $validatedData['amount'] * 100,
             'balance' => $currentBalance,
             'type' => TransactionType::Deposit,

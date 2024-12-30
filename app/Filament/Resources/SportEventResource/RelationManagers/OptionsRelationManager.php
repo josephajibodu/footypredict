@@ -3,14 +3,11 @@
 namespace App\Filament\Resources\SportEventResource\RelationManagers;
 
 use App\Enums\MatchOption;
-use App\Models\Option;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OptionsRelationManager extends RelationManager
 {
@@ -33,7 +30,7 @@ class OptionsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('type')
                     ->label('')
-                    ->formatStateUsing(fn(MatchOption $state) => $state->label()),
+                    ->formatStateUsing(fn (MatchOption $state) => $state->label()),
                 Tables\Columns\SelectColumn::make('value')
                     ->disabled()
                     ->label('Outcome')
@@ -41,9 +38,9 @@ class OptionsRelationManager extends RelationManager
                     ->options([
                         true => 'Yes',
                         false => 'No',
-                        null => 'Not yet decided'
+                        null => 'Not yet decided',
                     ])
-                    ->default(null)
+                    ->default(null),
             ])
             ->paginated(false)
             ->filters([

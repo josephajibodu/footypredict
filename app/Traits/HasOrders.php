@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Models\Order;
 use App\Models\SellAdvert;
-use App\Models\Transfer;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

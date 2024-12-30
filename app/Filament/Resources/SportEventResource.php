@@ -16,9 +16,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\HtmlString;
-use Illuminate\Validation\ValidationException;
 
 class SportEventResource extends Resource
 {
@@ -56,6 +53,7 @@ class SportEventResource extends Resource
                             ->reactive()
                             ->options(function (callable $get) {
                                 $team1Id = $get('team1_id');
+
                                 return Team::query()
                                     ->when($team1Id, function ($query) use ($team1Id) {
                                         $query->where('id', '!=', $team1Id);
@@ -66,12 +64,12 @@ class SportEventResource extends Resource
 
                         Forms\Components\TextInput::make('team1_score')
                             ->disabled()
-                            ->hidden(fn() => $form->getOperation() === 'create')
+                            ->hidden(fn () => $form->getOperation() === 'create')
                             ->numeric(),
 
                         Forms\Components\TextInput::make('team2_score')
                             ->disabled()
-                            ->hidden(fn() => $form->getOperation() === 'create')
+                            ->hidden(fn () => $form->getOperation() === 'create')
                             ->numeric(),
 
                     ])->columns(2),
@@ -85,7 +83,7 @@ class SportEventResource extends Resource
                             Forms\Components\TimePicker::make('kickoff_time')
                                 ->required(),
                             Forms\Components\Select::make('status')
-                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->hidden(fn () => $form->getOperation() === 'create')
                                 ->options(SportEventStatus::class)
                                 ->required(),
 
@@ -101,20 +99,20 @@ class SportEventResource extends Resource
                                 ->required(),
                             Forms\Components\Select::make('sport')
                                 ->disabled()
-                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->hidden(fn () => $form->getOperation() === 'create')
                                 ->options(SportEventType::class)
                                 ->required(),
                             Forms\Components\TextInput::make('season')
-                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->hidden(fn () => $form->getOperation() === 'create')
                                 ->helperText('Optional'),
                             Forms\Components\TextInput::make('match_week')
-                                ->hidden(fn() => $form->getOperation() === 'create')
+                                ->hidden(fn () => $form->getOperation() === 'create')
                                 ->helperText('Optional')
                                 ->numeric(),
 
                         ])->columnSpan(6),
                 ])->columns(12)
-                ->columnSpan(12),
+                    ->columnSpan(12),
 
             ])->columns(12);
     }
@@ -126,7 +124,7 @@ class SportEventResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('match_date')
                     ->date()
-                    ->description(fn(SportEvent $record) => Carbon::parse($record->kickoff_time)->format('H:i a'))
+                    ->description(fn (SportEvent $record) => Carbon::parse($record->kickoff_time)->format('H:i a'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('team1.short_name')
                     ->numeric()
@@ -141,7 +139,7 @@ class SportEventResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('score')
                     ->alignCenter()
-                    ->getStateUsing(fn(SportEvent $record) => "$record->team1_score : $record->team2_score"),
+                    ->getStateUsing(fn (SportEvent $record) => "$record->team1_score : $record->team2_score"),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -166,8 +164,8 @@ class SportEventResource extends Resource
                     }),
 
                 Tables\Filters\SelectFilter::make('status')
-                    ->options(SportEventStatus::class)
-            ],  layout: Tables\Enums\FiltersLayout::AboveContent)
+                    ->options(SportEventStatus::class),
+            ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\Action::make('update_score')
                     ->label('Score')
@@ -178,21 +176,21 @@ class SportEventResource extends Resource
                     ->form([
                         Forms\Components\Split::make([
                             Forms\Components\TextInput::make('team1_score')
-                                ->label(fn(SportEvent $record) => $record->team1->name)
+                                ->label(fn (SportEvent $record) => $record->team1->name)
                                 ->numeric()
-                                ->formatStateUsing(fn(SportEvent $record) => $record->team1_score),
+                                ->formatStateUsing(fn (SportEvent $record) => $record->team1_score),
                             Forms\Components\TextInput::make('team2_score')
-                                ->label(fn(SportEvent $record) => $record->team2->name)
+                                ->label(fn (SportEvent $record) => $record->team2->name)
                                 ->numeric()
-                                ->formatStateUsing(fn(SportEvent $record) => $record->team2_score),
-                        ])
+                                ->formatStateUsing(fn (SportEvent $record) => $record->team2_score),
+                        ]),
                     ])
                     ->action(function (UpdateScores $updateScores, SportEvent $record, Tables\Actions\Action $action, array $data) {
                         $updateScores($record, $data);
 
                         $action->success();
                     })
-                    ->successNotificationTitle("Match score updated"),
+                    ->successNotificationTitle('Match score updated'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -205,7 +203,7 @@ class SportEventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\OptionsRelationManager::class
+            RelationManagers\OptionsRelationManager::class,
         ];
     }
 

@@ -10,18 +10,17 @@ class Collection
 {
     protected Swervpay $swervpay;
 
-
     public function __construct(Swervpay $swervpay)
     {
         $this->swervpay = $swervpay;
     }
 
-
     /**
      * Creates a new collection.
      *
-     * @param array $data The collection data.
+     * @param  array  $data  The collection data.
      * @return Wallet The create collection response object.
+     *
      * @throws Exception
      */
     public function create(array $data): Wallet
@@ -31,13 +30,12 @@ class Collection
         return new Wallet($res);
     }
 
-
-
     /**
      * Retrieves a collection.
      *
-     * @param string $id The collection ID.
+     * @param  string  $id  The collection ID.
      * @return Wallet The collection model.
+     *
      * @throws Exception
      */
     public function get(string $id): Wallet
@@ -50,17 +48,18 @@ class Collection
     /**
      * Retrieves multiple collections.
      *
-     * @param array $query The query parameters.
+     * @param  array  $query  The query parameters.
      * @return Wallet The collection model.
+     *
      * @throws Exception
      */
     public function gets(array $query = []): Wallet
     {
 
-        $uri = "collections";
+        $uri = 'collections';
 
-        if (!empty($query)) {
-            $uri .= '?' . http_build_query($query);
+        if (! empty($query)) {
+            $uri .= '?'.http_build_query($query);
         }
 
         $res = $this->swervpay->get($uri);
@@ -68,13 +67,13 @@ class Collection
         return new Wallet($res);
     }
 
-
     /**
      * Retrieves a specific transaction of a collection.
      *
-     * @param string $id The collection ID.
-     * @param string $transactionId The transaction ID.
+     * @param  string  $id  The collection ID.
+     * @param  string  $transactionId  The transaction ID.
      * @return CollectionHistory The collection transaction object.
+     *
      * @throws Exception
      */
     public function transaction(string $id, string $transactionId): CollectionHistory
@@ -87,17 +86,18 @@ class Collection
     /**
      * Retrieves all transactions of a collection.
      *
-     * @param string $id The collection ID.
-     * @param array $query (optional) The query parameters to filter the transactions.
+     * @param  string  $id  The collection ID.
+     * @param  array  $query  (optional) The query parameters to filter the transactions.
      * @return CollectionHistory The collection transaction object.
+     *
      * @throws Exception
      */
     public function transactions(string $id, array $query = []): CollectionHistory
     {
         $uri = "collections/{$id}/transactions";
 
-        if (!empty($query)) {
-            $uri .= '?' . http_build_query($query);
+        if (! empty($query)) {
+            $uri .= '?'.http_build_query($query);
         }
 
         $res = $this->swervpay->get($uri);

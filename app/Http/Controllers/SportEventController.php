@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\SportEvent;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SportEventController extends Controller
@@ -15,7 +14,7 @@ class SportEventController extends Controller
             ->whereDay('match_date', today())->get();
 
         return Inertia::render('Events', [
-            'events' => $events
+            'events' => $events,
         ]);
     }
 }

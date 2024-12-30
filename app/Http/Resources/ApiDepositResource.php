@@ -23,7 +23,7 @@ class ApiDepositResource extends JsonResource
             'method' => $this->method->value,
             'fee' => $this->fee / 100,
             'amount_received' => $this->amount_received / 100,
-            'metadata' => $this->metadata
+            'metadata' => $this->metadata,
         ];
     }
 }

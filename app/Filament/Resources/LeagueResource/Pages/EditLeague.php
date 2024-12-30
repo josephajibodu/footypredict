@@ -19,6 +19,6 @@ class EditLeague extends EditRecord
 
     protected function getSavedNotificationMessage(): ?string
     {
-        return "League updated";
+        return 'League updated';
     }
 }

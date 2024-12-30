@@ -6,7 +6,7 @@ import {Transaction, TransactionStatus, TransactionType} from "@/types/transacti
 import {cn, toMoney} from "@/lib/utils";
 import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
-import {Landmark, Phone, UserCircle, Wallet} from "lucide-react";
+import {Ban, Landmark, Phone, UserCircle, Wallet} from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import {Input} from "@/Components/ui/input";
@@ -19,12 +19,17 @@ import {
     DrawerHeader,
     DrawerTitle
 } from "@/Components/ui/drawer";
-
-dayjs.extend(localizedFormat);
+import axios from "axios";
+import {useToast} from "@/hooks/use-toast";
 
 interface Bank {
     bank_name: string,
     bank_code: string
+}
+
+interface BankDetails extends Bank {
+    account_number: string,
+    account_name: string
 }
 
 interface WithdrawPageProps extends PageProps {
@@ -32,11 +37,13 @@ interface WithdrawPageProps extends PageProps {
 }
 
 export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps) {
+    const {toast} = useToast();
+    const [loading, setLoading] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [selectedBank, setSelectedBank] = useState<Bank | undefined>();
 
-    const [defaultBank, setDefaultBank] = useState();
-    const [availableBanks, setAvailableBanks] = useState();
+    const [accountNumber, setAccountNumber] = useState<string>();
+    const [selectedBank, setSelectedBank] = useState<Bank | undefined>();
+    const [resolvedBankDetails, setResolvedBankDetails] = useState<BankDetails>();
 
     const openDrawer = () => setDrawerOpen(true);
     const closeDrawer = () => setDrawerOpen(false);
@@ -46,18 +53,41 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
         closeDrawer();
     };
 
-    const handleWithdraw = () => {
-        router.post(route('resolve-bank'), {
-            account_number: '0040987133',
+    const handleResolveAccountNumber = () => {
+
+        if (! selectedBank) {
+            return toast({
+                title: 'Please select an account',
+                variant: 'destructive'
+            })
+        }
+
+        if (! accountNumber) {
+            return toast({
+                title: 'Please enter your account number',
+                variant: 'destructive'
+            })
+        }
+
+        axios.post(route('resolve-bank'), {
+            account_number: accountNumber,
             bank_code: selectedBank?.bank_code
-        }, {
-            onSuccess: params => {
-                console.log("success:", params)
-            },
-            onError: params => {
-                console.log("error occurred:", params)
-            }
+        }).then(res => {
+            setResolvedBankDetails(res.data as BankDetails)
         })
+        .catch(error => {
+            let message = error.response.data.message
+
+            toast({
+                title: message,
+                variant: 'destructive'
+            })
+        })
+    }
+
+    const saveBankAccount = () => {
+        const data = {  };
+        router.post(route('add-withdrawal-account.store'), data)
     }
 
     return (
@@ -83,27 +113,16 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
                     <label htmlFor='account_number'>
                         <UserCircle className="absolute size-8 top-3 start-3 text-gray-400" />
                     </label>
-                    <Input id="account_number" placeholder="Account Number"  className={'h-14 ps-[3.75rem]'} />
+                    <Input
+                        id="account_number"
+                        placeholder="Account Number"
+                        className={'h-14 ps-[3.75rem]'}
+                        value={accountNumber}
+                        onChange={e => setAccountNumber(e.target.value)}
+                    />
                 </div>
 
-
-                <div className="mt-12">
-                    <p className="mb-2 text-end">Balance: {toMoney(auth.user.balance)}</p>
-                    <div className="relative">
-                        <label htmlFor='amount'>
-                            <Wallet className="absolute size-8 top-3 start-3 text-gray-400" />
-                        </label>
-                        <Input
-                            id="amount"
-                            placeholder="Amount to Withdraw"
-                            className={'h-14 ps-[3.75rem]'}
-                            type="number"
-                            step="0.01"
-                        />
-                    </div>
-                </div>
-
-                <Button onClick={handleWithdraw} className="text-lg h-14 mt-8">Withdraw</Button>
+                <Button onClick={handleResolveAccountNumber} className="text-lg h-14 mt-8">Add Bank</Button>
             </div>
 
             <Drawer
@@ -113,9 +132,9 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
             >
                 <DrawerContent>
                     <DrawerHeader>
-                        <DrawerTitle>Fund Wallet</DrawerTitle>
-                        <DrawerDescription>How much do you to add?</DrawerDescription>
+                        <DrawerTitle>Select Bank</DrawerTitle>
                     </DrawerHeader>
+
                     <div className="h-[65vh] overflow-y-auto">
                         <ul className="divide-y divide-gray-200">
                             {banks.map((bank) => (
@@ -131,6 +150,70 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
                     </div>
                 </DrawerContent>
             </Drawer>
+
+            <Drawer
+                open={!!resolvedBankDetails}
+                onOpenChange={(value) => {
+                    if (! value) {
+                        setResolvedBankDetails(undefined)
+                    }
+                }}
+                dismissible={false}
+            >
+                <DrawerContent>
+                    <DrawerHeader className="py-4 px-4">
+                        <DrawerTitle className="font-bold text-xl">Confirm to Add Bank</DrawerTitle>
+                        <DrawerDescription className="sr-only">Resolved bank details</DrawerDescription>
+                    </DrawerHeader>
+
+                    <div className="px-4 py-2">
+                        {resolvedBankDetails ? (
+                            <>
+                                <div className="mb-4 mt-4 flex flex-col gap-2">
+                                    <div className="flex flex-row-reverse justify-between items-center">
+                                        <span className="font-medium">{resolvedBankDetails.account_name}</span>
+                                        <span className="text-gray-500 text-sm">Account Name</span>
+                                    </div>
+                                    <div className="flex flex-row-reverse justify-between items-center">
+                                        <span className="font-medium">{resolvedBankDetails.bank_name}</span>
+                                        <span className="text-gray-500 text-sm">Bank Name</span>
+                                    </div>
+                                    <div className="flex flex-row-reverse justify-between items-center">
+                                        <span className="font-medium">{resolvedBankDetails.account_number}</span>
+                                        <span className="text-gray-500 text-sm">Account Number</span>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <p className="text-center text-gray-500">No details available.</p>
+                        )}
+                    </div>
+
+                    <DrawerFooter className="flex flex-row px-0 pb-0 gap-0 ">
+                        <Button
+                            variant="destructive"
+                            onClick={() => setResolvedBankDetails(undefined)}
+                            className="rounded-none"
+                        >
+                            <Ban className="w-full" />
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="default"
+                            onClick={() => {
+                                toast({
+                                    title: "Bank added successfully!",
+                                    variant: "default",
+                                });
+                                setResolvedBankDetails(undefined);
+                            }}
+                            className="w-full rounded-none"
+                        >
+                            Add Bank
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </>
     );
 }
@@ -140,7 +223,7 @@ Withdraw.layout = (page: ReactNode) => (
         backUrl={route('wallet')}
         showHeader={false}
         hideBottomNav={true}
-        title="Withdraw"
+        title="Add New Bank Account"
     >
         {page}
     </Authenticated>

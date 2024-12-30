@@ -9,28 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
- *
  * @property string|int $user_id
- *
  * @property string $account_name
  * @property string $bank_name
  * @property string $account_number
  * @property string $bank_code
- *
  * @property string $payment_provider
  * @property WithdrawalAccountType $type
- *
  * @property string $memo_tag
  * @property string $withdrawal_address
- *
- * @property boolean $is_default
+ * @property bool $is_default
  * @property array $metadata
- *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property-read User $user
- *
  */
 class WithdrawalAccount extends Model
 {
@@ -41,7 +33,7 @@ class WithdrawalAccount extends Model
         return [
             'type' => WithdrawalAccountType::class,
             'metadata' => 'array',
-            'is_default' => 'boolean'
+            'is_default' => 'boolean',
         ];
     }
 

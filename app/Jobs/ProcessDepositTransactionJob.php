@@ -20,11 +20,11 @@ class ProcessDepositTransactionJob implements ShouldQueue
     public function __construct(
         public Transaction $transaction,
         public array $data
-    )
-    {}
+    ) {}
 
     /**
      * Execute the job.
+     *
      * @throws Exception
      */
     public function handle(): void
@@ -46,7 +46,7 @@ class ProcessDepositTransactionJob implements ShouldQueue
 
                 // Credit user wallet
                 $user = $this->transaction->user;
-                $user->credit($amountReceived, "Wallet Deposit");
+                $user->credit($amountReceived, 'Wallet Deposit');
 
                 $this->transaction->update([
                     'balance' => $user->balance,
@@ -57,7 +57,7 @@ class ProcessDepositTransactionJob implements ShouldQueue
                 if ($this->transaction->deposit) {
                     $this->transaction->deposit->update([
                         'fee' => $fee * 100,
-                        'amount_received' => $amountReceived * 100
+                        'amount_received' => $amountReceived * 100,
                     ]);
                 }
 

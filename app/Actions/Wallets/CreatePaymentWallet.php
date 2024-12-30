@@ -3,10 +3,8 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\Collection;
 use App\Integrations\SwervPay\CollectionData;
 use App\Integrations\SwervPay\SwervePay;
-use App\Models\Wallet;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -19,13 +17,13 @@ class CreatePaymentWallet
     public function __invoke(CollectionData $collectionData)
     {
         try {
-            $swervpay = new SwervePay();
+            $swervpay = new SwervePay;
 
             $res = $swervpay->createCollection($collectionData->toArray());
 
-            Log::channel(LogChannel::ExternalAPI->value)->info("Response from swervpay", [
+            Log::channel(LogChannel::ExternalAPI->value)->info('Response from swervpay', [
                 'res' => $res,
-                'user' => auth()->user()
+                'user' => auth()->user(),
             ]);
 
             return $res;

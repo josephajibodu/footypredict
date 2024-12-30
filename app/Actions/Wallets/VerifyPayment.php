@@ -2,8 +2,8 @@
 
 namespace App\Actions\Wallets;
 
-use Exception;
 use App\Integrations\SwervPay\CollectionData;
+use Exception;
 
 class VerifyPayment
 {
@@ -19,13 +19,13 @@ class VerifyPayment
                 'sandbox' => config('services.swervpay.sandbox'),
             ];
 
-            $swervpay = new SwervePay();
+            $swervpay = new SwervePay;
 
             $res = $swervpay->createCollection($collectionData->toArray());
 
-            Log::channel(LogChannel::Deposits->value)->info("Response from swervpay", [
+            Log::channel(LogChannel::Deposits->value)->info('Response from swervpay', [
                 'res' => $res,
-                'user' => auth()->user()
+                'user' => auth()->user(),
             ]);
 
             return $res;

@@ -3,7 +3,6 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\CollectionData;
 use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -17,13 +16,13 @@ class ResolveAccountNumber
     public function __invoke(array $data)
     {
         try {
-            $swervpay = new SwervePay();
+            $swervpay = new SwervePay;
 
             $res = $swervpay->resolveAccount($data);
 
-            Log::channel(LogChannel::Deposits->value)->info("Response from swervpay", [
+            Log::channel(LogChannel::Deposits->value)->info('Response from swervpay', [
                 'res' => $res,
-                'user' => auth()->user()
+                'user' => auth()->user(),
             ]);
 
             return $res;

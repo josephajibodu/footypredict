@@ -20,14 +20,14 @@ class PlaceBet
             $amountInUnit = $amount * 100;
 
             // Debit User
-            $user->debit($amount, "Betting stake");
+            $user->debit($amount, 'Betting stake');
 
             // Get multiplier for the type of bet
             $multiplier = 15;
 
             // Create a transaction record
             $transaction = Transaction::query()->create([
-                'reference' => Str::random() . "TXN-BET-{$user->id}",
+                'reference' => Str::random()."TXN-BET-{$user->id}",
                 'user_id' => $user->id,
                 'amount' => $amountInUnit,
                 'type' => TransactionType::Bet,

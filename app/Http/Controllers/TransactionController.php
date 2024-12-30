@@ -6,7 +6,6 @@ use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Http\Resources\ApiTransactionResource;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
@@ -19,7 +18,7 @@ class TransactionController extends Controller
             ->get();
 
         return Inertia::render('Wallet', [
-            'transactions' => $transactions
+            'transactions' => $transactions,
         ]);
     }
 
@@ -30,14 +29,14 @@ class TransactionController extends Controller
             $transaction->load('deposit');
 
             return Inertia::render('Deposit', [
-                'transaction' => ApiTransactionResource::make($transaction)
+                'transaction' => ApiTransactionResource::make($transaction),
             ]);
         }
 
         $transaction->load(['deposit', 'bet', 'withdrawal', 'winning', 'refund']);
 
         return Inertia::render('TransactionShow', [
-            'transaction' => ApiTransactionResource::make($transaction)
+            'transaction' => ApiTransactionResource::make($transaction),
         ]);
     }
 }

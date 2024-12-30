@@ -56,7 +56,7 @@ class ManageBetSettings extends SettingsPage
                             ->numeric()
                             ->required()
                             ->helperText('The maximum amount a user can bet.'),
-                    ])
+                    ]),
 
             ])->columns(1);
     }

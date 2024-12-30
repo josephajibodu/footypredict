@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LeagueResource\Pages;
-use App\Filament\Resources\LeagueResource\RelationManagers;
 use App\Models\League;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LeagueResource extends Resource
 {
@@ -56,7 +53,7 @@ class LeagueResource extends Resource
             ->defaultPaginationPageOption(25)
             ->columns([
                 Tables\Columns\ImageColumn::make('logo_url')
-                    ->label("")
+                    ->label('')
                     ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),

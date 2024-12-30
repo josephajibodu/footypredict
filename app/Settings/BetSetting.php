@@ -2,7 +2,6 @@
 
 namespace App\Settings;
 
-use DateTime;
 use Spatie\LaravelSettings\Settings;
 
 class BetSetting extends Settings

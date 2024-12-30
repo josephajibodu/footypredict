@@ -3,7 +3,6 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\CollectionData;
 use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Cache;
@@ -13,6 +12,7 @@ use Throwable;
 class GetPaymentBanks
 {
     const CACHE_KEY = 'payment_banks';
+
     const CACHE_TTL = 1440;
 
     /**
@@ -22,13 +22,13 @@ class GetPaymentBanks
     {
         return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
             try {
-                $swervpay = new SwervePay();
+                $swervpay = new SwervePay;
                 $banks = $swervpay->getBanks();
 
                 Log::channel(LogChannel::ExternalAPI->value)
-                    ->info("Fetched banks from SwervPay API", ['res' => $banks]);
+                    ->info('Fetched banks from SwervPay API', ['res' => $banks]);
 
-                if (!is_array($banks) || empty($banks)) {
+                if (! is_array($banks) || empty($banks)) {
                     throw new Exception('Invalid bank data received');
                 }
 

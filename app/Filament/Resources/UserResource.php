@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Enums\UserGender;
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,9 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
@@ -72,7 +69,7 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('full_name')
                     ->label('Name')
-                    ->description(fn(User $record) => $record->email)
+                    ->description(fn (User $record) => $record->email)
                     ->searchable(['first_name', 'last_name', 'email']),
                 Tables\Columns\TextColumn::make('username')
                     ->sortable()
@@ -120,7 +117,7 @@ class UserResource extends Resource
         return ['first_name', 'last_name', 'username', 'email'];
     }
 
-    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
     {
         return "$record->first_name $record->last_name";
     }
@@ -128,8 +125,8 @@ class UserResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Username' =>  $record->username,
-            'Email' =>  "$record->email",
+            'Username' => $record->username,
+            'Email' => "$record->email",
         ];
     }
 

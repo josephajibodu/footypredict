@@ -13,18 +13,17 @@ class CollectionData implements Arrayable
         public string $currency = 'NGN',
         public ?CollectionType $type = CollectionType::Temporary,
         public ?string $merchant_name = 'FootyPredict',
-    )
-    {}
+    ) {}
 
     public function toArray(): array
     {
         return [
-            "customer_id" => $this->customer_id,
-            "currency" => $this->currency,
-            "merchant_name" => $this->merchant_name,
-            "amount" => $this->amount,
-            "type" => $this->type->value,
-            "reference" => $this->reference,
+            'customer_id' => $this->customer_id,
+            'currency' => $this->currency,
+            'merchant_name' => $this->merchant_name,
+            'amount' => $this->amount,
+            'type' => $this->type->value,
+            'reference' => $this->reference,
         ];
     }
 }
