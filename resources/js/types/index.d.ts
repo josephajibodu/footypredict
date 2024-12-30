@@ -97,5 +97,10 @@ export type PageProps<
     settings: {
         bet: BetSetting,
         wallet: WalletSetting
+    },
+    flash: {
+        info?: string,
+        error?: string,
+        success?: string
     }
 };

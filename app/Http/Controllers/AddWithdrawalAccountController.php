@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\Wallets\GetPaymentBanks;
 use App\Enums\WithdrawalAccountType;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class AddWithdrawalAccountController extends Controller
@@ -20,7 +22,7 @@ class AddWithdrawalAccountController extends Controller
             return Inertia::render('AddNewBank', [
                 'banks' => $banks,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Inertia::render('AddNewBank', [
                 'banks' => [],
             ])->with([
@@ -31,27 +33,37 @@ class AddWithdrawalAccountController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'bank_code' => ['required', 'string'],
             'account_number' => ['required', 'string', 'size:10'],
             'account_name' => ['required', 'string', 'max:255'],
             'bank_name' => ['required', 'string', 'max:255'],
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors('Validation failed: ' . $validator->errors()->first());
+        }
+
+        $validated = $validator->validated();
+
         try {
+
             $numberOfAccounts = auth()->user()->withdrawalAccounts()->count();
-            $withdrawalAccount = auth()->user()->withdrawalAccounts()->create([
+            auth()->user()->withdrawalAccounts()->create([
                 'type' => WithdrawalAccountType::FiatBank,
                 'payment_provider' => 'swervpay',
-                'bank_id' => $validated['bank_id'],
+                'bank_code' => $validated['bank_code'],
+                'bank_name' => $validated['bank_name'],
                 'account_number' => $validated['account_number'],
                 'account_name' => $validated['account_name'],
                 'is_default' => $numberOfAccounts === 0,
             ]);
 
-            return redirect()->back()->with('success', 'Withdrawal account added successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to add withdrawal account. Please try again.');
+            return to_route('withdraw')->with('success', 'Withdrawal account added successfully.');
+        } catch (Exception $ex) {
+            report($ex);
+
+            return redirect()->back()->withErrors('Failed to add withdrawal account. Please try again.');
         }
     }
 }

@@ -2,17 +2,11 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, router} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {PageProps} from '@/types';
-import {Transaction, TransactionStatus, TransactionType} from "@/types/transactions";
-import {cn, toMoney} from "@/lib/utils";
-import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
-import {Ban, Landmark, Phone, UserCircle, Wallet} from "lucide-react";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat"
+import {Ban, Landmark, Loader, UserCircle} from "lucide-react";
 import {Input} from "@/Components/ui/input";
-import {Label} from "@headlessui/react";
 import {
-    Drawer, DrawerClose,
+    Drawer,
     DrawerContent,
     DrawerDescription,
     DrawerFooter,
@@ -21,6 +15,7 @@ import {
 } from "@/Components/ui/drawer";
 import axios from "axios";
 import {useToast} from "@/hooks/use-toast";
+import {extractErrorMessage} from "@/lib/utils";
 
 interface Bank {
     bank_name: string,
@@ -32,11 +27,11 @@ interface BankDetails extends Bank {
     account_name: string
 }
 
-interface WithdrawPageProps extends PageProps {
+interface AddNewBankProps extends PageProps {
     banks: Bank[]
 }
 
-export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps) {
+export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) {
     const {toast} = useToast();
     const [loading, setLoading] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -69,25 +64,59 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
             })
         }
 
+        setLoading(true);
         axios.post(route('resolve-bank'), {
             account_number: accountNumber,
             bank_code: selectedBank?.bank_code
         }).then(res => {
             setResolvedBankDetails(res.data as BankDetails)
         })
-        .catch(error => {
-            let message = error.response.data.message
+            .catch(error => {
+                let message = error.response.data.message
 
-            toast({
-                title: message,
-                variant: 'destructive'
+                toast({
+                    title: message,
+                    variant: 'destructive'
+                })
             })
-        })
+            .finally(() => setLoading(false))
     }
 
     const saveBankAccount = () => {
-        const data = {  };
-        router.post(route('add-withdrawal-account.store'), data)
+        if (! resolvedBankDetails) {
+            return toast({
+                title: 'Invalid bank details',
+                variant: 'destructive'
+            })
+        }
+
+        const data = {
+            ...resolvedBankDetails
+        };
+
+        router.post(route('add-withdrawal-account.store'), data, {
+            onStart: () => {
+                setLoading(true);
+            },
+            onFinish: () => {
+                setLoading(false);
+            },
+            onError: error => {
+                const errorMessage = extractErrorMessage(error);
+
+                toast({
+                    title: errorMessage ?? 'Error adding bank',
+                    variant: 'destructive'
+                })
+            },
+            onSuccess: page => {
+                console.log('it is success full', page)
+                toast({
+                    title: page.props.flash.success ?? 'Bank account added successfully',
+                    variant: 'success',
+                })
+            }
+        })
     }
 
     return (
@@ -194,21 +223,18 @@ export default function Withdraw({ transaction, auth, banks }: WithdrawPageProps
                             variant="destructive"
                             onClick={() => setResolvedBankDetails(undefined)}
                             className="rounded-none"
+                            disabled={loading}
                         >
                             <Ban className="w-full" />
                             Cancel
                         </Button>
                         <Button
                             variant="default"
-                            onClick={() => {
-                                toast({
-                                    title: "Bank added successfully!",
-                                    variant: "default",
-                                });
-                                setResolvedBankDetails(undefined);
-                            }}
+                            onClick={saveBankAccount}
                             className="w-full rounded-none"
+                            disabled={loading}
                         >
+                            {loading && <Loader className="animate-spin" />}
                             Add Bank
                         </Button>
                     </DrawerFooter>
