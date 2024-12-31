@@ -23,26 +23,10 @@ class ManageBetSettings extends SettingsPage
 
                 Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('required_selections')
-                            ->label('Required Selections')
-                            ->numeric()
-                            ->required()
-                            ->helperText('The minimum number of selections required for a valid bet.'),
-
-                        Forms\Components\TextInput::make('pool_size')
-                            ->label('Pool Size')
-                            ->numeric()
-                            ->required()
-                            ->helperText('The maximum number of bets allowed in the pool.'),
-
-                        Forms\Components\TextInput::make('winning_multiplier')
-                            ->label('Winning Multiplier')
-                            ->numeric()
-                            ->required()
-                            ->helperText('Multiplier applied to calculate winnings.'),
 
                         Forms\Components\TextInput::make('min_stake')
                             ->label('Minimum Stake')
+                            ->inlineLabel()
                             ->mask(RawJs::make('$money($input)'))
                             ->stripCharacters(',')
                             ->numeric()
@@ -51,11 +35,30 @@ class ManageBetSettings extends SettingsPage
 
                         Forms\Components\TextInput::make('max_stake')
                             ->label('Maximum Stake')
+                            ->inlineLabel()
                             ->mask(RawJs::make('$money($input)'))
                             ->stripCharacters(',')
                             ->numeric()
                             ->required()
                             ->helperText('The maximum amount a user can bet.'),
+
+                        Forms\Components\TextInput::make('min_selection')
+                            ->label('Minimum Selection')
+                            ->inlineLabel()
+                            ->numeric()
+                            ->minValue(1)
+                            ->required()
+                            ->helperText('The minimum number of selections required for a valid bet.'),
+
+                        Forms\Components\TextInput::make('max_selection')
+                            ->label('Maximum Selection')
+                            ->inlineLabel()
+                            ->numeric()
+                            ->minValue(1)
+                            ->required()
+                            ->live()
+                            ->helperText('The minimum number of selections required for a valid bet.'),
+
                     ]),
 
             ])->columns(1);

@@ -6,7 +6,11 @@ use Spatie\LaravelSettings\Settings;
 
 class BetSetting extends Settings
 {
-    public int $required_selections;
+    public int $min_selection;
+
+    public int $max_selection;
+
+    public array $selection_config;
 
     public int $pool_size;
 

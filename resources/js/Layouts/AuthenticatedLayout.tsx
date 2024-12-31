@@ -37,8 +37,22 @@ export default function Authenticated({
 
                 {showHeader && <header className="flex items-center justify-between px-2 py-2 h-full bg-primary border-b">
                     <h3 className="font-bold text-white">FootyPredict</h3>
-                    <div>
-                        <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>{toMoney(auth.user.balance)}</Button>
+                    <div className="flex gap-2">
+                        {auth.user && (
+                            <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>{toMoney(auth.user.balance)}</Button>
+                        )}
+
+                        {auth.user === null && (
+                            <>
+                                <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>
+                                    <Link href={route('login')}>Login</Link>
+                                </Button>
+
+                                <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>
+                                    <Link href={route('register')}>Register</Link>
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </header>}
             </section>

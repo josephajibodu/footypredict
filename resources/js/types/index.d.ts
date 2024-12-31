@@ -56,6 +56,18 @@ export interface BetSetting {
     winning_multiplier : number;
     min_stake : number;
     max_stake : number;
+    min_selection : number;
+    max_selection : number;
+    selection_config: BetMultiplier[]
+}
+
+export interface BetMultiplier {
+    selection: number,
+    main: number,
+    allow_flex: boolean,
+    flex_all: number,
+    flex_1: number,
+    flex_2: number,
 }
 
 

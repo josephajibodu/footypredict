@@ -46,7 +46,7 @@ export default function Events({ events, settings }: EventPageProps) {
         <>
             <Head title="Events" />
 
-            <div className="px-4 py-4">
+            <div className="px-4 py-4 relative h-full">
                 <div className="flex items-center justify-between py-2 border-b">
                     <div className="flex items-center">
                         <span className="w-8 font-bold"></span>
@@ -92,6 +92,7 @@ export default function Events({ events, settings }: EventPageProps) {
                         />
                     ))
                 )}
+
             </div>
 
             <Betslip />
