@@ -29,9 +29,9 @@ class ManageBetMultiplierSettings extends SettingsPage
                             ->helperText('Define multiplier rules for each selection. For example, configure the multiplier for exact matches, flex entries, etc.')
                             ->reorderable(false)
                             ->itemLabel(fn (array $state): ?string => (
-                            $state['selection']
-                                    ? "{$state['selection']} Matches Selection" . ($state['allow_flex'] ? ' (Flex Enabled)' : ' (Flex Disabled)')
-                                    : null
+                                $state['selection']
+                                        ? "{$state['selection']} Matches Selection".($state['allow_flex'] ? ' (Flex Enabled)' : ' (Flex Disabled)')
+                                        : null
                             ))
                             ->collapsible()
                             ->columns(12)
@@ -67,7 +67,7 @@ class ManageBetMultiplierSettings extends SettingsPage
                                         ->columnSpan(3)
                                         ->numeric()
                                         ->step(0.01)
-                                        ->disabled(fn ($get) => !boolval($get('allow_flex'))),
+                                        ->disabled(fn ($get) => ! boolval($get('allow_flex'))),
 
                                     Forms\Components\TextInput::make('flex_1')
                                         ->label('Flex -1')
@@ -75,7 +75,7 @@ class ManageBetMultiplierSettings extends SettingsPage
                                         ->columnSpan(3)
                                         ->numeric()
                                         ->step(0.01)
-                                        ->disabled(fn ($get) => !boolval($get('allow_flex'))),
+                                        ->disabled(fn ($get) => ! boolval($get('allow_flex'))),
 
                                     Forms\Components\TextInput::make('flex_2')
                                         ->label('Flex -2')
@@ -83,14 +83,14 @@ class ManageBetMultiplierSettings extends SettingsPage
                                         ->columnSpan(3)
                                         ->numeric()
                                         ->step(0.01)
-                                        ->disabled(fn ($get) => !boolval($get('allow_flex'))),
+                                        ->disabled(fn ($get) => ! boolval($get('allow_flex'))),
 
                                 ])
-                                ->columnSpan(7)
-                                ->columns(12)
-                            ])
+                                    ->columnSpan(7)
+                                    ->columns(12),
+                            ]),
 
-                    ])
+                    ]),
             ]);
     }
 }

@@ -30,7 +30,7 @@ class BetController extends Controller
                 'events.*' => ['required', 'array'],
                 'events.*.event_id' => ['required', 'integer', 'exists:sport_events,id'],
                 'events.*.bet_option' => ['required', 'string', 'in:home_win,draw,away_win'],
-                'is_flexed' => ['required', 'boolean']
+                'is_flexed' => ['required', 'boolean'],
             ], [
                 'events.min' => 'Please select at least 4 events.',
             ]);

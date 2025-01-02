@@ -16,8 +16,7 @@ use Illuminate\Support\Str;
 
 class PlaceBet
 {
-    public function __construct(public BetSetting $betSetting)
-    {}
+    public function __construct(public BetSetting $betSetting) {}
 
     public function __invoke(User $user, float $amount, array $sportEvents, bool $isFlexed): Bet
     {
@@ -32,7 +31,7 @@ class PlaceBet
             $validMultiplier = collect($multiplierSettings)->where('selection', count($sportEvents))->first();
 
             if (! $validMultiplier) {
-                throw new Exception("This is an error from us. Please contact our support if it persists");
+                throw new Exception('This is an error from us. Please contact our support if it persists');
             }
 
             $multiplier = floatval($validMultiplier['main']);
@@ -40,7 +39,7 @@ class PlaceBet
             // Create a transaction record
             $transaction = Transaction::query()->create([
                 'reference' => Str::random()."TXN-BET-{$user->id}",
-                "description" => "Bet funding",
+                'description' => 'Bet funding',
                 'user_id' => $user->id,
                 'amount' => $amountInUnit,
                 'type' => TransactionType::Bet,

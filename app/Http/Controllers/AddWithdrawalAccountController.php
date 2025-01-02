@@ -41,7 +41,7 @@ class AddWithdrawalAccountController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors('Validation failed: ' . $validator->errors()->first());
+            return redirect()->back()->withErrors('Validation failed: '.$validator->errors()->first());
         }
 
         $validated = $validator->validated();

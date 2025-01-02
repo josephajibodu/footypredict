@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'joseph@footypredict.test',
         ]);
 
-        $user->credit(1000, "Registration bonus");
+        $user->credit(1000, 'Registration bonus');
 
         $this->call([
             LeagueSeeder::class,
