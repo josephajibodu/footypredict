@@ -8,7 +8,7 @@ return new class extends SettingsMigration
     {
         $sampleConfig = config('bet-multiplier');
 
-        $this->migrator->add('bet.min_selection', 6);
+        $this->migrator->add('bet.min_selection', 2);
         $this->migrator->add('bet.max_selection', 6);
         $this->migrator->add('bet.selection_config', $sampleConfig);
         $this->migrator->add('bet.pool_size', 20);

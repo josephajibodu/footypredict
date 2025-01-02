@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bet_matches');
+        Schema::dropIfExists('bet_sport_event');
     }
 };

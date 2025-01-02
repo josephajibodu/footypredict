@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->unsignedBigInteger('stake');
-            $table->unsignedInteger('multiplier');
+            $table->text('multiplier_settings');
             $table->unsignedBigInteger('potential_winnings');
+            $table->boolean('is_flexed')->default(false);
             $table->string('status');
 
             $table->timestamps();

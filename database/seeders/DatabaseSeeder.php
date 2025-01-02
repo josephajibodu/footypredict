@@ -15,11 +15,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'joseph@footypredict.test',
         ]);
+
+        $user->credit(1000, "Registration bonus");
 
         $this->call([
             LeagueSeeder::class,

@@ -11,7 +11,7 @@ import {useEffect, useState} from 'react';
 import { Button } from './ui/button';
 import {Input} from "@/Components/ui/input";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {Loader, Trash, X} from "lucide-react";
+import {Info, Loader, Trash, X} from "lucide-react";
 import {MatchOptionLabels} from "@/enums/MatchOption";
 import {clearSelectedSportEvents, deselectSportEvent} from "@/store/eventSlice";
 import {Link, router, usePage} from "@inertiajs/react";
@@ -19,7 +19,8 @@ import {useToast} from "@/hooks/use-toast";
 import {ToastAction} from "@/Components/ui/toast";
 import Checkbox from "@/Components/Checkbox";
 import {BetMultiplier, SelectedSportEvent, SportEvent} from "@/types";
-import {cn, toMoney} from "@/lib/utils";
+import {cn, extractErrorMessage, toMoney} from "@/lib/utils";
+import {AnimatePresence, motion} from "framer-motion";
 
 const DEFAULT_AMOUNT = 500;
 
@@ -37,6 +38,16 @@ export default function Betslip() {
     const [isFlexed, setIsFlexed] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
 
+    const infoVariants = {
+        hidden: { x: "100%", opacity: 0 },
+        visible: { x: 0, opacity: 1 },
+    };
+
+    const slipVariants = {
+        hidden: { x: "100%", opacity: 0 },
+        visible: { x: 0, opacity: 1 },
+    };
+
     useEffect(() => {
         if (events.length >= betSettings.min_selection) {
             const matchedMultiplier = betSettings.selection_config.find(
@@ -44,9 +55,8 @@ export default function Betslip() {
             );
 
             if (matchedMultiplier) {
-                console.log()
                 setMultiplierSetting(matchedMultiplier);
-                const bestMultiplier = matchedMultiplier.allow_flex ? matchedMultiplier.flex_all : matchedMultiplier.main;
+                const bestMultiplier = (matchedMultiplier.allow_flex && isFlexed) ? matchedMultiplier.flex_all : matchedMultiplier.main;
                 setMultiplier(bestMultiplier)
             }
 
@@ -67,8 +77,9 @@ export default function Betslip() {
             amount: stake,
             events: events.map((event, index) => ({
                 event_id: event.id,
-                bet_option: event.betOption
-            }))
+                bet_option: event.betOption,
+            })),
+            is_flexed: isFlexed
         }
 
         router.post(route('bets'), data, {
@@ -89,10 +100,11 @@ export default function Betslip() {
                     ),
                 });
             },
-            onError: page => {
+            onError: error => {
+                const errorMessage = extractErrorMessage(error)
                 toast({
                     title: "Error Placing Bet",
-                    description: "There was an issue placing your bet. Try again or contact support.",
+                    description: errorMessage ?? "There was an issue placing your bet. Try again or contact support.",
                     variant: 'destructive',
                 });
             },
@@ -134,7 +146,7 @@ export default function Betslip() {
                 <div className="flex flex-col items-end">
                     <p>
                         <span className="text-gray-500 text-xs">Get all {events.length} correct for </span>
-                        x{(isFlexed && multiplierSetting.allow_flex) ? multiplierSetting.flex_all : multiplierSetting.main}
+                        x{multiplier}
                     </p>
                     {(isFlexed && multiplierSetting.allow_flex )&& (
                         <>
@@ -157,16 +169,43 @@ export default function Betslip() {
 
     return (
         <>
-            <div
-                className="fixed right-0 bottom-[60px] flex flex-col items-center justify-center w-12 h-16 bg-gray-900 rounded-l cursor-pointer"
-                onClick={() => setOpen(true)}
-                aria-label="Open bet slip"
-            >
-                <span className="flex items-center justify-center w-6 h-6 text-sm text-white rounded-full bg-destructive">
-                    {events.length}
-                </span>
-                <span className="text-sm text-white">Slip</span>
-            </div>
+
+            <AnimatePresence>
+                {events.length > 0 && events.length < betSettings.min_selection && (
+                    <motion.div
+                        variants={infoVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        transition={{ duration: 0.3 }}
+                        className="fixed right-0 bottom-[60px] flex gap-2 items-center justify-center ps-8 pe-2 h-8 bg-gray-300 rounded-l cursor-pointer"
+                    >
+                        <Info className="size-4" />
+                        <span className="text-xs">Select at least {betSettings.min_selection} matches</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+
+            <AnimatePresence>
+                {events.length >= betSettings.min_selection && (
+                    <motion.div
+                        variants={slipVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        transition={{ duration: 0.3 }}
+                        className="fixed right-0 bottom-[60px] flex flex-col items-center justify-center w-12 h-16 bg-gray-900 rounded-l cursor-pointer"
+                        onClick={() => setOpen(true)}
+                        aria-label="Open bet slip"
+                    >
+                    <span className="flex items-center justify-center w-6 h-6 text-sm text-white rounded-full bg-destructive">
+                        {events.length}
+                    </span>
+                        <span className="text-sm text-white">Slip</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerContent className="h-[90%]">
