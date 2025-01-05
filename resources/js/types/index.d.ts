@@ -34,6 +34,8 @@ export interface SportEvent {
     season?: string | null;
     match_week?: number | null;
 
+    transaction?: Transaction;
+
     team1: Team;
     team2: Team;
 

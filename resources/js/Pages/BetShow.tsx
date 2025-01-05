@@ -76,7 +76,7 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 <div className="bg-white p-4 mt-4">
                     <div className="flex justify-between items-center">
                         <span>Number of Bets: {bet.sport_events?.length}</span>
-                        <Link href={route('transaction.show', {transaction: bet.transaction_id})} className="text-green-600 font-semibold">
+                        <Link href={route('transaction.show', {transaction: bet.transaction.reference})} className="text-green-600 font-semibold">
                             Bet Details
                         </Link>
                     </div>

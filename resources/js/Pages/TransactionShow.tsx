@@ -2,13 +2,14 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head} from '@inertiajs/react';
 import {ReactNode} from 'react';
 import {PageProps} from '@/types';
-import {Transaction, TransactionStatus, TransactionType} from "@/types/transactions";
+import {Transaction} from "@/types/transactions";
 import {cn, toMoney} from "@/lib/utils";
 import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
 import {Phone} from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat"
+import {TransactionStatus, TransactionType} from "@/types/enums";
 
 dayjs.extend(localizedFormat);
 

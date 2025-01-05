@@ -15,10 +15,11 @@ class WalletController extends Controller
             ->with(['bet', 'deposit', 'refund', 'winning', 'withdrawal'])
             ->where('type', TransactionType::Deposit)
             ->orWhere('type', TransactionType::Withdrawal)
+            ->orWhere('type', TransactionType::Bet)
             ->latest()
             ->get();
 
-        //        return ApiTransactionResource::collection($transactions);
+//                return ApiTransactionResource::collection($transactions);
         return Inertia::render('Wallet', [
             'transactions' => ApiTransactionResource::collection($transactions),
         ]);
