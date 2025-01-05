@@ -93,7 +93,7 @@ export interface Bet {
     user_id: number;
     transaction_id: number;
     stake: number;
-    multiplier_setting: BetMultiplier;
+    multiplier_settings: BetMultiplier;
     is_flexed: boolean;
     potential_winnings: number;
     status: BetStatus;

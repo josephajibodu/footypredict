@@ -1,10 +1,10 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, Link} from '@inertiajs/react';
-import { ReactNode } from 'react';
+import {ReactNode} from 'react';
 import dayjs from 'dayjs';
-import { BetStatus } from '@/types/enums';
-import { Bet, PageProps } from '@/types';
-import { toMoney } from '@/lib/utils';
+import {BetStatus} from '@/types/enums';
+import {Bet, PageProps} from '@/types';
+import {cn, toMoney} from '@/lib/utils';
 import {MatchOptionEnum, MatchOptionLabels} from "@/enums/MatchOptionEnum";
 
 interface BetDetailsProps extends PageProps {
@@ -12,8 +12,7 @@ interface BetDetailsProps extends PageProps {
 }
 
 export default function BetDetails({ bet }: BetDetailsProps) {
-    const isLost = bet.status === BetStatus.Lost;
-    const statusClass = isLost ? 'text-red-600' : 'text-green-600';
+    console.log("bet: ", bet)
 
     return (
         <>
@@ -21,31 +20,34 @@ export default function BetDetails({ bet }: BetDetailsProps) {
 
             <div className="">
                 {/* Header */}
-                <div className="bg-red-600 text-white p-4">
+                <div className="p-4">
                     <div className="flex justify-between items-center">
                         <h1 className="font-bold text-lg">Ticket Details</h1>
                         <span>{dayjs(bet.created_at).format('DD/MM HH:mm')}</span>
                     </div>
-                    <p className={`${statusClass} font-bold text-xl mt-2`}>
-                        {bet.status === BetStatus.Lost ? 'Lost' : 'Won'}
+                    <p className={cn("font-bold text-xl mt-2 capitalize", {
+                        "text-red-600": bet.status === BetStatus.Lost || bet.status === BetStatus.Canceled,
+                        "text-green-600": bet.status === BetStatus.Won,
+                        "text-orange-600": bet.status === BetStatus.Pending,
+                    })}>
+                        {bet.status}
                     </p>
                 </div>
 
                 {/* Ticket Info */}
-                <div className="bg-black text-white p-4 space-y-4">
-                    <div>
-                        <h2 className="text-lg font-semibold">Singles</h2>
+                <div className="bg-black text-white p-4">
+                    <div className="space-y-4">
                         <div className="flex justify-between">
-                            <span>Total Return</span>
-                            <span className="font-bold">{toMoney(bet.potential_winnings || 0)}</span>
+                            <span>Expected Multiplier</span>
+                            <span className="font-bold">x{bet.multiplier_settings.main}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Total Stake</span>
                             <span className="font-bold">{toMoney(bet.stake)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span>Total Odds</span>
-                            <span className="font-bold">2</span>
+                            <span>Total Return</span>
+                            <span className="font-bold">{toMoney(bet.potential_winnings || 0)}</span>
                         </div>
                     </div>
                 </div>
@@ -73,19 +75,14 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 </div>
 
                 {/* Additional Actions */}
-                <div className="bg-white p-4 mt-4">
-                    <div className="flex justify-between items-center">
-                        <span>Number of Bets: {bet.sport_events?.length}</span>
-                        <Link href={route('transaction.show', {transaction: bet.transaction.reference})} className="text-green-600 font-semibold">
-                            Bet Details
-                        </Link>
-                    </div>
-                    <a
-                        href={route('wallet')}
+                <div className="bg-white text-center p-4 mt-4">
+                    <span>Number of Matches: {bet.sport_events?.length}</span>
+                    <Link
+                        href={route('transaction.show', {transaction: bet.transaction.reference})}
                         className="block mt-4 text-center text-green-600 font-semibold"
                     >
                         Check Transaction History
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Footer */}

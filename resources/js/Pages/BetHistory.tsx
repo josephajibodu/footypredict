@@ -40,11 +40,11 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                             <TabsContent value="all" className="mt-0 py-0">
                                 <div className="flex flex-col gap-4 py-4">
                                     {bets.map((bet, index) => (
-                                        <div key={bet.id} className="bg-white">
-                                            <div className={cn("flex justify-between py-2 border-b px-4", {
-                                                "bg-green-500": bet.status === BetStatus.Won,
+                                        <div key={bet.id} className="bg-white border">
+                                            <div className={cn("flex justify-between py-2 px-4", {
+                                                "bg-green-100": bet.status === BetStatus.Won,
                                                 "bg-destructive": bet.status === BetStatus.Lost || BetStatus.Canceled,
-                                                "bg-orange-500": bet.status === BetStatus.Pending,
+                                                "bg-orange-100": bet.status === BetStatus.Pending,
                                             })}>
                                                 <div className="flex ">
                                                     <span className="font-bold capitalize">{bet.status}</span>
