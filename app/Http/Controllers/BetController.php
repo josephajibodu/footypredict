@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Bets\PlaceBet;
+use App\Http\Resources\ApiBetResource;
+use App\Http\Resources\ApiBetSportEventResource;
+use App\Http\Resources\ApiBetSummaryResource;
+use App\Models\Bet;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +18,19 @@ class BetController extends Controller
     {
         $user = Auth::user();
 
-        $bets = $user->bets;
+        $bets = $user->bets->load(['sportEvents']);
 
         return Inertia::render('BetHistory', [
-            'bets' => $bets,
+            'bets' => ApiBetSummaryResource::collection($bets),
+        ]);
+    }
+
+    public function show(Bet $bet)
+    {
+        $bet->load(['sportEvents.team1', 'sportEvents.team2']);
+
+        return Inertia::render('BetShow', [
+            'bet' => ApiBetResource::make($bet),
         ]);
     }
 

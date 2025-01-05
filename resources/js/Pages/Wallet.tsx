@@ -73,33 +73,37 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                         </div>
                     )}
 
-                    <h2 className="px-4 pt-4 font-bold text-lg">Transactions</h2>
+                    {transactions.length > 0 && (
+                        <>
+                            <h2 className="px-4 pt-4 font-bold text-lg">Transactions</h2>
 
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="h-1">
-                                <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
-                                <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {transactions.map((transaction, index) => (
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="h-1">
+                                        <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
+                                        <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {transactions.map((transaction, index) => (
 
-                                <TableRow key={transaction.id}>
-                                    <TableCell className="font-medium">
-                                        <Link href={route('transaction.show', {transaction})}>
-                                            <span className="text-sm text-primary/70 line-clamp-1">{transaction.description}</span>
-                                            <div className="">{toMoney(Number(transaction.amount))}</div>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell className={'text-right ps-0'}>
-                                        <span className="text-xs text-primary/70">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
-                                    </TableCell>
-                                </TableRow>
+                                        <TableRow key={transaction.id}>
+                                            <TableCell className="font-medium">
+                                                <Link href={route('transaction.show', {transaction})}>
+                                                    <span className="text-sm text-primary/70 line-clamp-1">{transaction.description}</span>
+                                                    <div className="">{toMoney(Number(transaction.amount))}</div>
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell className={'text-right ps-0'}>
+                                                <span className="text-xs text-primary/70">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                            </TableCell>
+                                        </TableRow>
 
-                            ))}
-                        </TableBody>
-                    </Table>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </>
+                    )}
 
 
                 </div>

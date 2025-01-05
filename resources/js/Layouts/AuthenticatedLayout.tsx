@@ -61,7 +61,8 @@ export default function Authenticated({
             <main className={cn(containerClassName,
                 "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto bg-secondary",
                 {
-                    "mt-[64px]": showHeader || backUrl
+                    "mt-[64px]": showHeader || backUrl,
+                    "mb-[56px]": !hideBottomNav,
                 }
             )}>
                 {children}

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {clsx} from "clsx";
-import {MatchOption, MatchOptionLabels, MatchOptionShortCodes} from "@/enums/MatchOption";
+import {MatchOptionEnum, MatchOptionLabels, MatchOptionShortCodes} from "@/enums/MatchOptionEnum";
 
-const betOptions = Object.values(MatchOption);
+const betOptions = Object.values(MatchOptionEnum);
 
 export default function EventSelectorGroup({
     onChange,
     option
 }: {
-    onChange?: (value: null | MatchOption) => void;
-    option?: MatchOption;
+    onChange?: (value: null | MatchOptionEnum) => void;
+    option?: MatchOptionEnum;
 }) {
 
     return (

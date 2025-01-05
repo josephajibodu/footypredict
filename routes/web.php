@@ -22,10 +22,12 @@ Route::get('/events', [SportEventController::class, 'index'])->name('events');
 Route::middleware(['auth'])->group(function () {
 
     Route::resource('/bets', BetController::class)
-        ->only(['index', 'store'])
+        ->only(['index', 'store', 'show'])
+        ->parameters(['bets' => 'bet:reference'])
         ->names([
             'index' => 'bets',
             'store' => 'bets.store',
+            'show' => 'bets.show',
         ]);
 
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet');

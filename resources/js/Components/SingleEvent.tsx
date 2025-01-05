@@ -1,7 +1,7 @@
 import EventSelectorGroup from './EventSelectorGroup';
 import {SportEvent} from "@/types";
 import dayjs from "dayjs";
-import {MatchOption} from "@/enums/MatchOption";
+import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
 
 export default function SingleEvent(
     {
@@ -9,8 +9,8 @@ export default function SingleEvent(
     }: {
         event: SportEvent,
         sn: number,
-        onChange: (value: MatchOption | null) => void,
-        betOption?: MatchOption;
+        onChange: (value: MatchOptionEnum | null) => void,
+        betOption?: MatchOptionEnum;
     }
 ) {
     return (

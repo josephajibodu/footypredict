@@ -55,7 +55,7 @@ class UserFactory extends Factory
     public function configure(): UserFactory
     {
         return $this->afterCreating(function (User $user) {
-            Wallet::query()->create(['user_id' => $user->id]);
+            Wallet::query()->create(['user_id' => $user->id, 'ngn_balance' => 1_000_00]);
         });
     }
 }

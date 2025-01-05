@@ -6,7 +6,7 @@ import {ReactNode, useEffect, useMemo} from 'react';
 import {PageProps, SportEvent} from "@/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
-import {MatchOption} from "@/enums/MatchOption";
+import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
 
 interface EventPageProps extends PageProps {
     events: SportEvent[]
@@ -16,7 +16,7 @@ export default function Events({ events, settings }: EventPageProps) {
     const selectedEvents = useAppSelector((state) => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
-    const handleGameSelection = (event: SportEvent, value: MatchOption | null) => {
+    const handleGameSelection = (event: SportEvent, value: MatchOptionEnum | null) => {
         if (selectedEvents.length === settings.bet.required_selections) {
             return alert('Maximum selection reached');
         }
@@ -36,7 +36,7 @@ export default function Events({ events, settings }: EventPageProps) {
     };
 
     const getSelectedOption = useMemo(() => {
-        return (eventId: number): MatchOption | undefined => {
+        return (eventId: number): MatchOptionEnum | undefined => {
             const selectedEvent = selectedEvents.find((event) => event.id === eventId);
             return selectedEvent ? selectedEvent.betOption : undefined;
         };

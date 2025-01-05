@@ -1,20 +1,18 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Head, usePage} from '@inertiajs/react';
-import { ReactNode } from 'react';
-import {ArrowUp, ChevronDown, ReceiptText, TicketSlash} from "lucide-react";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/Components/ui/tabs"
+import {Head, Link} from '@inertiajs/react';
+import {ReactNode} from 'react';
+import {ChevronDown, ReceiptText} from "lucide-react";
+import {Tabs, TabsContent, TabsList, TabsTrigger,} from "@/Components/ui/tabs"
 import {Bet, PageProps} from "@/types";
+import {cn, toMoney} from "@/lib/utils";
+import dayjs from "dayjs";
+import {BetStatus} from "@/types/enums";
 
 interface BetHistoryProps extends PageProps {
     bets: Bet[]
 }
 
-export default function BetHistory({ bets } : BetHistoryProps) {
+export default function BetHistory({ bets, settings } : BetHistoryProps) {
 
     return (
         <>
@@ -32,35 +30,45 @@ export default function BetHistory({ bets } : BetHistoryProps) {
                     )}
 
                     {bets.length > 0 && (
-                        <Tabs defaultValue="all">
-                            <TabsList className="grid w-full grid-cols-3 p-0 rounded-none">
-                                <TabsTrigger className="h-full rounded-none" value="all">All</TabsTrigger>
-                                <TabsTrigger className="h-full rounded-none" value="unsettled">Unsettled</TabsTrigger>
-                                <TabsTrigger className="h-full rounded-none" value="settled">Settled</TabsTrigger>
+                        <Tabs defaultValue="all" className="px-4">
+                            <TabsList className="grid w-full grid-cols-3 p-0 rounded-none bg-white mt-4">
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="all">All</TabsTrigger>
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="unsettled">Unsettled</TabsTrigger>
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="settled">Settled</TabsTrigger>
                             </TabsList>
 
-                            <TabsContent value="all" className="mt-0">
-                                <div className="space-y-2">
+                            <TabsContent value="all" className="mt-0 py-0">
+                                <div className="flex flex-col gap-4 py-4">
                                     {bets.map((bet, index) => (
-                                        <div key={bet.id} className="bg-white py-4 px-4">
-                                            <div className="flex justify-between py-2 border-b">
+                                        <div key={bet.id} className="bg-white">
+                                            <div className={cn("flex justify-between py-2 border-b px-4", {
+                                                "bg-green-500": bet.status === BetStatus.Won,
+                                                "bg-destructive": bet.status === BetStatus.Lost || BetStatus.Canceled,
+                                                "bg-orange-500": bet.status === BetStatus.Pending,
+                                            })}>
                                                 <div className="flex ">
-                                                    <ArrowUp size={18} className="text-red-500 me-2" />
-                                                    <span className="font-bold">Loss</span>
+                                                    <span className="font-bold capitalize">{bet.status}</span>
                                                 </div>
-                                                <span className="">- 5,000.00</span>
+                                                <span className="">- {toMoney(bet.stake)}</span>
                                             </div>
-                                            <div className="py-2">
-                                                <div className="flex justify-between">
-                                                    <span className="text-sm"> Date & Time</span>
-                                                    <ChevronDown />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span>List of matches</span>
-                                                    <span>List of matches</span>
-                                                    <span>List of matches</span>
-                                                    <span>and 4 others ...</span>
-                                                </div>
+                                            <div className="py-2 px-4">
+                                                <Link href={route('bets.show', {bet: bet.reference})}>
+                                                    <div className="flex justify-between">
+                                                        <span className="text-sm">{dayjs(bet.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                                        <ChevronDown />
+                                                    </div>
+                                                </Link>
+
+                                                <Link href={route('bets.show', {bet: bet.reference})}>
+                                                    <div className="flex flex-col">
+                                                            {bet.short_sport_events?.slice(0, 3).map((event, index) => (
+                                                                <span key={index}>{event.fixture}</span>
+                                                            ))}
+                                                            {bet.short_sport_events && bet.short_sport_events.length > 3 && (
+                                                                <span className="text-gray-500 italic">and {bet.short_sport_events?.length - 3} others ...</span>
+                                                            )}
+                                                    </div>
+                                                </Link>
                                             </div>
                                         </div>
                                     ))}

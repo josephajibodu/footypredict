@@ -1,4 +1,5 @@
-import {User} from "@/types/index";
+import {Bet, User} from "@/types/index";
+import {TransactionStatus, TransactionType, WithdrawalAccountType} from "@/types/enums";
 
 export interface Transaction {
     id: number;
@@ -13,7 +14,7 @@ export interface Transaction {
     updated_at: string;
 
     deposit?: Deposit;
-    bet?: object,
+    bet?: Bet,
     withdrawal?: Withdrawal;
 }
 
@@ -81,24 +82,4 @@ export interface Withdrawal {
     updated_at?: string | null;
 
     transaction?: Transaction;
-}
-
-export enum TransactionStatus {
-    Pending = "pending",
-    Completed = "completed",
-    Failed = "failed",
-    Cancelled = "cancelled",
-}
-
-export enum TransactionType {
-    Bet = "bet",
-    Winning = "winning",
-    Withdrawal = "withdrawal",
-    Deposit = "deposit",
-    Refunds = "refunds",
-}
-
-export enum WithdrawalAccountType {
-    FiatBank = 'bank',
-    CryptoWalletAddress = 'crypto-wallet-address',
 }

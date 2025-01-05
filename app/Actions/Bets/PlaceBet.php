@@ -11,11 +11,16 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Settings\BetSetting;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PlaceBet
 {
+    public const START_BET_CODE = 100_000;
+
+    public const BET_CODE_CACHE_KEY = "last_bet_id";
+
     public function __construct(public BetSetting $betSetting) {}
 
     public function __invoke(User $user, float $amount, array $sportEvents, bool $isFlexed): Bet
@@ -47,12 +52,20 @@ class PlaceBet
                 'balance' => $user->balance,
             ]);
 
-            // Create the bet
+            $lastBetId = Cache::remember(self::BET_CODE_CACHE_KEY, now()->addMinutes(60), function () {
+                return Bet::query()->max('code') ?? self::START_BET_CODE;
+            });
+
+            $newBetCode = $lastBetId + 1;
+            Cache::put(self::BET_CODE_CACHE_KEY, $newBetCode);
+
             $bet = Bet::query()->create([
+                'code' => $newBetCode,
+                'reference' => Str::uuid(),
                 'user_id' => $user->id,
                 'transaction_id' => $transaction->id,
                 'stake' => $amountInUnit,
-                'multiplier_settings' => $multiplierSettings,
+                'multiplier_settings' => $validMultiplier,
                 'potential_winnings' => $amountInUnit * $multiplier,
                 'is_flexed' => $isFlexed,
                 'status' => BetStatus::Pending,

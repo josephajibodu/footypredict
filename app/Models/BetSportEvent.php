@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BetSportEvent extends Model
 {
+    protected $table = "bet_sport_event";
+
     protected $fillable = [
         'bet_id',
         'sport_event_id',

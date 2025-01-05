@@ -12,7 +12,7 @@ import { Button } from './ui/button';
 import {Input} from "@/Components/ui/input";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {Info, Loader, Trash, X} from "lucide-react";
-import {MatchOptionLabels} from "@/enums/MatchOption";
+import {MatchOptionLabels} from "@/enums/MatchOptionEnum";
 import {clearSelectedSportEvents, deselectSportEvent} from "@/store/eventSlice";
 import {Link, router, usePage} from "@inertiajs/react";
 import {useToast} from "@/hooks/use-toast";
@@ -63,7 +63,7 @@ export default function Betslip() {
         } else {
             setMultiplierSetting(undefined);
         }
-    }, [events, betSettings.min_selection, betSettings.selection_config])
+    }, [events, isFlexed, betSettings.min_selection, betSettings.selection_config])
 
     const handleRemoveEvent = (sportEventId: number) => dispatch(deselectSportEvent(sportEventId));
     const handleClearAllEvents = () => dispatch(clearSelectedSportEvents());

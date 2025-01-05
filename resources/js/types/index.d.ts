@@ -1,6 +1,7 @@
 import { Config } from 'ziggy-js';
-import {MatchOption} from "@/enums/MatchOption";
+import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
 import { Transaction } from "@/types/transactions";
+import {BetStatus} from "@/types/enums";
 
 export interface User {
     id: number;
@@ -33,12 +34,17 @@ export interface SportEvent {
     season?: string | null;
     match_week?: number | null;
 
-    team1: Team,
-    team2: Team
+    team1: Team;
+    team2: Team;
+
+    options?: MatchOption[];
+    selected_option?: MatchOption;
+    outcome_option?: MatchOption;
+    is_correct?: boolean;
 }
 
 export interface SelectedSportEvent extends SportEvent {
-    betOption: MatchOption;
+    betOption: MatchOptionEnum;
 }
 
 export interface Team {
@@ -78,6 +84,10 @@ export interface WalletSetting {
 
 export interface Bet {
     id: number;
+
+    reference: string;
+    code: number;
+
     user_id: number;
     transaction_id: number;
     stake: number;
@@ -90,14 +100,15 @@ export interface Bet {
 
     user: User;
     transaction: Transaction;
-    sportEvents: SportEvent[];
+    sport_events?: SportEvent[];
+    short_sport_events?: { fixture: string }[];
 }
 
-export enum BetStatus {
-    Pending = "pending",
-    Won = "won",
-    Lost = "lost",
-    Canceled = "canceled",
+export interface MatchOption {
+    id: string,
+    sport_event_id: number,
+    type: MatchOptionEnum,
+    value: string,
 }
 
 export type PageProps<

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class Bet
  *
  * @property int $id The unique identifier for the bet.
+ * @property string $reference
+ * @property int $code
  * @property int $user_id
  * @property int $transaction_id The ID of the transaction associated with the bet.
  * @property int $stake The amount staked on the bet.
@@ -53,9 +55,8 @@ class Bet extends Model
      */
     public function sportEvents(): BelongsToMany
     {
-        return $this->belongsToMany(SportEvent::class, 'bet_sport_event')
-            ->withPivot('selected_option_id', 'outcome_option_id', 'is_correct')
-            ->withTimestamps();
+        return $this->belongsToMany(SportEvent::class)
+            ->withPivot('selected_option_id', 'outcome_option_id', 'is_correct');
     }
 
     /**

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -64,6 +65,12 @@ class SportEvent extends Model
             'sport' => SportEventType::class,
             'status' => SportEventStatus::class,
         ];
+    }
+
+    public function bets(): BelongsToMany
+    {
+        return $this->belongsToMany(Bet::class)
+            ->withPivot('selected_option_id', 'outcome_option_id', 'is_correct');
     }
 
     public function team1(): BelongsTo

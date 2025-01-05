@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\BetSportEvent;
 use App\Models\SportEvent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,6 +19,18 @@ class ApiSportEventResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $betSportEventArray = [];
+
+        if ($this->pivot) {
+            $betSportEvent = BetSportEvent::query()
+                ->with(['selectedOption', 'outcomeOption'])
+                ->where('bet_id', $this->pivot->bet_id)
+                ->where('sport_event_id', $this->pivot->sport_event_id)
+                ->first(['is_correct', 'selected_option_id', 'outcome_option_id', 'i']);
+
+            $betSportEventArray = $betSportEvent->toArray();
+        }
+
         return [
             'id' => $this->id,
             'match_date' => $this->match_date,
@@ -36,6 +49,10 @@ class ApiSportEventResource extends JsonResource
             'options' => ApiOptionResource::collection($this->whenLoaded('options')),
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
+
+            $this->mergeWhen($this->pivot, [
+                ...$betSportEventArray
+            ]),
         ];
     }
 }
