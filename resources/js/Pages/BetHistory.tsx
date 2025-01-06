@@ -31,20 +31,20 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
 
                     {bets.length > 0 && (
                         <Tabs defaultValue="all" className="px-4">
-                            <TabsList className="grid w-full grid-cols-3 p-0 rounded-none bg-white mt-4">
-                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="all">All</TabsTrigger>
-                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="unsettled">Unsettled</TabsTrigger>
-                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-primary data-[state=active]:text-primary-foreground" value="settled">Settled</TabsTrigger>
+                            <TabsList className="grid w-full grid-cols-3 p-0 rounded-none bg-white mt-4 bg-card text-card-foreground rounded-lg overflow-hidden">
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-gradient-to-r from-secondary to-accent data-[state=active]:text-primary-foreground rounded-s-lg" value="all">All</TabsTrigger>
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-gradient-to-r from-secondary to-accent data-[state=active]:text-primary-foreground" value="unsettled">Unsettled</TabsTrigger>
+                                <TabsTrigger className="h-full rounded-none data-[state=active]:bg-gradient-to-r from-secondary to-accent data-[state=active]:text-primary-foreground rounded-e-lg" value="settled">Settled</TabsTrigger>
                             </TabsList>
 
                             <TabsContent value="all" className="mt-0 py-0">
                                 <div className="flex flex-col gap-4 py-4">
                                     {bets.map((bet, index) => (
-                                        <div key={bet.id} className="bg-white border">
-                                            <div className={cn("flex justify-between py-2 px-4", {
-                                                "bg-green-100": bet.status === BetStatus.Won,
-                                                "bg-destructive": bet.status === BetStatus.Lost || BetStatus.Canceled,
-                                                "bg-orange-100": bet.status === BetStatus.Pending,
+                                        <div key={bet.id} className="bg-card text-card-foreground rounded-lg overflow-hidden">
+                                            <div className={cn("flex justify-between text-primary bg-primary/60 text-primary-foreground py-2 px-4", {
+                                                // "bg-green-100": bet.status === BetStatus.Won,
+                                                // "bg-destructive": bet.status === BetStatus.Lost || BetStatus.Canceled,
+                                                // "bg-orange-100": bet.status === BetStatus.Pending,
                                             })}>
                                                 <div className="flex ">
                                                     <span className="font-bold capitalize">{bet.status}</span>
@@ -54,18 +54,18 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                                             <div className="py-2 px-4">
                                                 <Link href={route('bets.show', {bet: bet.reference})}>
                                                     <div className="flex justify-between">
-                                                        <span className="text-sm">{dayjs(bet.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                                        <span className="text-sm text-gray-400">{dayjs(bet.created_at).format('D MMM YYYY ・ HH:mA')}</span>
                                                         <ChevronDown />
                                                     </div>
                                                 </Link>
 
                                                 <Link href={route('bets.show', {bet: bet.reference})}>
-                                                    <div className="flex flex-col">
+                                                    <div className="flex flex-col text-sm">
                                                             {bet.short_sport_events?.slice(0, 3).map((event, index) => (
                                                                 <span key={index}>{event.fixture}</span>
                                                             ))}
                                                             {bet.short_sport_events && bet.short_sport_events.length > 3 && (
-                                                                <span className="text-gray-500 italic">and {bet.short_sport_events?.length - 3} others ...</span>
+                                                                <span className="text-gray-300 italic">and {bet.short_sport_events?.length - 3} others ...</span>
                                                             )}
                                                     </div>
                                                 </Link>

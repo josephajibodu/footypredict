@@ -18,9 +18,9 @@ export default function EventSelectorGroup({
                 <span
                     key={betOption}
                     className={clsx(
-                        'flex h-8 w-14 items-center justify-center bg-gray-400 px-1 text-sm font-bold',
+                        'flex h-8 w-14 items-center justify-center bg-primary px-1 text-sm font-bold',
                         {
-                            'bg-gray-900 text-white': betOption === option,
+                            'bg-gradient-to-r from-secondary to-accent text-white': betOption === option,
                             'rounded-s': index === 0,
                             'rounded-e': index === betOptions.length - 1
                         },

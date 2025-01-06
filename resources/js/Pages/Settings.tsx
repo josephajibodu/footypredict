@@ -65,11 +65,11 @@ export default function Settings() {
                         <AvatarFallback>JA</AvatarFallback>
                     </Avatar>
                     <h3 className="mt-2 text-lg">{auth.user.full_name}</h3>
-                    <Badge variant='secondary' className="text-sm">@{auth.user.username}</Badge>
+                    <Badge variant='secondary' className="text-sm bg-gradient-to-r from-secondary to-accent">@{auth.user.username}</Badge>
                 </div>
 
                 {/* Body */}
-                <div className="flex-1 rounded-t-2xl -mt-8 bg-white px-6 py-8">
+                <div className="flex-1 rounded-t-2xl -mt-8 bg-background px-6 py-8">
                     <h1 className="font-bold text-lg">Setting</h1>
 
                     <ul>
@@ -79,7 +79,7 @@ export default function Settings() {
                             return <li key={index}>
                                 <Link { ...(link.props || {})} className={"w-full"}>
                                     <div className="flex justify-between items-center gap-4 py-2">
-                                    <span className="size-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                                    <span className="size-10 bg-primary/60 rounded-full flex items-center justify-center text-primary-foreground">
                                         {link.icon}
                                     </span>
 

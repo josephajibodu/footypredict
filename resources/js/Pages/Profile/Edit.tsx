@@ -37,4 +37,4 @@ export default function Edit({
     );
 }
 
-Edit.layout = (page: ReactNode) => <AuthenticatedLayout showHeader={false} canGoBack title="Edit Profile">{page}</AuthenticatedLayout>
+Edit.layout = (page: ReactNode) => <AuthenticatedLayout showHeader={false} title="Edit Profile">{page}</AuthenticatedLayout>

@@ -27,7 +27,7 @@ export default function Authenticated({
     }
 
     return (
-        <div className="flex flex-col h-screen bg-primary/20">
+        <div className="flex flex-col h-screen bg-background text-foreground">
             {/* Header Section */}
             <section className="max-w-md mx-auto fixed left-0 right-0 z-10 h-[64px] ">
                 {(backUrl && !showHeader) && <header className="flex items-center gap-4 px-2 py-2 h-full bg-white border-b">
@@ -39,7 +39,7 @@ export default function Authenticated({
                     <h3 className="font-bold text-white">FootyPredict</h3>
                     <div className="flex gap-2">
                         {auth.user && (
-                            <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>{toMoney(auth.user.balance)}</Button>
+                            <div className="bg-card rounded-lg border-none py-2 px-2 text-card-foreground text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>
                         )}
 
                         {auth.user === null && (
@@ -59,7 +59,7 @@ export default function Authenticated({
 
             {/* Main Content */}
             <main className={cn(containerClassName,
-                "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto bg-secondary",
+                "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto",
                 {
                     "mt-[64px]": showHeader || backUrl,
                     "mb-[56px]": !hideBottomNav,
@@ -70,14 +70,14 @@ export default function Authenticated({
 
             {/* Bottom Navigation */}
             {!hideBottomNav && (
-                <nav className="max-w-md mx-auto text-white bg-black border-t border-gray-100 dark:bg-gray-800 fixed bottom-0 right-0 left-0">
-                    <ul className="flex items-center justify-between">
+                <nav className="max-w-md mx-auto text-white bg-primary border-t dark:bg-gray-800 fixed bottom-0 right-0 left-0">
+                    <ul className="grid grid-cols-4 items-center justify-between">
                         <li>
                             <Link
                                 href={route('events')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gray-700": url.startsWith('/events') }
+                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/events') }
                                 )}
                             >
                                 <Home size={20} />
@@ -89,7 +89,7 @@ export default function Authenticated({
                                 href={route('bets')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gray-700": url.startsWith('/bets') }
+                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/bets') }
                                 )}
                             >
                                 <List size={20} />
@@ -101,7 +101,7 @@ export default function Authenticated({
                                 href={route('wallet')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gray-700": url.startsWith('/wallet') }
+                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/wallet') }
                                 )}
                             >
                                 <Wallet size={20} />
@@ -113,7 +113,7 @@ export default function Authenticated({
                                 href={route('settings')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gray-700": url.startsWith('/settings') }
+                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/settings') }
                                 )}
                             >
                                 <User size={20} />

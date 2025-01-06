@@ -17,7 +17,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/
 import {toMoney} from "@/lib/utils";
 import dayjs from "dayjs";
 import {PageProps} from "@/types";
-import {Transaction, TransactionStatus} from "@/types/transactions";
+import {Transaction} from "@/types/transactions";
 
 
 interface WalletPageProps extends PageProps {
@@ -42,18 +42,28 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
             <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="bg-primary text-primary-foreground px-4 py-4">
-                    <div className="flex justify-between py-4">
+                    <div className="flex justify-between py-4 text-lg">
                         <h3 className="font-bold">Wallet Balance</h3>
                         <span className="">{toMoney(auth.user.balance)}</span>
                     </div>
 
                     <div className="flex justify-center items-center py-4 gap-4">
-                        <Button onClick={() => setOpenWalletInput(true)} variant="secondary" size="lg" className="text-base">
+                        <Button
+                            onClick={() => setOpenWalletInput(true)}
+                            variant="secondary"
+                            size="lg"
+                            className="text-base bg-gradient-to-r from-secondary to-accent"
+                        >
                             <Wallet2 />
                             Deposit
                         </Button>
 
-                        <Button variant="secondary" size="lg" className="text-base" asChild>
+                        <Button
+                            variant="secondary"
+                            size="lg"
+                            className="text-base bg-gradient-to-r from-secondary to-accent text-secondary-foreground"
+                            asChild
+                        >
                             <Link href={route('withdraw')}>
                                 <HandCoins size={12} />
                                 Withdraw
@@ -87,15 +97,15 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                                 <TableBody>
                                     {transactions.map((transaction, index) => (
 
-                                        <TableRow key={transaction.id}>
+                                        <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4">
                                             <TableCell className="font-medium">
                                                 <Link href={route('transaction.show', {transaction})}>
-                                                    <span className="text-sm text-primary/70 line-clamp-1">{transaction.description}</span>
+                                                    <span className="text-sm line-clamp-1">{transaction.description}</span>
                                                     <div className="">{toMoney(Number(transaction.amount))}</div>
                                                 </Link>
                                             </TableCell>
                                             <TableCell className={'text-right ps-0'}>
-                                                <span className="text-xs text-primary/70">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                                <span className="text-xs">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
                                             </TableCell>
                                         </TableRow>
 
