@@ -29,7 +29,7 @@ const links: ILink[] = [
         label: 'Password',
         icon: <Lock size={18} />,
         props: {
-            href: route('profile.edit'),
+            href: route('update-password'),
         }
     },
     {
