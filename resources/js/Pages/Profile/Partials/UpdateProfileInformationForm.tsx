@@ -1,33 +1,43 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import {Input} from "@/Components/ui/input";
-import {Button} from "@/Components/ui/button";
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import {PageProps} from "@/types";
+
+interface User {
+    first_name: string;
+    last_name: string;
+    username: string;
+    mobile_number: string;
+    nationality: string;
+    email: string;
+    email_verified_at: string | null;
+}
 
 export default function UpdateProfileInformation({
-    mustVerifyEmail,
-    status,
-    className = '',
-}: {
+     mustVerifyEmail,
+     status,
+     className = '',
+ }: {
     mustVerifyEmail: boolean;
     status?: string;
     className?: string;
 }) {
-    const user = usePage().props.auth.user;
+    const { user } = usePage<PageProps>().props.auth;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
-            name: user.name,
+        useForm<Partial<User>>({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
             email: user.email,
         });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         patch(route('profile.update'));
     };
 
@@ -37,41 +47,66 @@ export default function UpdateProfileInformation({
                 <h2 className="text-lg font-medium text-card-foreground">
                     Profile Information
                 </h2>
-
                 <p className="mt-1 text-sm text-gray-300">
-                    Update your account's profile information and email address.
+                    Your profile details cannot be changed
                 </p>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
+                    <InputLabel htmlFor="first_name" value="First Name" />
                     <Input
-                        id="name"
+                        id="username"
                         className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
+                        value={data.username || ''}
+                        onChange={(e) => setData('username', e.target.value)}
                         required
-                        autoComplete="name"
+                        disabled
+                        autoComplete="username"
                     />
+                    <InputError className="mt-2" message={errors.first_name} />
+                </div>
 
-                    <InputError className="mt-2" message={errors.name} />
+                <div>
+                    <InputLabel htmlFor="first_name" value="First Name" />
+                    <Input
+                        id="first_name"
+                        className="mt-1 block w-full"
+                        value={data.first_name || ''}
+                        onChange={(e) => setData('first_name', e.target.value)}
+                        required
+                        disabled
+                        autoComplete="given-name"
+                    />
+                    <InputError className="mt-2" message={errors.first_name} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="last_name" value="Last Name" />
+                    <Input
+                        id="last_name"
+                        className="mt-1 block w-full"
+                        value={data.last_name || ''}
+                        onChange={(e) => setData('last_name', e.target.value)}
+                        required
+                        disabled
+                        autoComplete="family-name"
+                    />
+                    <InputError className="mt-2" message={errors.last_name} />
                 </div>
 
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
-
                     <Input
                         id="email"
                         type="email"
                         className="mt-1 block w-full"
-                        value={data.email}
+                        value={data.email || ''}
                         onChange={(e) => setData('email', e.target.value)}
                         required
-                        autoComplete="username"
+                        disabled
+                        autoComplete="email"
                     />
-
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
@@ -91,16 +126,13 @@ export default function UpdateProfileInformation({
 
                         {status === 'verification-link-sent' && (
                             <div className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
-                                A new verification link has been sent to your
-                                email address.
+                                A new verification link has been sent to your email address.
                             </div>
                         )}
                     </div>
                 )}
 
                 <div className="flex items-center gap-4">
-                    <Button className="bg-gradient-to-r from-secondary to-accent" disabled={processing}>Save</Button>
-
                     <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
@@ -108,9 +140,7 @@ export default function UpdateProfileInformation({
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-300">
-                            Saved.
-                        </p>
+                        <p className="text-sm text-gray-300">Saved.</p>
                     </Transition>
                 </div>
             </form>

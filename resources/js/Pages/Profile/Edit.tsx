@@ -24,9 +24,9 @@ export default function Edit({
                         />
                     </div>
 
-                    <div className="p-4 bg-card text-card-foreground sm:rounded-lg sm:p-8">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                    {/*<div className="p-4 bg-card text-card-foreground sm:rounded-lg sm:p-8">*/}
+                    {/*    <DeleteUserForm className="max-w-xl" />*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </>
@@ -36,7 +36,7 @@ export default function Edit({
 Edit.layout = (page: ReactNode) => <AuthenticatedLayout
     backUrl={route('settings')}
     showHeader={false}
-    title="Edit Profile"
+    title="Profile Information"
 >
     {page}
 </AuthenticatedLayout>
