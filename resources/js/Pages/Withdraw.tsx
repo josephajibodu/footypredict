@@ -2,7 +2,7 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, Link, router} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {PageProps} from '@/types';
-import {Transaction, TransactionStatus, TransactionType, WithdrawalAccount} from "@/types/transactions";
+import {WithdrawalAccount} from "@/types/transactions";
 import {cn, extractErrorMessage, toMoney} from "@/lib/utils";
 import {Separator} from "@/Components/ui/separator";
 import {Button} from "@/Components/ui/button";
@@ -93,14 +93,14 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                     <p className="mb-2 text-end">Balance: {toMoney(auth.user.balance)}</p>
                     <div className="relative">
                         <label htmlFor='amount'>
-                            <Wallet className="absolute size-8 top-3 start-3 text-gray-400" />
+                            <Wallet className="absolute size-8 top-3 start-3 text-gray-300" />
                         </label>
                         <Input
                             id="amount"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
                             placeholder="Amount to Withdraw"
-                            className={'h-14 ps-[3.75rem]'}
+                            className={'h-14 ps-[3.75rem] placeholder:text-gray-400'}
                             type="number"
                             step="0.01"
                         />
@@ -109,11 +109,11 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
 
                 <div className="relative mb-4">
                     <label htmlFor="bank">
-                        <Landmark className="absolute size-8 top-3 start-3 text-gray-400" />
+                        <Landmark className="absolute size-8 top-3 start-3 text-gray-300" />
                     </label>
                     <Input
                         id="bank"
-                        className="h-14 ps-[3.75rem] cursor-pointer placeholder:text-gray-900"
+                        className="h-14 ps-[3.75rem] cursor-pointer placeholder:text-gray-400"
                         readOnly
                         onClick={openDrawer}
                         placeholder={"Select Bank"}
@@ -133,7 +133,7 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                 onOpenChange={setDrawerOpen}
                 dismissible={true}
             >
-                <DrawerContent>
+                <DrawerContent className="bg-card">
                     <DrawerHeader>
                         <DrawerTitle>Select Bank</DrawerTitle>
                     </DrawerHeader>
@@ -145,7 +145,7 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                                         <li
                                             key={account.bank_code}
                                             className={cn(
-                                                "p-4 flex justify-between items-center cursor-pointer hover:bg-gray-100",
+                                                "p-4 flex justify-between items-center cursor-pointer hover:bg-primary",
                                                 {
                                                     "border-t": index === 0,
                                                     "border-b": index === (accounts.length - 1),
@@ -156,18 +156,18 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
                                         >
                                             <div className="flex flex-col">
                                                 <span>{account.bank_name}</span>
-                                                <span className="text-sm text-gray-500">{account.account_number}</span>
+                                                <span className="text-sm text-gray-300">{account.account_number}</span>
                                             </div>
-                                            {(account.id === selectedBank?.id) && <Check/>}
+                                            {(account.id === selectedBank?.id) && <Check className="text-secondary" />}
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-center py-16 text-gray-500">
+                                <div className="flex flex-col items-center justify-center text-center py-16">
                                     <XIcon className="size-8 mb-4" />
                                     <p>No accounts found</p>
                                     <Button variant="link" asChild>
-                                        <Link href={route('add-withdrawal-account')} className="mt-4">
+                                        <Link href={route('add-withdrawal-account')} className="mt-4 text-secondary underline">
                                             <Plus className="mr-2" />
                                             Add a New Account
                                         </Link>

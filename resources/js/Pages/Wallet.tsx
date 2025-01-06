@@ -120,7 +120,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
             </div>
 
             <Drawer open={openWalletInput} onOpenChange={setOpenWalletInput}>
-                <DrawerContent>
+                <DrawerContent className="bg-card">
                     <DrawerHeader>
                         <DrawerTitle>Fund Wallet</DrawerTitle>
                         <DrawerDescription>How much do you to add?</DrawerDescription>

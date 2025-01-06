@@ -113,7 +113,7 @@ export default function Betslip() {
     };
 
     const renderEventItem = (event: SelectedSportEvent) => (
-        <div key={event.id} className="flex items-center justify-between py-2 border-b">
+        <div key={event.id} className="flex items-center justify-between py-2 bg-primary/20 border px-2 rounded-lg">
             <div className="flex flex-col">
                 <span className="text-sm text-gray-500">{MatchOptionLabels[event.betOption]}</span>
                 <span className="line-clamp-1">
@@ -145,20 +145,24 @@ export default function Betslip() {
                 </div>
                 <div className="flex flex-col items-end">
                     <p>
-                        <span className="text-gray-500 text-xs">Get all {events.length} correct for </span>
+                        <span className="text-gray-300 text-xs">Get all {events.length} correct for </span>
                         x{multiplier}
                     </p>
                     {(isFlexed && multiplierSetting.allow_flex )&& (
                         <>
                             {multiplierSetting.flex_1 && (
-                                <span className="text-gray-500 text-xs">
-                                    Get {events.length - 1} correct for x{multiplierSetting.flex_1}
-                                </span>
+                                <div className="flex items-end gap-1 text-xs">
+                                    <span className="text-gray-300">
+                                        Get {events.length - 1} correct for
+                                    </span>x{multiplierSetting.flex_1}
+                                </div>
                             )}
                             {multiplierSetting.flex_2 && (
-                                <span className="text-gray-500 text-xs">
-                                    Get {events.length - 2} correct for x{multiplierSetting.flex_2}
-                                </span>
+                                <div className="flex items-end gap-1 text-xs">
+                                    <span className="text-gray-300">
+                                        Get {events.length - 2} correct for
+                                    </span>x{multiplierSetting.flex_2}
+                                </div>
                             )}
                         </>
                     )}
@@ -208,7 +212,7 @@ export default function Betslip() {
             </AnimatePresence>
 
             <Drawer open={open} onOpenChange={setOpen}>
-                <DrawerContent className="h-[90%]">
+                <DrawerContent className="h-[90%] bg-card">
                     <DrawerHeader className={"justify-start flex flex-col"}>
                         <div className="flex justify-between items-center w-full">
                             <DrawerTitle>Bet Slip</DrawerTitle>
@@ -224,7 +228,7 @@ export default function Betslip() {
                         </div>
                     </DrawerHeader>
 
-                    <div className="flex-1 p-4 overflow-y-auto bg-white">
+                    <div className="flex-1 p-4 overflow-y-auto">
                         <div className="max-w-md mx-auto space-y-4">
                             {events.map(renderEventItem)}
                         </div>

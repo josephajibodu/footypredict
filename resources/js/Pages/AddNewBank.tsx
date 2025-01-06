@@ -125,11 +125,11 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
             <div className="flex flex-col px-4 py-4">
                 <div className="relative mb-4">
                     <label htmlFor="bank">
-                        <Landmark className="absolute size-8 top-3 start-3 text-gray-400" />
+                        <Landmark className="absolute size-8 top-3 start-3 text-gray-300" />
                     </label>
                     <Input
                         id="bank"
-                        className="h-14 ps-[3.75rem] cursor-pointer placeholder:text-gray-900"
+                        className="h-14 ps-[3.75rem] cursor-pointer placeholder:text-gray-400"
                         readOnly
                         onClick={openDrawer}
                         placeholder={"Select Bank"}
@@ -139,12 +139,12 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
 
                 <div className="relative">
                     <label htmlFor='account_number'>
-                        <UserCircle className="absolute size-8 top-3 start-3 text-gray-400" />
+                        <UserCircle className="absolute size-8 top-3 start-3 text-gray-300" />
                     </label>
                     <Input
                         id="account_number"
                         placeholder="Account Number"
-                        className={'h-14 ps-[3.75rem]'}
+                        className={'h-14 ps-[3.75rem] placeholder:text-gray-400'}
                         value={accountNumber}
                         onChange={e => setAccountNumber(e.target.value)}
                     />
@@ -165,7 +165,7 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                 onOpenChange={setDrawerOpen}
                 dismissible={true}
             >
-                <DrawerContent>
+                <DrawerContent className="bg-card">
                     <DrawerHeader>
                         <DrawerTitle>Select Bank</DrawerTitle>
                     </DrawerHeader>
@@ -175,11 +175,11 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                             {banks.map((bank) => (
                                 <li
                                     key={bank.bank_code}
-                                    className="p-4 flex justify-between cursor-pointer hover:bg-gray-100"
+                                    className="p-4 flex justify-between cursor-pointer hover:bg-primary"
                                     onClick={() => handleBankSelect(bank)}
                                 >
                                     {bank.bank_name}
-                                    {(bank.bank_code === selectedBank?.bank_code) && <Check/>}
+                                    {(bank.bank_code === selectedBank?.bank_code) && <Check className="text-secondary" />}
                                 </li>
                             ))}
                         </ul>
@@ -196,7 +196,7 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                 }}
                 dismissible={false}
             >
-                <DrawerContent>
+                <DrawerContent className="bg-card">
                     <DrawerHeader className="py-4 px-4">
                         <DrawerTitle className="font-bold text-xl">Confirm to Add Bank</DrawerTitle>
                         <DrawerDescription className="sr-only">Resolved bank details</DrawerDescription>
@@ -208,15 +208,15 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                                 <div className="mb-4 mt-4 flex flex-col gap-2">
                                     <div className="flex flex-row-reverse justify-between items-center">
                                         <span className="font-medium">{resolvedBankDetails.account_name}</span>
-                                        <span className="text-gray-500 text-sm">Account Name</span>
+                                        <span className="text-gray-300 text-sm">Account Name</span>
                                     </div>
                                     <div className="flex flex-row-reverse justify-between items-center">
                                         <span className="font-medium">{resolvedBankDetails.bank_name}</span>
-                                        <span className="text-gray-500 text-sm">Bank Name</span>
+                                        <span className="text-gray-300 text-sm">Bank Name</span>
                                     </div>
                                     <div className="flex flex-row-reverse justify-between items-center">
                                         <span className="font-medium">{resolvedBankDetails.account_number}</span>
-                                        <span className="text-gray-500 text-sm">Account Number</span>
+                                        <span className="text-gray-300 text-sm">Account Number</span>
                                     </div>
                                 </div>
                             </>
@@ -229,7 +229,7 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                         <Button
                             variant="destructive"
                             onClick={() => setResolvedBankDetails(undefined)}
-                            className="rounded-none"
+                            className="rounded-none h-12 text-base"
                             disabled={loading}
                         >
                             Cancel
@@ -237,7 +237,7 @@ export default function Withdraw({ transaction, auth, banks }: AddNewBankProps) 
                         <Button
                             variant="default"
                             onClick={saveBankAccount}
-                            className="w-full rounded-none"
+                            className="w-full rounded-none h-12 text-base"
                             disabled={loading}
                         >
                             {loading && <Loader className="animate-spin" />}
