@@ -12,7 +12,6 @@ interface BetDetailsProps extends PageProps {
 }
 
 export default function BetDetails({ bet }: BetDetailsProps) {
-    console.log("bet: ", bet)
 
     return (
         <>
@@ -35,7 +34,7 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 </div>
 
                 {/* Ticket Info */}
-                <div className="bg-black text-white p-4">
+                <div className="bg-card text-white p-4">
                     <div className="space-y-4">
                         <div className="flex justify-between">
                             <span>Expected Multiplier</span>
@@ -53,9 +52,9 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 </div>
 
                 {/* Bet Details */}
-                <div className="bg-white p-4 mt-4">
+                <div className="p-4 mt-4 space-y-4">
                     {bet.sport_events?.map((event) => (
-                        <div key={event.id} className="border-b pb-4 mb-4">
+                        <div key={event.id} className="border bg-card py-4 px-4 rounded-lg text-sm">
                             <div className="flex justify-between">
                                 <span>{dayjs(event.kickoff_time).format('DD/MM HH:mm')}</span>
                             </div>
@@ -75,11 +74,11 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 </div>
 
                 {/* Additional Actions */}
-                <div className="bg-white text-center p-4 mt-4">
+                <div className="bg-card text-center p-4 mt-4">
                     <span>Number of Matches: {bet.sport_events?.length}</span>
                     <Link
                         href={route('transaction.show', {transaction: bet.transaction.reference})}
-                        className="block mt-4 text-center text-green-600 font-semibold"
+                        className="block mt-4 text-center text-gray-400 underline font-semibold"
                     >
                         Check Transaction History
                     </Link>

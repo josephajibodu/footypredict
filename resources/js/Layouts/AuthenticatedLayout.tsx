@@ -30,7 +30,7 @@ export default function Authenticated({
         <div className="flex flex-col h-screen bg-background text-foreground">
             {/* Header Section */}
             <section className="max-w-md mx-auto fixed left-0 right-0 z-10 h-[64px] ">
-                {(backUrl && !showHeader) && <header className="flex items-center gap-4 px-2 py-2 h-full bg-white border-b">
+                {(backUrl && !showHeader) && <header className="flex items-center gap-4 px-2 py-2 h-full bg-card text-card-foreground border-b">
                     <span onClick={() => router.visit(backUrl)}><ChevronLeft /></span>
                     <h2 className="text-lg">{title}</h2>
                 </header>}
@@ -39,7 +39,7 @@ export default function Authenticated({
                     <h3 className="font-bold text-white">FootyPredict</h3>
                     <div className="flex gap-2">
                         {auth.user && (
-                            <div className="bg-card rounded-lg border-none py-2 px-2 text-card-foreground text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>
+                            <div className="bg-card text-card-foreground rounded-lg border-none py-2 px-2 text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>
                         )}
 
                         {auth.user === null && (

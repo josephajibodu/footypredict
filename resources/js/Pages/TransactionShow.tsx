@@ -24,12 +24,12 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
             <Head title="Transaction Details" />
 
             {transaction && (
-                <div className="flex flex-col h-full px-4 py-4 bg-white">
+                <div className="flex flex-col h-full px-4 py-4 text-primary-foreground">
                     <div className="flex-1 space-y-8">
 
                         {/* Amount Section */}
                         <div className="p-6 space-y-2">
-                            <div className="text-sm text-muted-foreground">Amount (NGN)</div>
+                            <div className="text-sm">Amount (NGN)</div>
                             <div className="text-4xl font-bold">
                                 {transaction.amount > 0 ? '+' : ''}{toMoney(transaction.amount)}
                             </div>
@@ -41,11 +41,11 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
                         <div className="p-6 space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-full">
-                                    <div className="text-sm text-muted-foreground">Reference</div>
+                                    <div className="text-sm text-foreground/80">Reference</div>
                                     <div className="font-medium break-all">{transaction.reference}</div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-muted-foreground">Status</div>
+                                    <div className="text-sm text-foreground/80">Status</div>
                                     <div className="font-medium">
                                         <span className={cn("capitalize", {
                                                 'text-green-600': transaction.status === TransactionStatus.Completed,
@@ -57,11 +57,11 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-muted-foreground">Time</div>
+                                    <div className="text-sm text-foreground/80">Time</div>
                                     <div className="font-medium">{dayjs(transaction.created_at).format('ll LT')}</div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-muted-foreground">Type</div>
+                                    <div className="text-sm text-foreground/80">Type</div>
                                     <div className="font-medium capitalize">{transaction.type}</div>
                                 </div>
 
@@ -69,12 +69,12 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
                                 {(transaction.type === TransactionType.Deposit && transaction.deposit) && (
                                     <>
                                         <div>
-                                            <div className="text-sm text-muted-foreground">Amount Received</div>
+                                            <div className="text-sm text-foreground/80">Amount Received</div>
                                             <div className="font-medium">{toMoney(transaction.deposit?.amount_received ?? 0)}</div>
                                         </div>
 
                                         <div>
-                                            <div className="text-sm text-muted-foreground">Fee</div>
+                                            <div className="text-sm text-foreground/80">Fee</div>
                                             <div className="font-medium">{toMoney(transaction.deposit?.fee ?? 0)}</div>
                                         </div>
 
@@ -85,17 +85,17 @@ export default function TransactionShow({ transaction }: TransactionDetailProps)
                                 {(transaction.type === TransactionType.Withdrawal && transaction.withdrawal) && (
                                     <>
                                         <div>
-                                            <div className="text-sm text-muted-foreground">Account Name</div>
+                                            <div className="text-sm text-foreground/80">Account Name</div>
                                             <div className="font-medium">{transaction.withdrawal.account_name ?? '-'}</div>
                                         </div>
 
                                         <div>
-                                            <div className="text-sm text-muted-foreground">Account Number</div>
+                                            <div className="text-sm text-foreground/80">Account Number</div>
                                             <div className="font-medium">{transaction.withdrawal.account_number ?? '-'}</div>
                                         </div>
 
                                         <div>
-                                            <div className="text-sm text-muted-foreground">Bank Name</div>
+                                            <div className="text-sm text-foreground/80">Bank Name</div>
                                             <div className="font-medium line-clamp-1">{transaction.withdrawal.bank_name ?? '-'}</div>
                                         </div>
 
