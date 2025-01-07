@@ -11,4 +11,9 @@ class StaticPageController extends Controller
     {
         return Inertia::render('Welcome');
     }
+
+    public function faq()
+    {
+        return Inertia::render('FAQ');
+    }
 }

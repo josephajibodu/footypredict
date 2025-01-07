@@ -8,7 +8,6 @@ export default function StaticLayoutHeader() {
     const [menuOpen, setMenuOpen] = useState(false);
     const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
-    // Prevent scrolling when the menu is open
     useEffect(() => {
         if (menuOpen) {
             document.body.style.overflow = "hidden";
@@ -28,14 +27,12 @@ export default function StaticLayoutHeader() {
         }
     }, [isSmallScreen]);
 
-    // Links object
     const navLinks = [
         { name: "Home", href: "/" },
         { name: "How to Play", href: "/how-to-play" },
-        { name: "FAQs", href: "/faqs" },
+        { name: "FAQs", href: route('faq') },
     ];
 
-    // Framer Motion variants for animations
     const menuVariants = {
         hidden: {
             opacity: 0,
@@ -78,7 +75,7 @@ export default function StaticLayoutHeader() {
 
                 <Button
                     size="lg"
-                    className="bg-gradient-to-r from-secondary to-accent text-base mt-6"
+                    className="hidden md:block bg-gradient-to-r from-secondary to-accent text-base mt-6"
                     asChild
                 >
                     <li>Sign In</li>
