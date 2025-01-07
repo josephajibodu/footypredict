@@ -2,37 +2,13 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 import {Button} from "@/Components/ui/button";
-import {Mail, Phone} from "lucide-react";
+import {Facebook, Instagram, Mail, Phone, Twitter} from "lucide-react";
+import StaticLayoutHeader from "@/Components/StaticLayoutHeader";
 
 export default function StaticLayout({ children }: PropsWithChildren) {
     return (
-        <div className="bg-red-600 w-full">
-            <header className="py-6 bg-card flex px-12">
-                <nav className="flex flex-1 justify-between items-center max-w-screen-xl mx-auto">
-                    <div className="">
-                        <span className="font-bold text-lg">FootyPredict</span>
-                    </div>
-
-                    <ul className="flex flex-1 justify-center gap-8">
-                        <li className="flex items-center gap-4">
-                            <Link className="hover:text-secondary" href={""}>Home</Link>
-                        </li>
-                        <li className="flex items-center gap-4">
-                            <Link className="hover:text-secondary" href={""}>How to Play</Link>
-                        </li>
-                        <li className="flex items-center gap-4">
-                            <Link className="hover:text-secondary" href={""}>FAQs</Link>
-                        </li>
-                    </ul>
-
-                    <ul className="">
-                        <Button size="lg" className="bg-gradient-to-r from-secondary to-accent text-base" asChild>
-                            <li>Sign In</li>
-                        </Button>
-                    </ul>
-                </nav>
-
-            </header>
+        <div className="w-full">
+            <StaticLayoutHeader />
 
             <main className="min-h-screen">
 
@@ -57,6 +33,26 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                             <li className="flex items-center gap-4">
                                 <Mail className="size-5" />
                                 <a href="mailto:support@footypredict.app">support@footypredict.app</a>
+                            </li>
+                        </ul>
+
+                        <ul className="mt-4 flex gap-4">
+                            <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
+                                <a href="" target="_blank">
+                                    <Twitter className="size-5" />
+                                </a>
+                            </li>
+
+                            <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
+                                <a href="" target="_blank">
+                                    <Instagram className="size-5" />
+                                </a>
+                            </li>
+
+                            <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
+                                <a href="" target="_blank">
+                                    <Facebook className="size-5" />
+                                </a>
                             </li>
                         </ul>
                     </div>
