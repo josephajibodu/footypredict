@@ -1,6 +1,6 @@
-import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { ReactNode } from 'react';
+import StaticLayout from "@/Layouts/StaticLayout";
 
 export default function Welcome() {
     return (
@@ -10,4 +10,4 @@ export default function Welcome() {
     );
 }
 
-Welcome.layout = (page: ReactNode) => <Authenticated>{page}</Authenticated>;
+Welcome.layout = (page: ReactNode) => <StaticLayout>{page}</StaticLayout>;
