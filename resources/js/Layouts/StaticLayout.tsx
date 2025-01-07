@@ -11,7 +11,7 @@ export default function StaticLayout({ children }: PropsWithChildren) {
             <StaticLayoutHeader />
 
             <main className="min-h-screen">
-
+                {children}
             </main>
 
             <footer className="bg-card px-12 py-16">
@@ -21,8 +21,10 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                             FootyPredict
                         </h4>
                         <p className="max-w-md mb-6 text-center lg:text-start">
-                            Dignissi to bring significant changes online based learning by
-                            doing resed cased learning by cosin extensive of arch for game
+                            Footy Predict is a Jackpot-style predict-to-win service for football matches.
+                            We use social wagering to share games among users. We are also out to solve the perennial
+                            issue of bookies locking and unlocking games unfairly by ensuring that all games are booked
+                            before they start and only truthful outcomes are rewarded.
                         </p>
 
                         <ul className="space-y-2 flex flex-col items-center md:items-start">
