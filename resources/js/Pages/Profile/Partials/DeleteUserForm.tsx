@@ -3,10 +3,10 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useRef, useState } from 'react';
+import {useForm} from '@inertiajs/react';
+import {FormEventHandler, useRef, useState} from 'react';
 import {Button} from "@/Components/ui/button";
+import {Input} from "@/Components/ui/input";
 
 export default function DeleteUserForm({
     className = '',
@@ -89,7 +89,7 @@ export default function DeleteUserForm({
                             className="sr-only"
                         />
 
-                        <TextInput
+                        <Input
                             id="password"
                             type="password"
                             name="password"
@@ -99,7 +99,7 @@ export default function DeleteUserForm({
                                 setData('password', e.target.value)
                             }
                             className="mt-1 block w-3/4"
-                            isFocused
+                            autoFocus
                             placeholder="Password"
                         />
 

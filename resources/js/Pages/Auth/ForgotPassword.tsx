@@ -1,14 +1,10 @@
 import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEventHandler, ReactNode} from 'react';
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import InputLabel from "@/Components/InputLabel";
 import {Input} from "@/Components/ui/input";
 import {Button} from "@/Components/ui/button";
-import Login from "@/Pages/Auth/Login";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({

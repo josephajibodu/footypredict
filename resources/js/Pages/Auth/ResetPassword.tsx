@@ -1,10 +1,10 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import {Head, useForm} from '@inertiajs/react';
+import {FormEventHandler} from 'react';
+import {Input} from "@/Components/ui/input";
 
 export default function ResetPassword({
     token,
@@ -36,7 +36,7 @@ export default function ResetPassword({
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
-                    <TextInput
+                    <Input
                         id="email"
                         type="email"
                         name="email"
@@ -52,14 +52,14 @@ export default function ResetPassword({
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
 
-                    <TextInput
+                    <Input
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="new-password"
-                        isFocused={true}
+                        autoFocus={true}
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
@@ -72,7 +72,7 @@ export default function ResetPassword({
                         value="Confirm Password"
                     />
 
-                    <TextInput
+                    <Input
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
