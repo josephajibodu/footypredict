@@ -29,7 +29,7 @@ export default function StaticLayoutHeader() {
 
     const navLinks = [
         { name: "Home", href: "/" },
-        { name: "How to Play", href: "/how-to-play" },
+        { name: "How to Play", href: route('how-to-play') },
         { name: "FAQs", href: route('faq') },
     ];
 

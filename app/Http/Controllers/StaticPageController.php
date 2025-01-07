@@ -16,4 +16,9 @@ class StaticPageController extends Controller
     {
         return Inertia::render('FAQ');
     }
+
+    public function howToPlay()
+    {
+        return Inertia::render('HowToPlay');
+    }
 }

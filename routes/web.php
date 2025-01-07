@@ -19,6 +19,8 @@ Route::get('/', [StaticPageController::class, 'index'])->name('landing');
 
 Route::get('/frequently-asked-questions', [StaticPageController::class, 'faq'])->name('faq');
 
+Route::get('/how-to-play', [StaticPageController::class, 'howToPlay'])->name('how-to-play');
+
 Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
 Route::middleware(['auth'])->group(function () {

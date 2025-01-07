@@ -66,7 +66,7 @@ export default function StaticLayout({ children }: PropsWithChildren) {
 
                         <ul className="space-y-2 flex flex-col items-center lg:items-start">
                             <li className="flex items-center gap-4">
-                                <Link className="hover:text-secondary" href={""}>How to Play</Link>
+                                <Link className="hover:text-secondary" href={route('how-to-play')}>How to Play</Link>
                             </li>
                             <li className="flex items-center gap-4 ">
                                 <Link className="hover:text-secondary" href={route('faq')}>Frequently Asked Questions</Link>
