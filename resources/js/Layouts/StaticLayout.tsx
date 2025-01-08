@@ -14,7 +14,7 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                 {children}
             </main>
 
-            <footer className="bg-card px-12 py-16">
+            <footer className="bg-primary/50 px-12 py-16">
                 <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16">
                     <div className="col-span-full sm:col-span-2 lg:col-span-6 flex flex-col items-center lg:items-start">
                         <h4 className="mb-8 pb-2 text-2xl font-bold relative after:content-[''] after:bg-primary after:w-full lg:after:w-16 after:h-1 after:absolute after:bottom-0 after:left-0">

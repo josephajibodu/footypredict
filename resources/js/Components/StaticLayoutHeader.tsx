@@ -55,7 +55,7 @@ export default function StaticLayoutHeader() {
     };
 
     return (
-        <header className="py-6 bg-card flex px-4 lg:px-12">
+        <header className="py-6 bg-primary/50 flex px-4 lg:px-12">
             <nav className="flex flex-1 justify-between items-center max-w-screen-xl mx-auto">
                 {/* Logo */}
                 <div>

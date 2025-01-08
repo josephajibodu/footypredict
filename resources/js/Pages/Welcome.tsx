@@ -45,7 +45,7 @@ export default function Welcome() {
             <Head title="FootyPredict - Predict. Stake. Win Big" />
 
             <section>
-                <div className="max-w-screen-xl mx-auto flex items-center flex-col md:flex-row py-12">
+                <div className="max-w-screen-xl mx-auto flex items-center flex-col md:flex-row pt-12 pb-0 md:pb-12">
                     <div className="w-full md:w-7/12 py-12 md:py-24 px-4 md:px-0 text-center md:text-start">
                         <h1 className="text-3xl md:text-5xl leading-relaxed font-bold mb-8">
                             The Ultimate Football <br /> Prediction Platform
@@ -78,7 +78,7 @@ export default function Welcome() {
                         </div>
 
                         {/* Mobile Image: Show top half */}
-                        <div className="block md:hidden bg-primary w-full h-[300px] overflow-hidden">
+                        <div className="block md:hidden bg-primary/40 w-full h-[300px] overflow-hidden">
                             <motion.img
                                 src="/images/sample-app.png"
                                 alt="sample app"
@@ -120,7 +120,7 @@ export default function Welcome() {
             </section>
 
             {/* Call to Action Section */}
-            <section className="py-36 text-white text-center">
+            <section className="py-36 text-white text-center px-4">
                 <ClickToAction />
             </section>
         </>
