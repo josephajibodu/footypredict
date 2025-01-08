@@ -33,6 +33,6 @@ createInertiaApp({
         createRoot(el).render(WrappedApp);
     },
     progress: {
-        color: '#4B5563',
+        color: '#ff8d35',
     },
 });
