@@ -59,7 +59,7 @@ export default function StaticLayoutHeader() {
             <nav className="flex flex-1 justify-between items-center max-w-screen-xl mx-auto">
                 {/* Logo */}
                 <div>
-                    <span className="font-bold text-lg">FootyPredict</span>
+                    <Link href={route('landing')}><span className="font-bold text-lg">FootyPredict</span></Link>
                 </div>
 
                 {/* Desktop Menu */}
@@ -75,7 +75,7 @@ export default function StaticLayoutHeader() {
 
                 <Button
                     size="lg"
-                    className="hidden md:block bg-gradient-to-r from-secondary to-accent text-base mt-6"
+                    className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
                     asChild
                 >
                     <li>Sign In</li>
