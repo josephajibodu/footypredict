@@ -33,42 +33,42 @@ export default function Deposit({ settings, transaction, auth }: DepositPageProp
             <Head title="Deposit Funds" />
 
             {deposit && (
-                <div className="flex flex-col h-full px-4 py-4 bg-white">
+                <div className="flex flex-col h-full px-4 py-4">
                     <div className="flex-1 space-y-8">
                         {/* Wallet Information */}
                         <section className="flex items-center gap-4">
                             <Wallet2 size={48} />
                             <div>
-                                <p className="text-sm text-gray-600">Wallet Balance</p>
-                                <p className="text-xl font-bold text-gray-800">{toMoney(auth.user.balance)}</p>
+                                <p className="text-sm text-gray-200">Wallet Balance</p>
+                                <p className="text-xl font-bold text-gray-200">{toMoney(auth.user.balance)}</p>
                             </div>
                         </section>
 
                         {/* Transfer Information */}
                         <section>
-                            <h2 className="text-lg font-medium text-gray-800">
+                            <h2 className="text-lg font-medium text-gray-200">
                                 Transfer {toMoney(transaction.amount)} into the account number displayed below.
                             </h2>
-                            <p className="text-sm text-gray-600 mt-2">
+                            <p className="text-sm text-gray-300 mt-2">
                                 This account expires in 30 minutes. Any transfer to the account details below will reflect in your wallet within 10 minutes.
                             </p>
                         </section>
 
                         {/* Bank Details Card */}
-                        <section className="bg-secondary rounded-lg p-6 text-primary space-y-6">
+                        <section className="bg-card rounded-lg p-6 text-primary space-y-6">
                             <div className="flex justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600">Bank</p>
-                                    <p className="font-bold text-gray-800">{deposit.metadata.bank_name}</p>
+                                    <p className="text-sm text-gray-400">Bank</p>
+                                    <p className="font-bold text-gray-200">{deposit.metadata.bank_name}</p>
                                 </div>
                             </div>
 
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <p className="text-sm text-gray-600">Account Number</p>
-                                    <p className="font-bold text-gray-800">{deposit.metadata.account_number}</p>
+                                    <p className="text-sm text-gray-400">Account Number</p>
+                                    <p className="font-bold text-gray-200">{deposit.metadata.account_number}</p>
                                 </div>
-                                <Button size="sm" variant="outline" className="rounded-full" onClick={() => {
+                                <Button size="sm" variant="outline" className="rounded-full text-white hover:bg-primary" onClick={() => {
                                     copyToClipBoard(deposit.metadata.account_number ?? '').then(() => {
                                         toast({
                                             title: "Account number copied to clipboard"
@@ -80,8 +80,8 @@ export default function Deposit({ settings, transaction, auth }: DepositPageProp
                             </div>
                             <div className="flex justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600">Account Name</p>
-                                    <p className="font-bold text-gray-800">{deposit.metadata.account_name}</p>
+                                    <p className="text-sm text-gray-400">Account Name</p>
+                                    <p className="font-bold text-gray-200">{deposit.metadata.account_name}</p>
                                 </div>
                             </div>
                         </section>

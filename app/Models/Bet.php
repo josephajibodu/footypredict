@@ -34,6 +34,8 @@ class Bet extends Model
 
     protected $fillable = [
         'user_id',
+        'code',
+        'reference',
         'transaction_id',
         'stake',
         'multiplier_settings',

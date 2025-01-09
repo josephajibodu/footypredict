@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\TransactionType;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,6 +28,7 @@ class ApiTransactionResource extends JsonResource
             'balance' => $this->balance / 100,
             'type' => $this->type->value,
             'status' => $this->status->value,
+            'trend_up' => $this->isTrendUp(),
 
             'bet' => $this->whenLoaded('bet'),
             'winning' => $this->whenLoaded('winning'),
@@ -37,5 +39,14 @@ class ApiTransactionResource extends JsonResource
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
+    }
+
+    private function isTrendUp(): bool
+    {
+        if ($this->type === TransactionType::Withdrawal || $this->type === TransactionType::Bet) {
+            return false;
+        }
+
+        return true;
     }
 }

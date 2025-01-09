@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\Bets\PlaceBet;
 use App\Http\Resources\ApiBetResource;
-use App\Http\Resources\ApiBetSportEventResource;
 use App\Http\Resources\ApiBetSummaryResource;
 use App\Models\Bet;
 use Exception;
@@ -18,7 +17,7 @@ class BetController extends Controller
     {
         $user = Auth::user();
 
-        $bets = $user->bets->load(['sportEvents']);
+        $bets = $user->bets()->latest()->with(['sportEvents'])->get();
 
         return Inertia::render('BetHistory', [
             'bets' => ApiBetSummaryResource::collection($bets),
@@ -54,6 +53,8 @@ class BetController extends Controller
 
             return back();
         } catch (Exception $ex) {
+            report($ex);
+
             return back()->withErrors($ex->getMessage());
         }
     }

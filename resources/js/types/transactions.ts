@@ -10,6 +10,7 @@ export interface Transaction {
     balance: number;
     type: TransactionType;
     status: TransactionStatus;
+    trend_up: boolean;
     created_at: string;
     updated_at: string;
 

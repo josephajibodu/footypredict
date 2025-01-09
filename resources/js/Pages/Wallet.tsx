@@ -2,7 +2,7 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
-import {HandCoins, Loader, TicketSlash, Wallet2} from "lucide-react";
+import {ArrowDown, ArrowUp, ArrowUp01, HandCoins, Loader, TicketSlash, Wallet2} from "lucide-react";
 
 import {
     Drawer,
@@ -100,8 +100,13 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                                         <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4">
                                             <TableCell className="font-medium">
                                                 <Link href={route('transaction.show', {transaction})}>
-                                                    <span className="text-sm line-clamp-1">{transaction.description}</span>
-                                                    <div className="">{toMoney(Number(transaction.amount))}</div>
+                                                    <div className="flex">
+                                                        {!transaction.trend_up
+                                                            ? <ArrowUp className="size-5 flex-shrink-0 text-destructive" />
+                                                            : <ArrowDown className="size-5 flex-shrink-0 text-green-400" />}
+                                                        <span className="text-sm line-clamp-1">{transaction.description}</span>
+                                                    </div>
+                                                    <div className="text-lg">{toMoney(Number(transaction.amount))}</div>
                                                 </Link>
                                             </TableCell>
                                             <TableCell className={'text-right ps-0'}>
