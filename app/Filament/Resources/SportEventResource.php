@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Actions\Matches\UpdateScores;
+use App\Actions\Matches\UpdateSportEventStatus;
 use App\Enums\SportEventStatus;
 use App\Enums\SportEventType;
 use App\Filament\Resources\SportEventResource\Pages;
@@ -16,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 class SportEventResource extends Resource
 {
@@ -83,6 +85,7 @@ class SportEventResource extends Resource
                             Forms\Components\TimePicker::make('kickoff_time')
                                 ->required(),
                             Forms\Components\Select::make('status')
+                                ->disabled()
                                 ->hidden(fn () => $form->getOperation() === 'create')
                                 ->options(SportEventStatus::class)
                                 ->required(),
@@ -124,14 +127,19 @@ class SportEventResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('match_date')
                     ->date()
-                    ->description(fn (SportEvent $record) => Carbon::parse($record->kickoff_time)->format('H:i a'))
+                    ->description(fn (SportEvent $record) => Carbon::parse($record->kickoff_time)->format('h:i A'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('team1.short_name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('team2.short_name')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Match')
+                    ->formatStateUsing(fn(SportEvent $record) => new HtmlString("
+                        <div class='flex items-center'>
+                            <div class='text-gray-400 text-xs'>vs</div>
+                            <div>
+                                <div>{$record->team1->name}</div>
+                                <div>{$record->team2->name}</div>
+                            </div>
+                        </div>
+                    ")),
                 Tables\Columns\TextColumn::make('league.short_code')
                     ->numeric()
                     ->sortable(),
@@ -167,31 +175,76 @@ class SportEventResource extends Resource
                     ->options(SportEventStatus::class),
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
-                Tables\Actions\Action::make('update_score')
-                    ->label('Score')
-                    ->icon('heroicon-o-rocket-launch')
-                    ->iconButton()
-                    ->modalHeading('Score Board')
-                    ->modalSubmitActionLabel('Update')
-                    ->form([
-                        Forms\Components\Split::make([
-                            Forms\Components\TextInput::make('team1_score')
-                                ->label(fn (SportEvent $record) => $record->team1->name)
-                                ->numeric()
-                                ->formatStateUsing(fn (SportEvent $record) => $record->team1_score),
-                            Forms\Components\TextInput::make('team2_score')
-                                ->label(fn (SportEvent $record) => $record->team2->name)
-                                ->numeric()
-                                ->formatStateUsing(fn (SportEvent $record) => $record->team2_score),
-                        ]),
-                    ])
-                    ->action(function (UpdateScores $updateScores, SportEvent $record, Tables\Actions\Action $action, array $data) {
-                        $updateScores($record, $data);
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('update_score')
+                        ->label('Update Score')
+                        ->icon('heroicon-o-puzzle-piece')
+                        ->modalHeading('Score Board')
+                        ->modalSubmitActionLabel('Update')
+                        ->form([
+                            Forms\Components\Split::make([
+                                Forms\Components\TextInput::make('team1_score')
+                                    ->label(fn (SportEvent $record) => $record->team1->name)
+                                    ->numeric()
+                                    ->formatStateUsing(fn (SportEvent $record) => $record->team1_score),
+                                Forms\Components\TextInput::make('team2_score')
+                                    ->label(fn (SportEvent $record) => $record->team2->name)
+                                    ->numeric()
+                                    ->formatStateUsing(fn (SportEvent $record) => $record->team2_score),
+                            ]),
+                        ])
+                        ->action(function (UpdateScores $updateScores, SportEvent $record, Tables\Actions\Action $action, array $data) {
+                            $updateScores($record, $data);
 
-                        $action->success();
-                    })
-                    ->successNotificationTitle('Match score updated'),
-                Tables\Actions\EditAction::make(),
+                            $action->success();
+                        })
+                        ->successNotificationTitle('Match score updated'),
+
+                    Tables\Actions\Action::make('update_status')
+                        ->label('Update Status')
+                        ->icon('heroicon-o-sparkles')
+                        ->modalHeading('Update Match Status')
+                        ->modalDescription("Once a match is completed, the status can't be changed again.")
+                        ->modalSubmitActionLabel('Update')
+                        ->form([
+                            Forms\Components\ToggleButtons::make('status')
+                                ->label('')
+                                ->live()
+                                ->formatStateUsing(fn(SportEvent $record) => $record->status)
+                                ->options(SportEventStatus::class)
+                                ->grouped(),
+
+                            Forms\Components\TextInput::make('confirm')
+                                ->required()
+                                ->hidden(function (Forms\Get $get, Forms\Set $set, SportEvent $record) {
+
+                                    $status = $get('status') ?? $record->status;
+
+                                    if ( $status == SportEventStatus::Completed
+                                        || $status == SportEventStatus::Cancelled
+                                        || $status == SportEventStatus::Postponed ) {
+                                        return false;
+                                    }
+                                    return true;
+                                })
+                                ->label(fn() => new HtmlString("To confirm, type \"<b>confirm</b>\" in the box below"))
+                        ])
+                        ->action(function (UpdateSportEventStatus $updateSportEventStatus, SportEvent $record, Tables\Actions\Action $action, array $data) {
+                            if (isset($data['confirm']) && $data['confirm'] !== 'confirm') {
+                                $action->failureNotificationTitle('Invalid confirmation text. To confirm, type "confirm" in the box below');
+                                $action->failure();
+                                $action->halt();
+                            }
+
+                            $updateSportEventStatus($record, $data['status']);
+                            $action->success();
+                        })
+                        ->successNotificationTitle('Match status updated')
+                        ->failureNotificationTitle('Error occurred while updating match status'),
+
+                    Tables\Actions\EditAction::make()
+                        ->label('Edit Match'),
+                ])->button()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

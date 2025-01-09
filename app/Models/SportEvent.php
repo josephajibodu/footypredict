@@ -28,8 +28,8 @@ use Illuminate\Support\Carbon;
  * @property int|null $team2_score The score of the second team (nullable).
  * @property string|null $season The season the event belongs to (nullable).
  * @property int|null $match_week The match week number (nullable).
- * @property-read Team $homeTeam
- * @property-read Team $awayTeam
+ * @property-read Team $team1
+ * @property-read Team $team2
  * @property-read Collection<MatchOption> $options Available match options
  * @property Carbon|null $created_at Timestamp of creation.
  * @property Carbon|null $updated_at Timestamp of last update.

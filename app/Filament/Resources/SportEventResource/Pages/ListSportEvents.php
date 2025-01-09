@@ -4,6 +4,7 @@ namespace App\Filament\Resources\SportEventResource\Pages;
 
 use App\Filament\Resources\SportEventResource;
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 
 class ListSportEvents extends ListRecords

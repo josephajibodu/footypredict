@@ -6,6 +6,7 @@ use App\Actions\Transactions\InitiateDepositTransaction;
 use App\Actions\Wallets\CreatePaymentWallet;
 use App\Enums\DepositMethod;
 use App\Integrations\SwervPay\CollectionData;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
