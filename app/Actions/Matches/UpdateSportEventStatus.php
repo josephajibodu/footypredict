@@ -8,6 +8,7 @@ use App\Jobs\ProcessCompletedSportEvent;
 use App\Models\Option;
 use App\Models\SportEvent;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateSportEventStatus
@@ -23,15 +24,17 @@ class UpdateSportEventStatus
             throw new Exception("Match ID {$match->id} cannot be completed. Ensure all necessary conditions are met.");
         }
 
-        $match->update(['status' => $status]);
+        return DB::transaction(function () use ($status, $match) {
+            $match->update(['status' => $status]);
 
-        Log::info("Match ID {$match->id} status updated to {$status->value}.");
+            Log::info("Match ID {$match->id} status updated to {$status->value}.");
 
-        if ($this->isCompleteState($status)) {
-            $this->completeSportEvent($match);
-        }
+            if ($this->isCompleteState($status)) {
+                $this->completeSportEvent($match);
+            }
 
-        return $match->refresh();
+            return $match->refresh();
+        });
     }
 
     /**
