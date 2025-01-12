@@ -19,8 +19,7 @@ class BetSeeder extends Seeder
         $placeBet = app(PlaceBet::class);
 
         foreach ($users as $user) {
-            // Generate random data for bets
-            $events = SportEvent::query()->inRandomOrder()->take(rand(2,6))->get()->map(function ($event) {
+            $events = SportEvent::query()->inRandomOrder()->take(rand(2,3))->get()->map(function ($event) {
                 return [
                     'event_id' => $event->id,
                     'bet_option' => ['home_win', 'draw', 'away_win'][array_rand(['home_win', 'draw', 'away_win'])],

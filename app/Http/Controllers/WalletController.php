@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TransactionType;
 use App\Http\Resources\ApiTransactionResource;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 
 class WalletController extends Controller
@@ -13,9 +14,12 @@ class WalletController extends Controller
     {
         $transactions = Transaction::query()
             ->with(['bet', 'deposit', 'refund', 'winning', 'withdrawal'])
-            ->where('type', TransactionType::Deposit)
-            ->orWhere('type', TransactionType::Withdrawal)
-            ->orWhere('type', TransactionType::Bet)
+            ->where(function (Builder $query) {
+                $query->orWhere('type', TransactionType::Deposit)
+                    ->orWhere('type', TransactionType::Withdrawal)
+                    ->orWhere('type', TransactionType::Bet)
+                    ->orWhere('type', TransactionType::Winning);
+            })
             ->latest()
             ->get();
 

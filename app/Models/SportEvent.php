@@ -92,4 +92,14 @@ class SportEvent extends Model
     {
         return $this->hasMany(Option::class);
     }
+
+    /**
+     * Relationship with betSportEvent(the pivot table between bet and sport-event).
+     *
+     * This relationship is needed for easy access to the selected match outcome and the actual outcome
+     */
+    public function betSportEvent(): HasMany
+    {
+        return $this->hasMany(BetSportEvent::class);
+    }
 }

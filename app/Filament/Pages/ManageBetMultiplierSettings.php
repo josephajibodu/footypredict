@@ -61,7 +61,7 @@ class ManageBetMultiplierSettings extends SettingsPage
                                         ->minValue(1)
                                         ->step(0.01),
 
-                                    Forms\Components\TextInput::make('flex_all')
+                                    Forms\Components\TextInput::make('flex_0')
                                         ->label('Flex All')
                                         ->prefixIcon('heroicon-o-x-mark')
                                         ->columnSpan(3)

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Bet
@@ -49,6 +50,7 @@ class Bet extends Model
         return [
             'status' => BetStatus::class,
             'multiplier_settings' => 'array',
+            'is_flexed' => 'boolean'
         ];
     }
 
@@ -67,5 +69,23 @@ class Bet extends Model
     public function transaction(): BelongsTo
     {
         return $this->belongsTo(Transaction::class);
+    }
+
+    /**
+     * Relationship with transaction.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relationship with betSportEvent(the pivot table between bet and sport-event).
+     *
+     * This relationship is needed for easy access to the selected match outcome and the actual outcome
+     */
+    public function betSportEvent(): HasMany
+    {
+        return $this->hasMany(BetSportEvent::class);
     }
 }

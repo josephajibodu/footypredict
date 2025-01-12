@@ -67,11 +67,10 @@ class PlaceBet
                 'stake' => $amountInUnit,
                 'multiplier_settings' => $validMultiplier,
                 'potential_winnings' => $amountInUnit * $multiplier,
-                'is_flexed' => $isFlexed,
+                'is_flexed' => $isFlexed && $validMultiplier['allow_flex'],
                 'status' => BetStatus::Pending,
             ]);
 
-            // Attach sport events to the bet
             foreach ($sportEvents as $event) {
                 $betOption = Option::query()->where('sport_event_id', $event['event_id'])
                     ->where('type', $event['bet_option'])

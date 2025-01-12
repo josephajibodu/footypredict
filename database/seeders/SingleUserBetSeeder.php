@@ -15,7 +15,6 @@ class SingleUserBetSeeder extends Seeder
      */
     public function run(): void
     {
-        // Fetch the specific user
         $user = User::query()->where('email', 'joseph@footypredict.test')->first();
 
         if (! $user) {
@@ -23,24 +22,20 @@ class SingleUserBetSeeder extends Seeder
             return;
         }
 
-        // Credit the user account
         $user->credit(5_000, 'Test runs');
 
-        // Resolve the PlaceBet action
         $placeBet = app(PlaceBet::class);
 
-        // Check if there are enough sport events in the database
         $sportEventCount = SportEvent::query()->count();
         if ($sportEventCount < 6) {
             $this->command->error('Not enough sport events in the database to seed bets.');
             return;
         }
 
-        // Create random bets for the user
-        for ($i = 0; $i < 5; $i++) { // Generate 5 random bets
+        for ($i = 0; $i < 5; $i++) {
             $events = SportEvent::query()
                 ->inRandomOrder()
-                ->take(rand(2, 6)) // Randomly select 2 to 6 events
+                ->take(rand(2, 3))
                 ->get()
                 ->map(function ($event) {
                     return [
@@ -49,10 +44,9 @@ class SingleUserBetSeeder extends Seeder
                     ];
                 })->toArray();
 
-            $amount = rand(100, 500); // Random bet amount
-            $isFlexed = (bool) rand(0, 1); // Random boolean for flexed bet
+            $amount = rand(100, 500);
+            $isFlexed = (bool) rand(0, 1);
 
-            // Place the bet
             $placeBet($user, $amount, $events, $isFlexed);
         }
 

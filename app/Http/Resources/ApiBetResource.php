@@ -24,6 +24,7 @@ class ApiBetResource extends JsonResource
             'reference' => $this->reference,
             'code' => $this->code,
             'user_id' => $this->user_id,
+            'is_flexed' => $this->is_flexed,
             'stake' => $this->stake / 100,
             'multiplier_settings' => $this->multiplier_settings,
             'potential_winnings' => $this->potential_winnings / 100,

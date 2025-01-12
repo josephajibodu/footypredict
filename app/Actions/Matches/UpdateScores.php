@@ -18,16 +18,10 @@ class UpdateScores
         $match->team1_score = $data['team1_score'];
         $match->team2_score = $data['team2_score'];
 
-        // Determine the outcome
         $outcome = $this->determineOutcome($match->team1_score, $match->team2_score);
 
-        // Update the match status
-        $match->status = SportEventStatus::Completed;
-
-        // Save the updated match
         $match->save();
 
-        // Update match outcome options
         $this->updateMatchOptions($match, $outcome);
 
         return $match->refresh();
@@ -64,7 +58,6 @@ class UpdateScores
      */
     private function updateMatchOptions(SportEvent $match, array $outcome): void
     {
-        // Update each option with the outcome
         foreach ($outcome as $type => $value) {
             $match->options()
                 ->where('type', $type)

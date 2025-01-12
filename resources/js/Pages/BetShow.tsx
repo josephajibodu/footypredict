@@ -39,7 +39,10 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                     <div className="space-y-4">
                         <div className="flex justify-between">
                             <span>Expected Multiplier</span>
-                            <span className="font-bold">x{bet.multiplier_settings.main}</span>
+                            <span className="font-bold">
+                                {bet.is_flexed && <span className="text-sm me-2">(Flexed)</span>}
+                                x{bet.multiplier_settings.main}
+                            </span>
                         </div>
                         <div className="flex justify-between">
                             <span>Total Stake</span>
@@ -69,8 +72,10 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                                     <span>Outcome:</span>
                                     <span className="font-bold flex items-center gap-2">
                                         {event.selected_option?.id === event.outcome_option?.id
-                                            ? <CheckCircle className="text-green-600 size-4" />
-                                            : <XCircle className="text-destructive size-4" />}
+                                            && <CheckCircle className="text-green-600 size-4" />}
+                                        {event.selected_option?.id !== event.outcome_option?.id
+                                            && event.outcome_option !== null
+                                            && <XCircle className="text-destructive size-4" />}
                                         {MatchOptionLabels[MatchOptionEnum[event.outcome_option?.type.toUpperCase() as keyof typeof MatchOptionEnum]]}
                                     </span>
                                 </div>
