@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('nationality');
-            $table->string('currency')->default(Currency::NGN->value);
+            $table->string('currency')->default(Currency::NGN);
             $table->date('date_of_birth');
             $table->string('password');
             $table->rememberToken();
