@@ -7,6 +7,7 @@ use App\Enums\SportEventStatus;
 use App\Models\Option;
 use App\Models\SportEvent; // Assuming the 'Option' model for match outcomes
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UpdateScores
 {
@@ -15,16 +16,18 @@ class UpdateScores
      */
     public function __invoke(SportEvent|Model $match, array $data): SportEvent
     {
-        $match->team1_score = $data['team1_score'];
-        $match->team2_score = $data['team2_score'];
+        return DB::transaction(function () use ($match, $data) {
+            $match->team1_score = $data['team1_score'];
+            $match->team2_score = $data['team2_score'];
 
-        $outcome = $this->determineOutcome($match->team1_score, $match->team2_score);
+            $outcome = $this->determineOutcome($match->team1_score, $match->team2_score);
 
-        $match->save();
+            $match->save();
 
-        $this->updateMatchOptions($match, $outcome);
+            $this->updateMatchOptions($match, $outcome);
 
-        return $match->refresh();
+            return $match->refresh();
+        });
     }
 
     /**

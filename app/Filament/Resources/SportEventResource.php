@@ -11,6 +11,7 @@ use App\Filament\Resources\SportEventResource\RelationManagers;
 use App\Models\SportEvent;
 use App\Models\Team;
 use Carbon\Carbon;
+use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -194,9 +195,15 @@ class SportEventResource extends Resource
                             ]),
                         ])
                         ->action(function (UpdateScores $updateScores, SportEvent $record, Tables\Actions\Action $action, array $data) {
-                            $updateScores($record, $data);
 
-                            $action->success();
+                            try {
+                                $updateScores($record, $data);
+                                $action->success();
+                            } catch (Exception $ex) {
+                                report($ex);
+                                $action->failure();
+                                $action->halt();
+                            }
                         })
                         ->successNotificationTitle('Match score updated'),
 
@@ -236,8 +243,14 @@ class SportEventResource extends Resource
                                 $action->halt();
                             }
 
-                            $updateSportEventStatus($record, $data['status']);
-                            $action->success();
+                            try {
+                                $updateSportEventStatus($record, $data['status']);
+                                $action->success();
+                            } catch (Exception $ex) {
+                                report($ex);
+                                $action->failure();
+                                $action->halt();
+                            }
                         })
                         ->successNotificationTitle('Match status updated')
                         ->failureNotificationTitle('Error occurred while updating match status'),
