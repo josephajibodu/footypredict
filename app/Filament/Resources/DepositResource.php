@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TransactionType;
 use App\Filament\Resources\DepositResource\Pages;
 use App\Models\Deposit;
+use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DepositResource extends Resource
 {
@@ -17,6 +20,11 @@ class DepositResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-paper-airplane';
 
     protected static ?string $navigationGroup = 'Transactions';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return Transaction::query()->where('type', TransactionType::Deposit);
+    }
 
     public static function form(Form $form): Form
     {
@@ -40,17 +48,19 @@ class DepositResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('reference')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.username')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->amount, 100))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('method')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('balance')
+                    ->numeric()
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->balance, 100))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('transaction_reference')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

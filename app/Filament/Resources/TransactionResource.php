@@ -2,36 +2,42 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BetResource\Pages;
-use App\Models\Bet;
+use App\Filament\Resources\TransactionResource\Pages;
+use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BetResource extends Resource
+class TransactionResource extends Resource
 {
-    protected static ?string $model = Bet::class;
+    protected static ?string $model = Transaction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-
-    protected static ?string $navigationGroup = 'Match';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'id')
+                    ->required(),
+                Forms\Components\TextInput::make('reference')
+                    ->required(),
+                Forms\Components\TextInput::make('description')
+                    ->required(),
+                Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('stake')
+                Forms\Components\TextInput::make('balance')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('potential_winnings')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\TextInput::make('type')
+                    ->required(),
                 Forms\Components\TextInput::make('status')
                     ->required(),
             ]);
@@ -41,19 +47,19 @@ class BetResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('reference')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('user.username')
-                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('stake')
+                Tables\Columns\TextColumn::make('amount')
                     ->numeric()
-                    ->formatStateUsing(fn(Bet $record) => to_money($record->stake, 100))
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->amount, 100))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('potential_winnings')
+                Tables\Columns\TextColumn::make('balance')
                     ->numeric()
-                    ->formatStateUsing(fn(Bet $record) => to_money($record->potential_winnings, 100))
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->balance, 100))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -87,9 +93,9 @@ class BetResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBets::route('/'),
-            'create' => Pages\CreateBet::route('/create'),
-            'edit' => Pages\EditBet::route('/{record}/edit'),
+            'index' => Pages\ListTransactions::route('/'),
+            'create' => Pages\CreateTransaction::route('/create'),
+            'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
     }
 }

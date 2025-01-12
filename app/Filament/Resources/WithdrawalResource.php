@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TransactionType;
 use App\Filament\Resources\WithdrawalResource\Pages;
+use App\Models\Transaction;
 use App\Models\Withdrawal;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class WithdrawalResource extends Resource
 {
@@ -17,6 +20,11 @@ class WithdrawalResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $navigationGroup = 'Transactions';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return Transaction::query()->where('type', TransactionType::Withdrawal);
+    }
 
     public static function form(Form $form): Form
     {
@@ -42,19 +50,19 @@ class WithdrawalResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('reference')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('user.username')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->amount, 100))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('method')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('balance')
+                    ->numeric()
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->balance, 100))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('withdrawal_address')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
