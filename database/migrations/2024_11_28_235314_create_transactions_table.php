@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('balance')->comment('balance after the transaction');
             $table->string('type');
             $table->string('status');
+            $table->string('currency');
 
             $table->timestamps();
         });

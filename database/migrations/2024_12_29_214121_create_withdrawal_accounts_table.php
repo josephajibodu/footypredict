@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('type')->comment('fiat, crypto');
+            $table->string('currency');
             $table->string('payment_provider')->nullable();
 
             $table->string('bank_code')->nullable();

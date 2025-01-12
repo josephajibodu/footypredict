@@ -3,6 +3,7 @@
 namespace App\Actions\Bets;
 
 use App\Enums\BetStatus;
+use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Bet;
@@ -50,6 +51,7 @@ class PlaceBet
                 'type' => TransactionType::Bet,
                 'status' => TransactionStatus::Completed,
                 'balance' => $user->balance,
+                'currency' => Currency::NGN,
             ]);
 
             $lastBetId = Cache::remember(self::BET_CODE_CACHE_KEY, now()->addMinutes(60), function () {

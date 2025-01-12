@@ -2,6 +2,7 @@
 
 namespace App\Actions\Transactions;
 
+use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Deposit;
@@ -33,6 +34,7 @@ class CreateWinningPayout
             'balance' => $currentBalance,
             'type' => TransactionType::Winning,
             'status' => TransactionStatus::Completed,
+            'currency' => Currency::NGN
         ]);
 
         // Winning can be used if the winning transaction needs to store more data

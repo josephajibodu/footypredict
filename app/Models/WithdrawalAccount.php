@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Currency;
 use App\Enums\WithdrawalAccountType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -20,8 +21,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $withdrawal_address
  * @property bool $is_default
  * @property array $metadata
+ * @property Currency $currency
+ *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @property-read User $user
  */
 class WithdrawalAccount extends Model
@@ -34,6 +38,7 @@ class WithdrawalAccount extends Model
             'type' => WithdrawalAccountType::class,
             'metadata' => 'array',
             'is_default' => 'boolean',
+            'currency' => Currency::class,
         ];
     }
 

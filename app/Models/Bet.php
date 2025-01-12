@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BetStatus;
+use App\Enums\Currency;
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -23,8 +24,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array $multiplier_settings
  * @property int $potential_winnings The calculated potential winnings.
  * @property BetStatus $status The status of the bet (e.g., 'pending', 'won', 'lost').
+ * @property Currency $currency
+ *
  * @property Carbon|null $created_at Timestamp when the bet was created.
  * @property Carbon|null $updated_at Timestamp when the bet was last updated.
+ *
  * @property-read User $user
  * @property-read Transaction $transaction The transaction associated with the bet.
  * @property-read SportEvent[] $sportEvents The sport events linked to the bet.
@@ -50,7 +54,8 @@ class Bet extends Model
         return [
             'status' => BetStatus::class,
             'multiplier_settings' => 'array',
-            'is_flexed' => 'boolean'
+            'is_flexed' => 'boolean',
+            'currency' => Currency::class,
         ];
     }
 

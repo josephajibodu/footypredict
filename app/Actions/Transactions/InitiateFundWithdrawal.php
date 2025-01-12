@@ -2,6 +2,7 @@
 
 namespace App\Actions\Transactions;
 
+use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Enums\WithdrawalAccountType;
@@ -53,6 +54,7 @@ class InitiateFundWithdrawal
                 'balance' => $currentBalance,
                 'type' => TransactionType::Withdrawal,
                 'status' => TransactionStatus::Pending,
+                'currency' => Currency::NGN
             ]);
 
             Withdrawal::query()->create([

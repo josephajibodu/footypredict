@@ -2,6 +2,7 @@
 
 namespace App\Actions\Transactions;
 
+use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Deposit;
@@ -32,6 +33,7 @@ class InitiateDepositTransaction
             'balance' => $currentBalance,
             'type' => TransactionType::Deposit,
             'status' => TransactionStatus::Pending,
+            'currency' => Currency::NGN
         ]);
 
         Deposit::query()->create([

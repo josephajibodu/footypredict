@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use Carbon\Carbon;
@@ -21,8 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property TransactionType $type The type of transaction, either 'stake' or 'winnings'.
  * @property TransactionStatus $status The status of the transaction, either 'pending', 'completed', or 'failed'.
  * @property int $balance
+ * @property Currency $currency
  * @property Carbon|null $created_at Timestamp when the transaction was created.
  * @property Carbon|null $updated_at Timestamp when the transaction was last updated.
+ *
  * @property-read User $user The user who made the transaction.
  * @property-read Bet|null $bet
  * @property-read Winning|null $winning
@@ -42,6 +45,7 @@ class Transaction extends Model
         return [
             'type' => TransactionType::class,
             'status' => TransactionStatus::class,
+            'currency' => Currency::class,
         ];
     }
 

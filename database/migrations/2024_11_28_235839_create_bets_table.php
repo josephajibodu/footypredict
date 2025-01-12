@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('potential_winnings');
             $table->boolean('is_flexed')->default(false);
             $table->string('status');
+            $table->string('currency');
 
             $table->timestamps();
         });
