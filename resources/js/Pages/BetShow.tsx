@@ -6,6 +6,7 @@ import {BetStatus} from '@/types/enums';
 import {Bet, PageProps} from '@/types';
 import {cn, toMoney} from '@/lib/utils';
 import {MatchOptionEnum, MatchOptionLabels} from "@/enums/MatchOptionEnum";
+import {CheckCircle, XCircle} from "lucide-react";
 
 interface BetDetailsProps extends PageProps {
     bet: Bet;
@@ -66,7 +67,12 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Outcome:</span>
-                                    <span className="font-bold">{MatchOptionLabels[MatchOptionEnum[event.outcome_option?.type.toUpperCase() as keyof typeof MatchOptionEnum]]}</span>
+                                    <span className="font-bold flex items-center gap-2">
+                                        {event.selected_option?.id === event.outcome_option?.id
+                                            ? <CheckCircle className="text-green-600 size-4" />
+                                            : <XCircle className="text-destructive size-4" />}
+                                        {MatchOptionLabels[MatchOptionEnum[event.outcome_option?.type.toUpperCase() as keyof typeof MatchOptionEnum]]}
+                                    </span>
                                 </div>
                             </div>
                         </div>
