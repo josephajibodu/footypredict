@@ -22,17 +22,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Forgot Password" />
 
 
-            <div className="flex flex-col h-full px-8">
+            <div className="flex flex-col h-full px-8 pt-6 pb-6">
 
-                <div className="flex-1 flex flex-col justify-center items-center">
+                <div className="flex-1 flex flex-col items-center">
 
-                    <div>
-                        <Link href={route('events')}>
-                            <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
-                        </Link>
-                    </div>
-
-                    <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="mb-4 text-sm text-gray-300">
                         Forgot your password? No problem. Just let us know your email
                         address and we will email you a password reset link that will
                         allow you to choose a new one.
@@ -53,6 +47,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                             className="mt-1 block w-full"
                             autoFocus={true}
                             onChange={(e) => setData('email', e.target.value)}
+                            placeholder="Email Address"
                         />
 
                         <InputError message={errors.email} className="mt-2" />
@@ -73,6 +68,5 @@ export default function ForgotPassword({ status }: { status?: string }) {
         </>
     );
 }
-
 
 ForgotPassword.layout = (page: ReactNode) => <GuestLayout>{page}</GuestLayout>
