@@ -5,9 +5,17 @@ import { PropsWithChildren } from 'react';
 export default function Guest({ children }: PropsWithChildren) {
     return (
         <div className="h-screen bg-primary/20">
-            <main className="h-full w-full max-w-md mx-auto bg-background text-foreground">
-                {children}
-            </main>
+            <div className="flex flex-col h-full max-w-md w-full mx-auto bg-background">
+                <div className="h-40 flex justify-center items-center">
+                    <Link href={route('events')}>
+                        <h3 className="font-bold text-3xl">FootyPredict</h3>
+                    </Link>
+                </div>
+
+                <main className="flex-1 w-full max-w-md mx-auto bg-card border-t text-foreground rounded-t-[24px]">
+                    {children}
+                </main>
+            </div>
         </div>
     );
 }

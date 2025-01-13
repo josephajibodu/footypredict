@@ -2,7 +2,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
-import {FormEventHandler, ReactNode} from 'react';
+import React, {FormEventHandler, ReactNode} from 'react';
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import {Input} from "@/Components/ui/input";
 import {Button} from "@/Components/ui/button";
@@ -32,7 +32,7 @@ export default function Login({
         <>
             <Head title="Log in" />
 
-           <div className="flex flex-col h-full px-8">
+           <div className="flex flex-col h-full px-8 pb-6 pt-6">
 
                <div className="flex-1 flex flex-col justify-center items-center">
                    {status && (
@@ -41,17 +41,8 @@ export default function Login({
                        </div>
                    )}
 
-                   <div>
-                       <Link href={route('events')}>
-                           <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
-                       </Link>
-                   </div>
-
-
-                   <form onSubmit={submit} className="w-full">
+                   <form onSubmit={submit} className="w-full flex-1 flex flex-col">
                        <div>
-                           <InputLabel htmlFor="email" value="Email" />
-
                            <Input
                                id="email"
                                type="email"
@@ -61,31 +52,28 @@ export default function Login({
                                autoComplete="username"
                                autoFocus={true}
                                onChange={(e) => setData('email', e.target.value)}
+                               placeholder="Email"
                            />
 
                            <InputError message={errors.email} className="mt-2" />
                        </div>
 
                        <div className="mt-4">
-                           <InputLabel htmlFor="password" value="Password" />
+                               <Input
+                                   id="password"
+                                   type="password"
+                                   name="password"
+                                   value={data.password}
+                                   className="mt-1 block w-full"
+                                   autoComplete="current-password"
+                                   onChange={(e) => setData('password', e.target.value)}
+                                   placeholder="Password"
+                               />
 
-                           <Input
-                               id="password"
-                               type="password"
-                               name="password"
-                               value={data.password}
-                               className="mt-1 block w-full"
-                               autoComplete="current-password"
-                               onChange={(e) => setData('password', e.target.value)}
-                           />
+                               <InputError message={errors.password} className="mt-2" />
+                           </div>
 
-                           <InputError message={errors.password} className="mt-2" />
-                       </div>
-
-                       <div className="mt-8 flex flex-col justify-center items-center">
-                           <Button className="w-full" disabled={processing}>
-                               Log in
-                           </Button>
+                       <div className="mt-8 flex flex-col justify-center items-center gap-2">
 
                            {canResetPassword && (
                                <Link
@@ -95,14 +83,16 @@ export default function Login({
                                    Forgot password?
                                </Link>
                            )}
+
+                           <Button size="lg" className="w-full" disabled={processing}>
+                               Log in
+                           </Button>
                        </div>
                    </form>
                </div>
 
-               <div className="py-4 text-center">
-                   <Button asChild className="w-full" variant='outline'>
-                       <Link href={route('register')}>Create new account</Link>
-                   </Button>
+               <div className="pt-4 text-center text-sm">
+                   Don't have an account? <Link className="underline" href={route('register')}>Register</Link>
                </div>
            </div>
         </>

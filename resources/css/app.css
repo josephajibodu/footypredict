@@ -64,11 +64,17 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   .clear-bottom {
     @apply pb-[60px];
+  }
+
+  .bg-gradient {
+    @apply bg-gradient-to-r from-secondary to-accent
   }
 }
 

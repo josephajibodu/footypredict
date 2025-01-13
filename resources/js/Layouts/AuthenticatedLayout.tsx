@@ -77,11 +77,11 @@ export default function Authenticated({
                                 href={route('events')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/events') }
+                                    { "bg-gradient": url.startsWith('/events') }
                                 )}
                             >
                                 <Home size={20} />
-                                <span className="text-sm">Home</span>
+                                <span className="text-sm whitespace-nowrap">Home</span>
                             </Link>
                         </li>
                         <li>
@@ -89,11 +89,11 @@ export default function Authenticated({
                                 href={route('bets')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/bets') }
+                                    { "bg-gradient": url.startsWith('/bets') }
                                 )}
                             >
                                 <List size={20} />
-                                <span className="text-sm">Open Bets</span>
+                                <span className="text-sm whitespace-nowrap">Open Bets</span>
                             </Link>
                         </li>
                         <li>
@@ -101,11 +101,11 @@ export default function Authenticated({
                                 href={route('wallet')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/wallet') }
+                                    { "bg-gradient": url.startsWith('/wallet') }
                                 )}
                             >
                                 <Wallet size={20} />
-                                <span className="text-sm">Wallet</span>
+                                <span className="text-sm whitespace-nowrap">Wallet</span>
                             </Link>
                         </li>
                         <li>
@@ -113,11 +113,11 @@ export default function Authenticated({
                                 href={route('settings')}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
-                                    { "bg-gradient-to-r from-secondary to-accent": url.startsWith('/settings') }
+                                    { "bg-gradient": url.startsWith('/settings') }
                                 )}
                             >
                                 <User size={20} />
-                                <span className="text-sm">Profile</span>
+                                <span className="text-sm whitespace-nowrap">Profile</span>
                             </Link>
                         </li>
                     </ul>
