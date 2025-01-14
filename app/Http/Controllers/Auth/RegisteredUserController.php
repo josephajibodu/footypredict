@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wallet;
+use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @throws \Illuminate\Validation\ValidationException
+     * @throws Exception
      */
     public function store(Request $request): RedirectResponse
     {
@@ -43,7 +45,9 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        DB::transaction(function () use ($request) {
+        try {
+            DB::beginTransaction();
+
             $user = User::query()->create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -60,8 +64,13 @@ class RegisteredUserController extends Controller
             event(new Registered($user));
 
             Auth::login($user);
-        });
 
-        return redirect(route('events', absolute: false));
+            DB::commit();
+
+            return redirect(route('events', absolute: false));
+        } catch (Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+        }
     }
 }
