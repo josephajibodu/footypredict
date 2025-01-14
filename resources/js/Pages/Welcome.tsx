@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import {Head, Link} from '@inertiajs/react';
 import { ReactNode } from 'react';
 import StaticLayout from "@/Layouts/StaticLayout";
 import { Button } from "@/Components/ui/button";
@@ -57,11 +57,12 @@ export default function Welcome() {
                         </p>
 
                         <Button
+                            asChild
                             variant="secondary"
                             size="lg"
                             className="bg-gradient-to-r from-secondary to-accent text-base h-12"
                         >
-                            Watch out for launch
+                            <Link href={route('login')}>Get Started</Link>
                         </Button>
                     </div>
 

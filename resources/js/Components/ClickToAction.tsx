@@ -1,4 +1,5 @@
 import {Button} from "@/Components/ui/button";
+import {Link} from "@inertiajs/react";
 
 export default function ClickToAction() {
     return (
@@ -16,7 +17,7 @@ export default function ClickToAction() {
                 size="lg"
                 className="bg-gradient-to-r from-secondary to-accent text-base h-12"
             >
-                Watch out for launch
+                <Link href={route('login')}>Watch out for launch</Link>
             </Button>
         </div>
     );

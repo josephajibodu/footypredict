@@ -78,7 +78,7 @@ export default function StaticLayoutHeader() {
                     className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
                     asChild
                 >
-                    <li>Sign In</li>
+                    <Link href={route('login')}>Sign In</Link>
                 </Button>
 
                 {/* Mobile Menu */}
@@ -104,7 +104,7 @@ export default function StaticLayoutHeader() {
                             className="bg-gradient-to-r from-secondary to-accent text-base mt-6"
                             asChild
                         >
-                            <li>Sign In</li>
+                            <Link href={route('login')}>Sign In</Link>
                         </Button>
                     </motion.div>
                 )}
