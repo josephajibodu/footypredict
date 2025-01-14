@@ -5,18 +5,28 @@ import {Button} from "@/Components/ui/button";
 import {Facebook, Instagram, Mail, Phone, Twitter} from "lucide-react";
 import StaticLayoutHeader from "@/Components/StaticLayoutHeader";
 
-export default function StaticLayout({ children }: PropsWithChildren) {
+interface StaticLayoutProps extends PropsWithChildren {
+    hideHeader?: boolean
+    hideFooter?: boolean
+}
+
+export default function StaticLayout({
+    children,
+    hideFooter = false,
+    hideHeader = false
+}: StaticLayoutProps) {
     return (
         <div className="w-full">
-            <StaticLayoutHeader />
+            {!hideHeader && <StaticLayoutHeader/>}
 
             <main className="min-h-screen">
                 {children}
             </main>
 
-            <footer className="bg-primary/50 px-12 py-16">
+            {!hideFooter && <footer className="bg-primary/50 px-12 py-16">
                 <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16">
-                    <div className="col-span-full sm:col-span-2 lg:col-span-6 flex flex-col items-center lg:items-start">
+                    <div
+                        className="col-span-full sm:col-span-2 lg:col-span-6 flex flex-col items-center lg:items-start">
                         <h4 className="mb-8 pb-2 text-2xl font-bold relative after:content-[''] after:bg-primary after:w-full lg:after:w-16 after:h-1 after:absolute after:bottom-0 after:left-0">
                             FootyPredict
                         </h4>
@@ -29,11 +39,11 @@ export default function StaticLayout({ children }: PropsWithChildren) {
 
                         <ul className="space-y-2 flex flex-col items-center md:items-start">
                             <li className="flex items-center gap-4">
-                                <Phone className="size-5" />
+                                <Phone className="size-5"/>
                                 <a href="tel:+789-5565886">+789-5565886</a>
                             </li>
                             <li className="flex items-center gap-4">
-                                <Mail className="size-5" />
+                                <Mail className="size-5"/>
                                 <a href="mailto:support@footypredict.app">support@footypredict.app</a>
                             </li>
                         </ul>
@@ -41,25 +51,26 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                         <ul className="mt-4 flex gap-4">
                             <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
                                 <a href="" target="_blank">
-                                    <Twitter className="size-5" />
+                                    <Twitter className="size-5"/>
                                 </a>
                             </li>
 
                             <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
                                 <a href="" target="_blank">
-                                    <Instagram className="size-5" />
+                                    <Instagram className="size-5"/>
                                 </a>
                             </li>
 
                             <li className="border rounded-full border-card-foreground size-10 flex items-center justify-center">
                                 <a href="" target="_blank">
-                                    <Facebook className="size-5" />
+                                    <Facebook className="size-5"/>
                                 </a>
                             </li>
                         </ul>
                     </div>
 
-                    <div className="col-span-full sm:col-span-1 lg:col-span-3 flex flex-col items-center lg:items-start">
+                    <div
+                        className="col-span-full sm:col-span-1 lg:col-span-3 flex flex-col items-center lg:items-start">
                         <h4 className="mb-8 pb-2 text-2xl font-bold relative after:content-[''] after:bg-primary after:w-full lg:after:w-16 after:h-1 after:absolute after:bottom-0 after:left-0">
                             Quick Link
                         </h4>
@@ -69,12 +80,14 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                                 <Link className="hover:text-secondary" href={route('how-to-play')}>How to Play</Link>
                             </li>
                             <li className="flex items-center gap-4 ">
-                                <Link className="hover:text-secondary" href={route('faq')}>Frequently Asked Questions</Link>
+                                <Link className="hover:text-secondary" href={route('faq')}>Frequently Asked
+                                    Questions</Link>
                             </li>
                         </ul>
                     </div>
 
-                    <div className="col-span-full sm:col-span-1 lg:col-span-3 flex flex-col items-center lg:items-start">
+                    <div
+                        className="col-span-full sm:col-span-1 lg:col-span-3 flex flex-col items-center lg:items-start">
                         <h4 className="mb-8 pb-2 text-2xl font-bold relative after:content-[''] after:bg-primary after:w-full lg:after:w-16 after:h-1 after:absolute after:bottom-0 after:left-0">
                             Legal
                         </h4>
@@ -89,7 +102,7 @@ export default function StaticLayout({ children }: PropsWithChildren) {
                         </ul>
                     </div>
                 </div>
-            </footer>
+            </footer>}
         </div>
     );
 }
