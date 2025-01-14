@@ -21,11 +21,13 @@ const faqs = [
     },
     {
         question: "How do I play?",
-        answer: "You select two or more football matches and predict their outcomes, including Home Win, Draw, or Away Win for each respective match. You enter the stake amount and click Stake."
+        answer: "You select two or more football matches and predict their outcomes, including Home Win, Draw, or " +
+            "Away Win for each respective match. You enter the stake amount and click Stake."
     },
     {
         question: "How do I know if I win?",
-        answer: "You check your bet history, the system automatically validates the games and their outcomes."
+        answer: "You check your bet history, the system automatically validates the games and their outcomes, each " +
+            "outcomes are decided based only on 90mins full time played. This excludes extratime and penalties."
     },
     {
         question: "Can I share my booking codes?",
