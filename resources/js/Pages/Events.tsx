@@ -47,14 +47,14 @@ export default function Events({ events, settings }: EventPageProps) {
             <Head title="Events" />
 
             <div className="relative h-full">
-                <div className="flex items-center justify-between py-2 bg-card border-b">
+                <div className="flex items-center justify-between py-2 border-b">
                     <div className="flex items-center">
                         <span className="w-8 font-bold"></span>
                         <div className="flex flex-col">
                             <span>Events</span>
                         </div>
                     </div>
-                    <div className="flex justify-end w-48 gap-1 text-sm">
+                    <div className="flex justify-end w-48 gap-1 text-sm py-2">
                         <span className="w-14 text-center">1(Home)</span>
                         <span className="w-14 text-center">X(Draw)</span>
                         <span className="w-14 text-center">2(Away)</span>

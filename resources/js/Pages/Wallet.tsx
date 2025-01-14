@@ -39,7 +39,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
         <>
             <Head title="Events" />
 
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full bg-primary">
                 {/* Header */}
                 <div className="bg-primary text-primary-foreground px-4 py-4">
                     <div className="flex justify-between py-4 text-lg">
@@ -73,7 +73,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                 </div>
 
                 {/* Body: Transaction History */}
-                <div className="flex-1">
+                <div className="flex-1 rounded-t-[24px] bg-background overflow-y-auto">
 
                     {transactions.length === 0 && (
                         <div className="h-full flex flex-col items-center justify-center px-8">
@@ -100,13 +100,13 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                                         <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4">
                                             <TableCell className="font-medium">
                                                 <Link href={route('transaction.show', {transaction})}>
-                                                    <div className="flex">
+                                                    <div className="flex items-center">
                                                         {!transaction.trend_up
-                                                            ? <ArrowUp className="size-5 flex-shrink-0 text-destructive" />
-                                                            : <ArrowDown className="size-5 flex-shrink-0 text-green-400" />}
+                                                            ? <ArrowUp className="size-4 flex-shrink-0 text-destructive" />
+                                                            : <ArrowDown className="size-4 flex-shrink-0 text-green-400" />}
                                                         <span className="text-sm line-clamp-1">{transaction.description}</span>
                                                     </div>
-                                                    <div className="text-lg">{toMoney(Number(transaction.amount))}</div>
+                                                    <div className="text-base">{toMoney(Number(transaction.amount))}</div>
                                                 </Link>
                                             </TableCell>
                                             <TableCell className={'text-right ps-0'}>

@@ -1,5 +1,3 @@
-import Betslip from '@/Components/Betslip';
-import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, InertiaLinkProps, Link, usePage} from '@inertiajs/react';
 import { ReactNode } from 'react';
@@ -8,7 +6,7 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/Components/ui/avatar"
-import {ArrowRight, ChevronRight, Lock, LogOut, Shield, UserCog} from "lucide-react";
+import {ChevronRight, Lock, LogOut, Shield, UserCog} from "lucide-react";
 import {Badge} from "@/Components/ui/badge";
 
 interface ILink {
@@ -62,7 +60,7 @@ export default function Settings() {
                 <div className="bg-primary text-primary-foreground px-4 pt-8 pb-16 flex flex-col items-center">
                     <Avatar className="size-24">
                         <AvatarImage src={auth.user.avatar} alt={auth.user.username + " avatar"} />
-                        <AvatarFallback>JA</AvatarFallback>
+                        <AvatarFallback className="">{auth.user.first_name[0]}{auth.user.last_name[0]}</AvatarFallback>
                     </Avatar>
                     <h3 className="mt-2 text-lg">{auth.user.full_name}</h3>
                     <Badge variant='secondary' className="text-sm bg-gradient-to-r from-secondary to-accent">@{auth.user.username}</Badge>

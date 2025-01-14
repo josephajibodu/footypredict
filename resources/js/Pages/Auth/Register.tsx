@@ -5,10 +5,12 @@ import {Head, Link, useForm} from '@inertiajs/react';
 import React, { useState } from 'react';
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import {cn} from "@/lib/utils";
+import {cn, extractErrorMessage} from "@/lib/utils";
 import Stepper from "@/Components/Stepper";
+import {useToast} from "@/hooks/use-toast";
 
 export default function Register() {
+    const {toast} = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -29,7 +31,22 @@ export default function Register() {
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () => {
+                reset('password', 'password_confirmation')
+
+                toast({
+                    title: "Account created successfully",
+                    variant: "success"
+                })
+            },
+            onError: error => {
+                const errorMessage = extractErrorMessage(error)
+
+                toast({
+                    title: errorMessage ?? "Registration failed",
+                    variant: "destructive"
+                })
+            }
         });
     };
 
@@ -124,6 +141,7 @@ export default function Register() {
                                         value={data.mobile_number}
                                         onChange={(e) => setData('mobile_number', e.target.value)}
                                         placeholder="Mobile Number"
+                                        autoComplete="mobile tel"
                                         className="mt-1 block w-full"
                                         required
                                     />
@@ -137,6 +155,7 @@ export default function Register() {
                                         value={data.nationality}
                                         onChange={(e) => setData('nationality', e.target.value)}
                                         placeholder="Nationality"
+                                        autoComplete="country"
                                         className="mt-1 block w-full"
                                     />
                                     <InputError message={errors.nationality} className="mt-2" />
@@ -151,6 +170,7 @@ export default function Register() {
                                         value={data.date_of_birth}
                                         onChange={(e) => setData('date_of_birth', e.target.value)}
                                         placeholder="Date of Birth"
+                                        autoComplete="bday-day"
                                         className={cn(
                                             "mt-1 block w-full",
                                             "[&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-70 hover:[&::-webkit-calendar-picker-indicator]:opacity-100",
