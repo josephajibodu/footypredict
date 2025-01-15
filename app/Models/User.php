@@ -115,7 +115,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@footypredict.test') && $this->hasVerifiedEmail();
+        return str_contains($this->email, 'gideon') || str_contains($this->email, 'ajibodu');
     }
 
     public function getFilamentName(): string
