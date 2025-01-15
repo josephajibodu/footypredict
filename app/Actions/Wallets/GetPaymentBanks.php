@@ -3,7 +3,7 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\NowPayment;
+use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +22,7 @@ class GetPaymentBanks
     {
         return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
             try {
-                $swervpay = new NowPayment;
+                $swervpay = new SwervePay;
                 $banks = $swervpay->getBanks();
 
                 Log::channel(LogChannel::ExternalAPI->value)

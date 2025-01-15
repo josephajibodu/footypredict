@@ -115,6 +115,10 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if (app()->environment(['local', 'testing'])) {
+            return true;
+        }
+
         return str_contains($this->email, 'gideon') || str_contains($this->email, 'ajibodu');
     }
 

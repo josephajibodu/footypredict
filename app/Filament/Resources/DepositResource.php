@@ -23,7 +23,8 @@ class DepositResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return Transaction::query()->where('type', TransactionType::Deposit);
+        return Transaction::query()
+            ->where('type', TransactionType::Deposit);
     }
 
     public static function form(Form $form): Form
@@ -61,7 +62,7 @@ class DepositResource extends Resource
                     ->formatStateUsing(fn(Transaction $record) => to_money($record->balance, 100))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

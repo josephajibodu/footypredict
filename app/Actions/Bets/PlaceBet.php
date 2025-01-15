@@ -20,7 +20,7 @@ class PlaceBet
 {
     public const START_BET_CODE = 100_000;
 
-    public const BET_CODE_CACHE_KEY = "last_bet_id";
+    public const BET_CODE_CACHE_KEY = 'last_bet_id';
 
     public function __construct(public BetSetting $betSetting) {}
 
@@ -71,6 +71,7 @@ class PlaceBet
                 'potential_winnings' => $amountInUnit * $multiplier,
                 'is_flexed' => $isFlexed && $validMultiplier['allow_flex'],
                 'status' => BetStatus::Pending,
+                'currency' => Currency::NGN,
             ]);
 
             foreach ($sportEvents as $event) {

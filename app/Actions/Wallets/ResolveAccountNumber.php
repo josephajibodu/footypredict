@@ -3,7 +3,7 @@
 namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
-use App\Integrations\SwervPay\NowPayment;
+use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -16,7 +16,7 @@ class ResolveAccountNumber
     public function __invoke(array $data)
     {
         try {
-            $swervpay = new NowPayment;
+            $swervpay = new SwervePay;
 
             $res = $swervpay->resolveAccount($data);
 

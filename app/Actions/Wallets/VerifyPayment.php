@@ -2,13 +2,17 @@
 
 namespace App\Actions\Wallets;
 
+use App\Enums\LogChannel;
 use App\Integrations\SwervPay\CollectionData;
+use App\Integrations\SwervPay\SwervePay;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class VerifyPayment
 {
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function __invoke(CollectionData $collectionData)
     {

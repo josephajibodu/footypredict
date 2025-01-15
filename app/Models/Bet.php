@@ -25,10 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $potential_winnings The calculated potential winnings.
  * @property BetStatus $status The status of the bet (e.g., 'pending', 'won', 'lost').
  * @property Currency $currency
- *
  * @property Carbon|null $created_at Timestamp when the bet was created.
  * @property Carbon|null $updated_at Timestamp when the bet was last updated.
- *
  * @property-read User $user
  * @property-read Transaction $transaction The transaction associated with the bet.
  * @property-read SportEvent[] $sportEvents The sport events linked to the bet.
@@ -47,6 +45,7 @@ class Bet extends Model
         'potential_winnings',
         'status',
         'is_flexed',
+        'currency',
     ];
 
     protected function casts(): array

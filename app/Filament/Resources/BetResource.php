@@ -2,14 +2,19 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\BetStatus;
 use App\Filament\Resources\BetResource\Pages;
+use App\Filament\Resources\BetResource\RelationManagers\BetSportEventRelationManager;
+use App\Filament\Resources\BetResource\RelationManagers\SportEventsRelationManager;
 use App\Models\Bet;
 use App\Models\Transaction;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class BetResource extends Resource
 {
@@ -17,23 +22,67 @@ class BetResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
-    protected static ?string $navigationGroup = 'Match';
+    protected static ?string $navigationGroup = 'Bet';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                    ->label("Username")
+                    ->formatStateUsing(fn(Bet $record) => $record->user->username)
+                    ->disabled(),
                 Forms\Components\TextInput::make('stake')
                     ->required()
-                    ->numeric(),
+                    ->disabled()
+                    ->formatStateUsing(fn($state) => to_money($state, 100)),
                 Forms\Components\TextInput::make('potential_winnings')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
+                    ->disabled()
+                    ->formatStateUsing(fn($state) => to_money($state, 100)),
+                Forms\Components\ToggleButtons::make('status')
+                    ->inline()
+                    ->grouped()
+                    ->options(BetStatus::class)
+                    ->disabled(),
+
+                Forms\Components\Section::make('Multiplier Settings')
+                    ->schema([
+
+                        Forms\Components\TextInput::make('multiplier_settings.main')
+                            ->numeric()
+                            ->prefixIcon('heroicon-o-x-mark')
+                            ->reactive()
+                            ->columnSpan(3)
+                            ->minValue(1)
+                            ->disabled(),
+
+                        Forms\Components\TextInput::make('multiplier_settings.flex_0')
+                            ->label('Flex All')
+                            ->prefixIcon('heroicon-o-x-mark')
+                            ->columnSpan(3)
+                            ->numeric()
+                            ->step(0.01)
+                            ->disabled(),
+
+                        Forms\Components\TextInput::make('multiplier_settings.flex_1')
+                            ->label('Flex -1')
+                            ->prefixIcon('heroicon-o-x-mark')
+                            ->columnSpan(3)
+                            ->numeric()
+                            ->step(0.01)
+                            ->disabled(),
+
+                        Forms\Components\TextInput::make('flex_2')
+                            ->label('Flex -2')
+                            ->prefixIcon('heroicon-o-x-mark')
+                            ->columnSpan(3)
+                            ->numeric()
+                            ->step(0.01)
+                            ->disabled(),
+
+                    ])
+                    ->columns(12)
             ]);
     }
 
@@ -52,6 +101,10 @@ class BetResource extends Resource
                     ->numeric()
                     ->formatStateUsing(fn(Bet $record) => to_money($record->potential_winnings, 100))
                     ->sortable(),
+                Tables\Columns\TextColumn::make('sport_events_count')
+                    ->counts('sportEvents')
+                    ->alignCenter(),
+                Tables\Columns\IconColumn::make('is_flexed'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->searchable(),
@@ -68,7 +121,7 @@ class BetResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -80,7 +133,7 @@ class BetResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BetSportEventRelationManager::class
         ];
     }
 

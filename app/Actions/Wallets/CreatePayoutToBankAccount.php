@@ -4,7 +4,7 @@ namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
 use App\Integrations\SwervPay\PayoutData;
-use App\Integrations\SwervPay\NowPayment;
+use App\Integrations\SwervPay\SwervePay;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -17,7 +17,7 @@ class CreatePayoutToBankAccount
     public function __invoke(PayoutData $payoutData)
     {
         try {
-            $swervpay = new NowPayment;
+            $swervpay = new SwervePay;
 
             $res = $swervpay->createPayout($payoutData->toArray());
 

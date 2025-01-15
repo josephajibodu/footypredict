@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'Match',
+                'Bet',
                 'Transactions',
                 'Settings',
             ])
