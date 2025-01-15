@@ -41,5 +41,11 @@ return [
             'business_id' => env('SWERVPAY_BUSINESS_ID'),
             'sandbox' => env('SWERVPAY_SANDBOX'),
         ],
+        'nowpayment' => [
+            'api_key' => env('NOWPAYMENT_API_KEY'),
+            'email' => env('NOWPAYMENT_EMAIL'),
+            'password' => env('NOWPAYMENT_PASSWORD'),
+            'sandbox' => env('NOWPAYMENT_SANDBOX'),
+        ],
     ],
 ];

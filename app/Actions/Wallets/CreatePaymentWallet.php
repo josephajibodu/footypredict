@@ -4,7 +4,7 @@ namespace App\Actions\Wallets;
 
 use App\Enums\LogChannel;
 use App\Integrations\SwervPay\CollectionData;
-use App\Integrations\SwervPay\SwervePay;
+use App\Integrations\SwervPay\NowPayment;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -17,7 +17,7 @@ class CreatePaymentWallet
     public function __invoke(CollectionData $collectionData)
     {
         try {
-            $swervpay = new SwervePay;
+            $swervpay = new NowPayment;
 
             $res = $swervpay->createCollection($collectionData->toArray());
 

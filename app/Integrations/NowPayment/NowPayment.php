@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\SwervPay;
+namespace App\Integrations\NowPayment;
 
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
@@ -8,32 +8,36 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-class SwervePay
+class NowPayment
 {
-    protected string $businessId;
+    protected string $apiKey;
 
-    protected string $secretKey;
+    protected string $email;
+
+    protected string $password;
 
     protected string $baseUrl;
 
     protected bool $isSandbox;
 
-    protected string $cacheKey = 'swervpay_access_token';
+    protected string $cacheKey = 'nowpayment_access_token';
 
     public function __construct()
     {
-        $this->businessId = config('services.misc.swervpay.business_id');
-        $this->secretKey = config('services.misc.swervpay.secret_key');
-        $this->isSandbox = config('services.misc.swervpay.sandbox');
-        $this->baseUrl = $this->isSandbox ? 'https://sandbox.swervpay.co/api/v1' : 'https://api.swervpay.co/api/v1';
+        $this->apiKey = config('services.misc.nowpayment.api_key');
+        $this->email = config('services.misc.nowpayment.email');
+        $this->password = config('services.misc.nowpayment.password');
+        $this->isSandbox = config('services.misc.nowpayment.sandbox');
+        $this->baseUrl = $this->isSandbox ? 'https://api.nowpayments.io/v1' : 'https://api.nowpayments.io/v1';
     }
 
     /**
+     * Only needed when creating payouts
+     *
      * @throws ConnectionException|Throwable
      */
     protected function getAccessToken()
     {
-        // Check if token exists in cache
         if ($cachedToken = Cache::get($this->cacheKey)) {
             return $cachedToken;
         }
@@ -41,26 +45,19 @@ class SwervePay
         $credentials = base64_encode($this->businessId.':'.$this->secretKey);
 
         $response = Http::withHeaders([
-            'Authorization' => 'Basic '.$credentials,
+            'Content-Type' => 'application/json',
+            'x-api-key' => $this->apiKey,
         ])->post($this->baseUrl.'/auth')->json();
 
-        if (isset($response['access_token'])) {
-            $token = $response['access_token'];
-            $expiresAt = $response['token']['expires_at'];
-            $issuedAt = $response['token']['issued_at'];
+        if (isset($response['token'])) {
+            $token = $response['token'];
+            $ttl = 4;
 
-            // Calculate TTL in minutes (55 minutes)
-            $ttl = 55;
-
-            // If you want to make it dynamic based on expires_at:
-            // $ttl = floor(($expiresAt - $issuedAt) / 1000 / 60) - 5; // Convert to minutes and subtract 5 minutes for safety
-
-            // Cache the token
             Cache::put($this->cacheKey, $token, now()->addMinutes($ttl));
 
             return $token;
         } else {
-            throw new Exception('Swerve Payment authentication failed');
+            throw new Exception('Now Payment authentication failed');
         }
     }
 
@@ -75,6 +72,7 @@ class SwervePay
             'Authorization' => 'Bearer '.$bearerToken,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
+            'x-api-key' => $this->apiKey,
         ];
 
         return Http::withHeaders($headers)
@@ -85,9 +83,9 @@ class SwervePay
     /**
      * @throws Throwable
      */
-    public function createCollection(array $data)
+    public function createPayment(array $data)
     {
-        return $this->makeRequest('post', '/collections', $data);
+        return $this->makeRequest('post', '/payment', $data);
     }
 
     /**
@@ -101,9 +99,15 @@ class SwervePay
     /**
      * @throws Throwable
      */
-    public function getBanks()
+    public function getMinimumPaymentAmount()
     {
-        return $this->makeRequest('get', '/banks');
+        $data = [
+            "currency_from" => "usdttrc20",
+            "currency_to" => "usdttrc20",
+            "is_fee_paid_by_user" => true,
+        ];
+
+        return $this->makeRequest('get', "/min-amount", $data);
     }
 
     /**

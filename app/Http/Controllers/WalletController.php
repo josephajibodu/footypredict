@@ -14,6 +14,7 @@ class WalletController extends Controller
     {
         $transactions = Transaction::query()
             ->with(['bet', 'deposit', 'refund', 'winning', 'withdrawal'])
+            ->where('user_id', auth()->id())
             ->where(function (Builder $query) {
                 $query->orWhere('type', TransactionType::Deposit)
                     ->orWhere('type', TransactionType::Withdrawal)

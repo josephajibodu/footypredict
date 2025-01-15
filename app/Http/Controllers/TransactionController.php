@@ -13,6 +13,7 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::query()
+            ->where('user_id', auth()->id())
             ->where('type', TransactionType::Deposit)
             ->orWhere('type', TransactionType::Withdrawal)
             ->get();
