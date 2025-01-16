@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User
@@ -48,6 +49,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    use HasRoles;
     use HasTransaction;
     use HasWallet;
     use HasWithdrawalAccount;
