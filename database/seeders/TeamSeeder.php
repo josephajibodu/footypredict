@@ -38,7 +38,7 @@ class TeamSeeder extends Seeder
                 'name' => 'Brentford',
                 'short_name' => 'Brentford',
                 'short_code' => 'BRE',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/de/2/2a/Brentford_FC_Logo.svg',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg',
                 'country' => 'England',
             ],
             [
@@ -49,10 +49,10 @@ class TeamSeeder extends Seeder
                 'country' => 'England',
             ],
             [
-                'name' => 'Burnley',
-                'short_name' => 'Burnley',
-                'short_code' => 'BUR',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/0/02/Burnley_F.C._Logo.svg',
+                'name' => 'Leicester City',
+                'short_name' => 'Leicester',
+                'short_code' => 'LEI',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/Leicester_City_crest.svg/1920px-Leicester_City_crest.svg.png',
                 'country' => 'England',
             ],
             [
@@ -66,7 +66,7 @@ class TeamSeeder extends Seeder
                 'name' => 'Crystal Palace',
                 'short_name' => 'Palace',
                 'short_code' => 'CRY',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/0/0c/Crystal_Palace_FC_logo.svg',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/350px-Crystal_Palace_FC_logo_%282022%29.svg.png',
                 'country' => 'England',
             ],
             [
@@ -80,7 +80,7 @@ class TeamSeeder extends Seeder
                 'name' => 'Fulham',
                 'short_name' => 'Fulham',
                 'short_code' => 'FUL',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/e/eb/Fulham_FC.svg',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/1920px-Fulham_FC_%28shield%29.svg.png',
                 'country' => 'England',
             ],
             [
@@ -94,7 +94,7 @@ class TeamSeeder extends Seeder
                 'name' => 'Luton Town',
                 'short_name' => 'Luton',
                 'short_code' => 'LUT',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/8/81/LutonTownBadge2022.png',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Luton_Town_logo.svg/1920px-Luton_Town_logo.svg.png',
                 'country' => 'England',
             ],
             [
@@ -122,14 +122,14 @@ class TeamSeeder extends Seeder
                 'name' => 'Nottingham Forest',
                 'short_name' => 'Forest',
                 'short_code' => 'NFO',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_FC_logo.svg',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/1024px-Nottingham_Forest_F.C._logo.svg.png',
                 'country' => 'England',
             ],
             [
-                'name' => 'Sheffield United',
-                'short_name' => 'Sheffield',
-                'short_code' => 'SHU',
-                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/4/42/Sheffield_United_FC_logo.svg',
+                'name' => 'Southampton',
+                'short_name' => 'Southampton',
+                'short_code' => 'SOU',
+                'logo_url' => 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/FC_Southampton.svg/1920px-FC_Southampton.svg.png',
                 'country' => 'England',
             ],
             [
