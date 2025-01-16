@@ -40,7 +40,7 @@ class TeamResource extends Resource
                             ->label('')
                             ->required()
                             ->disk('public')
-                            ->directory('leagues')
+                            ->directory('teams')
                             ->avatar()
                             ->imageEditor()
                             ->circleCropper()
