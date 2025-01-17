@@ -6,6 +6,7 @@ use App\Enums\TransactionType;
 use App\Filament\Resources\DepositResource\Pages;
 use App\Models\Deposit;
 use App\Models\Transaction;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -52,6 +53,9 @@ class DepositResource extends Resource
                 Tables\Columns\TextColumn::make('reference')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.username')
+                    ->label('User')
+                    ->description(fn (Transaction $record) => $record->user->email)
+                    ->searchable(['first_name', 'last_name', 'email'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()

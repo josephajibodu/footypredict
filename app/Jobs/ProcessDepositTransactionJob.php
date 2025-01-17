@@ -50,7 +50,6 @@ class ProcessDepositTransactionJob implements ShouldQueue
 
                 $this->transaction->update([
                     'balance' => $user->balance,
-                    'amount' => ($amountReceived) * 100,
                     'status' => TransactionStatus::Completed,
                 ]);
 
