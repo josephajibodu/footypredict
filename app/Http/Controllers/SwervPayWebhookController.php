@@ -13,7 +13,7 @@ class SwervPayWebhookController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $secret = config('services.misc.swervpay.secret_key');
+        $secret = config('services.misc.swervpay.webhook_secret_key');
 
         Log::info('SwervPay webhook received', [
             'headers' => $request->headers->all(),

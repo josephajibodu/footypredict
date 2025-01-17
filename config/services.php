@@ -37,6 +37,7 @@ return [
 
     'misc' => [
         'swervpay' => [
+            'webhook_secret_key' => env('SWERVPAY_WEBHOOK_SECRET_KEY'),
             'secret_key' => env('SWERVPAY_SECRET_KEY'),
             'business_id' => env('SWERVPAY_BUSINESS_ID'),
             'sandbox' => env('SWERVPAY_SANDBOX'),

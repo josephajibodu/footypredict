@@ -2,6 +2,7 @@
 
 namespace App\Integrations\SwervPay;
 
+use App\Enums\LogChannel;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
@@ -81,7 +82,7 @@ class SwervePay
         $response = Http::withHeaders($headers)
             ->$method($this->baseUrl . $endpoint, $data);
 
-        Log::info('HTTP Response', [
+        Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Response', [
             'method' => $method,
             'endpoint' => $endpoint,
             'data' => $data,
