@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import {PageProps} from "@/types";
 import {Transaction} from "@/types/transactions";
 import {TransactionStatus} from "@/types/enums";
+import {WalletTransactionLoader} from "@/Components/Loaders/WalletTransactionLoader";
 
 
 interface WalletPageProps extends PageProps {
@@ -79,7 +80,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                 {/* Body: Transaction History */}
                 <div className="flex-1 rounded-t-[24px] bg-background overflow-y-auto">
                     <h2 className="px-4 pt-8 font-bold text-lg">Transactions</h2>
-                    <Deferred fallback={<div>Loading...</div>} data="transactions">
+                    <Deferred fallback={<WalletTransactionLoader />} data="transactions">
                         <>
                             {(transactions && transactions.length === 0) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
@@ -90,47 +91,45 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                             )}
 
                             {(transactions && transactions.length > 0) && (
-                                <>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="h-1">
-                                                <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
-                                                <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="h-1">
+                                            <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
+                                            <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {transactions.map((transaction, index) => (
+
+                                            <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4 hover:bg-primary/50">
+                                                <TableCell className={cn("font-medium border-s-green-500 border-l-4", {
+                                                    "border-s-green-400": transaction.trend_up,
+                                                    "border-s-red-400": !transaction.trend_up,
+                                                })}>
+                                                    <Link href={route('transaction.show', {transaction})}>
+                                                        <div className="flex items-center">
+                                                            <span className="text-sm line-clamp-1">{transaction.description}</span>
+                                                        </div>
+                                                        <div className="text-base">
+                                                            <span>{toMoney(Number(transaction.amount))}</span>
+                                                        </div>
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell className={'text-right ps-0'}>
+                                                    <Link href={route('transaction.show', {transaction})} className="flex flex-col items-end gap-1">
+                                                        <span className="text-xs">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
+                                                        <span className={cn("text-xs w-fit px-2 rounded font-bold", {
+                                                            "bg-destructive/20 text-red-500": [TransactionStatus.Failed,TransactionStatus.Cancelled].includes(transaction.status),
+                                                            "bg-green-500/50 text-green-500": transaction.status === TransactionStatus.Completed,
+                                                            "bg-orange-500/20 text-orange-500": transaction.status === TransactionStatus.Pending,
+                                                        })}>{transaction.status}</span>
+                                                    </Link>
+                                                </TableCell>
                                             </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {transactions.map((transaction, index) => (
 
-                                                <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4 hover:bg-primary/50">
-                                                    <TableCell className={cn("font-medium border-s-green-500 border-l-4", {
-                                                        "border-s-green-400": transaction.trend_up,
-                                                        "border-s-red-400": !transaction.trend_up,
-                                                    })}>
-                                                        <Link href={route('transaction.show', {transaction})}>
-                                                            <div className="flex items-center">
-                                                                <span className="text-sm line-clamp-1">{transaction.description}</span>
-                                                            </div>
-                                                            <div className="text-base">
-                                                                <span>{toMoney(Number(transaction.amount))}</span>
-                                                            </div>
-                                                        </Link>
-                                                    </TableCell>
-                                                    <TableCell className={'text-right ps-0'}>
-                                                        <Link href={route('transaction.show', {transaction})} className="flex flex-col items-end gap-1">
-                                                            <span className="text-xs">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
-                                                            <span className={cn("text-xs w-fit px-2 rounded font-bold", {
-                                                                "bg-destructive/20 text-red-500": [TransactionStatus.Failed,TransactionStatus.Cancelled].includes(transaction.status),
-                                                                "bg-green-500/50 text-green-500": transaction.status === TransactionStatus.Completed,
-                                                                "bg-orange-500/20 text-orange-500": transaction.status === TransactionStatus.Pending,
-                                                            })}>{transaction.status}</span>
-                                                        </Link>
-                                                    </TableCell>
-                                                </TableRow>
-
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             )}
                         </>
                     </Deferred>
