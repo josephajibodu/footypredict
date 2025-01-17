@@ -27,11 +27,6 @@ class VerifyPayment
 
             $res = $swervpay->createCollection($collectionData->toArray());
 
-            Log::channel(LogChannel::Deposits->value)->info('Response from swervpay', [
-                'res' => $res,
-                'user' => auth()->user(),
-            ]);
-
             return $res;
 
         } catch (Throwable $ex) {

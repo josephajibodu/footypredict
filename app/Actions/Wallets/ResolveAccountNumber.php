@@ -20,11 +20,6 @@ class ResolveAccountNumber
 
             $res = $swervpay->resolveAccount($data);
 
-            Log::channel(LogChannel::Deposits->value)->info('Response from swervpay', [
-                'res' => $res,
-                'user' => auth()->user(),
-            ]);
-
             return $res;
 
         } catch (Throwable $ex) {

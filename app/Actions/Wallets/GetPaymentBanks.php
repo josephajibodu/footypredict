@@ -25,9 +25,6 @@ class GetPaymentBanks
                 $swervpay = new SwervePay;
                 $banks = $swervpay->getBanks();
 
-                Log::channel(LogChannel::ExternalAPI->value)
-                    ->info('Fetched banks from SwervPay API', ['res' => $banks]);
-
                 if (! is_array($banks) || empty($banks)) {
                     throw new Exception('Invalid bank data received');
                 }

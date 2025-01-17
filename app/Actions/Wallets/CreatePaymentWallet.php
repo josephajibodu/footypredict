@@ -21,11 +21,6 @@ class CreatePaymentWallet
 
             $res = $swervpay->createCollection($collectionData->toArray());
 
-            Log::channel(LogChannel::ExternalAPI->value)->info('Response from swervpay', [
-                'res' => $res,
-                'user' => auth()->user(),
-            ]);
-
             return $res;
 
         } catch (Throwable $ex) {
