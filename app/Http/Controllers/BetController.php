@@ -20,7 +20,10 @@ class BetController extends Controller
         $bets = $user->bets()->latest()->with(['sportEvents'])->get();
 
         return Inertia::render('BetHistory', [
-            'bets' => ApiBetSummaryResource::collection($bets),
+            'bets' => Inertia::defer(function () use ($bets) {
+                sleep(4);
+                return ApiBetSummaryResource::collection($bets);
+            }),
         ]);
     }
 
