@@ -16,7 +16,8 @@ class WalletController extends Controller
             ->with(['bet', 'deposit', 'refund', 'winning', 'withdrawal'])
             ->where('user_id', auth()->id())
             ->where(function (Builder $query) {
-                $query->orWhere('type', TransactionType::Deposit)
+                $query
+                    ->orWhere('type', TransactionType::Deposit)
                     ->orWhere('type', TransactionType::Withdrawal)
                     ->orWhere('type', TransactionType::Bet)
                     ->orWhere('type', TransactionType::Winning);
@@ -25,7 +26,7 @@ class WalletController extends Controller
             ->get();
 
         return Inertia::render('Wallet', [
-            'transactions' => ApiTransactionResource::collection($transactions),
+            'transactions' => Inertia::defer(fn() => ApiTransactionResource::collection($transactions)),
         ]);
     }
 }
