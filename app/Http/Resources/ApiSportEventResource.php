@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\BetSportEvent;
 use App\Models\SportEvent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -34,7 +35,7 @@ class ApiSportEventResource extends JsonResource
         return [
             'id' => $this->id,
             'match_date' => $this->match_date,
-            'kickoff_time' => $this->kickoff_time,
+            'kickoff_time' => Carbon::createFromFormat('H:i:s', $this->kickoff_time),
             'team1_id' => $this->team1_id,
             'team2_id' => $this->team2_id,
             'league_id' => $this->league_id,

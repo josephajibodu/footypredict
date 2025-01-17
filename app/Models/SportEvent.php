@@ -59,7 +59,6 @@ class SportEvent extends Model
     {
         return [
             'match_date' => 'date',
-            'kickoff_time' => 'timestamp',
             'team1_score' => 'integer',
             'team2_score' => 'integer',
             'sport' => SportEventType::class,

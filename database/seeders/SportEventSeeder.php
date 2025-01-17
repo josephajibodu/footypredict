@@ -20,19 +20,16 @@ class SportEventSeeder extends Seeder
         shuffle($teamIds);
 
         for ($i = 0; $i < 16; $i += 2) {
-            // Skip if we don't have enough teams
             if (! isset($teamIds[$i]) || ! isset($teamIds[$i + 1])) {
                 break;
             }
 
-            // Create the sport event
             $sportEvent = SportEvent::factory()->create([
                 'team1_id' => $teamIds[$i],
                 'team2_id' => $teamIds[$i + 1],
-                'kickoff_time' => sprintf('%02d:00:00', rand(12, 21)),
+                'kickoff_time' => sprintf('%02d:00:00', rand(15, 23)),
             ]);
 
-            // Create the three standard options for each match
             $options = [
                 MatchOption::HOME_WIN,
                 MatchOption::DRAW,

@@ -7,6 +7,7 @@ import {PageProps, SportEvent} from "@/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
 import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
+import dayjs from "dayjs";
 
 interface EventPageProps extends PageProps {
     events: SportEvent[]
@@ -54,7 +55,7 @@ export default function Events({ events, settings }: EventPageProps) {
                             <span>Events</span>
                         </div>
                     </div>
-                    <div className="flex justify-end w-48 gap-1 text-sm py-2">
+                    <div className="flex justify-end w-48 gap-1 text-sm py-2 pe-4">
                         <span className="w-14 text-center">1(Home)</span>
                         <span className="w-14 text-center">X(Draw)</span>
                         <span className="w-14 text-center">2(Away)</span>
@@ -91,6 +92,7 @@ export default function Events({ events, settings }: EventPageProps) {
                                 sn={index + 1}
                                 onChange={(value) => handleGameSelection(event, value)}
                                 betOption={getSelectedOption(event.id)}
+                                disabled={dayjs().isAfter(dayjs(event.kickoff_time))}
                             />
                         ))
                     )}
