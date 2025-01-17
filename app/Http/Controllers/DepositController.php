@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use _PHPStan_2f712479f\Nette\Neon\Exception;
 use App\Actions\Transactions\InitiateDepositTransaction;
 use App\Actions\Wallets\CreatePaymentWallet;
 use App\Enums\DepositMethod;
@@ -36,7 +37,13 @@ class DepositController extends Controller
                 reference: $transaction->reference
             ));
 
+            $walletId = $bankPaymentDetails['id'] ?? null;
+            if ($walletId === null) {
+                throw new Exception("Invalid response from swervepay");
+            }
+
             $transaction->deposit()->update([
+                'provider_reference' => $walletId,
                 'metadata' => json_encode($bankPaymentDetails),
             ]);
 

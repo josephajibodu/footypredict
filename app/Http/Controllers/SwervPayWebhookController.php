@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TransactionStatus;
 use App\Jobs\ProcessDepositTransactionJob;
 use App\Jobs\ProcessWithdrawalJob;
+use App\Models\Deposit;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +31,7 @@ class SwervPayWebhookController extends Controller
 
         $data = $request->input('data', []);
         $event = $request->input('event');
-        $reference = $data['reference'] ?? null;
+        $reference = $data['collection_id'] ?? null;
 
         if (! $reference) {
             Log::warning('Missing transaction reference in SwervPay webhook');
@@ -44,16 +45,15 @@ class SwervPayWebhookController extends Controller
             return response('Missing reference', 400);
         }
 
-        /**
-         * @var Transaction $transaction
-         */
-        $transaction = Transaction::query()->where('reference', $reference)->first();
+        /** @var Deposit $deposit */
+        $deposit = Deposit::query()->where('provider_reference', $reference)->first();
+        if (! $deposit) {
+            Log::error('Deposit not found for provider_reference', ['reference' => $reference]);
 
-        if (! $transaction) {
-            Log::error('Transaction not found for reference', ['reference' => $reference]);
-
-            return response('Transaction not found', 404);
+            return response('Deposit Transaction not found', 404);
         }
+
+        $transaction = $deposit->transaction;
 
         if ($transaction->status !== TransactionStatus::Pending) {
             Log::info('Transaction already processed', [
