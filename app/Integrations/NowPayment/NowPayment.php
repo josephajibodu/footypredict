@@ -68,27 +68,52 @@ class NowPayment
      */
     protected function makeRequest($method, $endpoint, $data = [])
     {
-        $bearerToken = $this->getAccessToken();
+        try {
+            $bearerToken = $this->getAccessToken();
 
-        $headers = [
-            'Authorization' => 'Bearer '.$bearerToken,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'x-api-key' => $this->apiKey,
-        ];
+            $headers = [
+                'Authorization' => 'Bearer ' . $bearerToken,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ];
 
-        $response = Http::withHeaders($headers)
-            ->$method($this->baseUrl . $endpoint, $data);
+            $response = Http::withHeaders($headers)
+                ->$method($this->baseUrl . $endpoint, $data);
 
-        Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Response', [
-            'method' => $method,
-            'endpoint' => $endpoint,
-            'data' => $data,
-            'response_status' => $response->status(),
-            'response_body' => $response->body(),
-        ]);
+            Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Request', [
+                'method' => $method,
+                'endpoint' => $endpoint,
+                'data' => $data,
+                'response_status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
 
-        return $response->json();
+            if ($response->failed()) {
+                $errorDetails = [
+                    'status' => $response->status(),
+                    'body' => $response->json(),
+                ];
+
+                Log::channel(LogChannel::ExternalAPI->value)->error('HTTP Error Response', $errorDetails);
+
+                throw new Exception('API request failed: ' . $response->status() . ' - ' . json_encode($response->json()));
+            }
+
+            return $response->json();
+        } catch (ConnectionException $e) {
+            Log::channel(LogChannel::ExternalAPI->value)->error('Connection Exception', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw new Exception('Connection to API failed. Please try again later.');
+        } catch (Throwable $e) {
+            report($e);
+            Log::channel(LogChannel::ExternalAPI->value)->error('Unhandled Exception', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
     }
 
     /**

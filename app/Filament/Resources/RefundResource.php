@@ -47,7 +47,7 @@ class RefundResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('balance')
                     ->numeric()
-                    ->formatStateUsing(fn(Transaction $record) => to_money($record->balance, 100))
+                    ->formatStateUsing(fn(Transaction $record) => to_money($record->balance))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),

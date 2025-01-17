@@ -35,7 +35,6 @@ class SwervePay
      */
     protected function getAccessToken()
     {
-        // Check if token exists in cache
         if ($cachedToken = Cache::get($this->cacheKey)) {
             return $cachedToken;
         }
@@ -48,16 +47,8 @@ class SwervePay
 
         if (isset($response['access_token'])) {
             $token = $response['access_token'];
-            // $expiresAt = $response['token']['expires_at'];
-            // $issuedAt = $response['token']['issued_at'];
 
-            // Calculate TTL in minutes (55 minutes)
             $ttl = 55;
-
-            // If you want to make it dynamic based on expires_at:
-            // $ttl = floor(($expiresAt - $issuedAt) / 1000 / 60) - 5; // Convert to minutes and subtract 5 minutes for safety
-
-            // Cache the token
             Cache::put($this->cacheKey, $token, now()->addMinutes($ttl));
 
             return $token;
@@ -71,26 +62,52 @@ class SwervePay
      */
     protected function makeRequest($method, $endpoint, $data = [])
     {
-        $bearerToken = $this->getAccessToken();
+        try {
+            $bearerToken = $this->getAccessToken();
 
-        $headers = [
-            'Authorization' => 'Bearer '.$bearerToken,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
+            $headers = [
+                'Authorization' => 'Bearer ' . $bearerToken,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ];
 
-        $response = Http::withHeaders($headers)
-            ->$method($this->baseUrl . $endpoint, $data);
+            $response = Http::withHeaders($headers)
+                ->$method($this->baseUrl . $endpoint, $data);
 
-        Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Response', [
-            'method' => $method,
-            'endpoint' => $endpoint,
-            'data' => $data,
-            'response_status' => $response->status(),
-            'response_body' => $response->body(),
-        ]);
+            Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Request', [
+                'method' => $method,
+                'endpoint' => $endpoint,
+                'data' => $data,
+                'response_status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
 
-        return $response->json();
+            if ($response->failed()) {
+                $errorDetails = [
+                    'status' => $response->status(),
+                    'body' => $response->json(),
+                ];
+
+                Log::channel(LogChannel::ExternalAPI->value)->error('HTTP Error Response', $errorDetails);
+
+                throw new Exception('API request failed: ' . $response->status() . ' - ' . json_encode($response->json()));
+            }
+
+            return $response->json();
+        } catch (ConnectionException $e) {
+            Log::channel(LogChannel::ExternalAPI->value)->error('Connection Exception', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw new Exception('Connection to API failed. Please try again later.');
+        } catch (Throwable $e) {
+            report($e);
+            Log::channel(LogChannel::ExternalAPI->value)->error('Unhandled Exception', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
     }
 
     /**
