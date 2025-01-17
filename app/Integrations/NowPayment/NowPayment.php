@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class NowPayment
@@ -28,7 +29,7 @@ class NowPayment
         $this->email = config('services.misc.nowpayment.email');
         $this->password = config('services.misc.nowpayment.password');
         $this->isSandbox = config('services.misc.nowpayment.sandbox');
-        $this->baseUrl = $this->isSandbox ? 'https://api.nowpayments.io/v1' : 'https://api.nowpayments.io/v1';
+        $this->baseUrl = 'https://api.nowpayments.io/v1';
     }
 
     /**
@@ -75,9 +76,18 @@ class NowPayment
             'x-api-key' => $this->apiKey,
         ];
 
-        return Http::withHeaders($headers)
-            ->$method($this->baseUrl.$endpoint, $data)
-            ->json();
+        $response = Http::withHeaders($headers)
+            ->$method($this->baseUrl . $endpoint, $data);
+
+        Log::info('HTTP Response', [
+            'method' => $method,
+            'endpoint' => $endpoint,
+            'data' => $data,
+            'response_status' => $response->status(),
+            'response_body' => $response->body(),
+        ]);
+
+        return $response->json();
     }
 
     /**

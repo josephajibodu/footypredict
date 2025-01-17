@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class SwervePay
@@ -46,8 +47,8 @@ class SwervePay
 
         if (isset($response['access_token'])) {
             $token = $response['access_token'];
-            $expiresAt = $response['token']['expires_at'];
-            $issuedAt = $response['token']['issued_at'];
+            // $expiresAt = $response['token']['expires_at'];
+            // $issuedAt = $response['token']['issued_at'];
 
             // Calculate TTL in minutes (55 minutes)
             $ttl = 55;
@@ -77,9 +78,18 @@ class SwervePay
             'Accept' => 'application/json',
         ];
 
-        return Http::withHeaders($headers)
-            ->$method($this->baseUrl.$endpoint, $data)
-            ->json();
+        $response = Http::withHeaders($headers)
+            ->$method($this->baseUrl . $endpoint, $data);
+
+        Log::info('HTTP Response', [
+            'method' => $method,
+            'endpoint' => $endpoint,
+            'data' => $data,
+            'response_status' => $response->status(),
+            'response_body' => $response->body(),
+        ]);
+
+        return $response->json();
     }
 
     /**
