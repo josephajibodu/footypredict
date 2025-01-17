@@ -33,7 +33,7 @@ class SwervPayWebhookController extends Controller
 
         if (! in_array($event, ['collection.completed', 'payout.completed'])) {
             Log::warning('Webhook rejected', ['data' => $data]);
-            return response();
+            return response("");
         }
 
         if (request()->header('X-SWERV-SECRET') !== $secret) {
@@ -45,7 +45,7 @@ class SwervPayWebhookController extends Controller
 
         if (! $reference && ! $collectionId) {
             Log::warning('Missing reference/collection id in SwervPay webhook');
-            return response();
+            return response("");
         }
 
         $transaction = null;
@@ -55,7 +55,7 @@ class SwervPayWebhookController extends Controller
                 $deposit = Deposit::query()->where('provider_reference', $collectionId)->first();
                 if (!$deposit) {
                     Log::error('Deposit not found for collection_id', ['collection_id' => $collectionId]);
-                    return response();
+                    return response("");
                 }
 
                 $transaction = $deposit->transaction;
@@ -66,7 +66,7 @@ class SwervPayWebhookController extends Controller
 
                 if (!$transaction) {
                     Log::error('Transaction not found for reference', ['reference' => $reference]);
-                    return response();
+                    return response("");
                 }
                 break;
             default:
@@ -101,6 +101,6 @@ class SwervPayWebhookController extends Controller
             'data' => $data,
         ]);
 
-        return response();
+        return response("");
     }
 }

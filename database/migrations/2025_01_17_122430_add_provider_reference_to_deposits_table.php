@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('deposits', function (Blueprint $table) {
-            $table->string('provider_reference')->nullable();
+            $table->string('provider_reference')->nullable()->after('transaction_id');
         });
     }
 
