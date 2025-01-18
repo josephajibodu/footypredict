@@ -108,10 +108,6 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     public function avatar(): string
     {
-        //        if ($this->hasMedia('avatar')) {
-        //            return $this->getFirstMediaUrl('avatar');
-        //        }
-
         $hash = hash('sha256', $this->email);
         $default = 'https://github.com/shadcn.png';
 

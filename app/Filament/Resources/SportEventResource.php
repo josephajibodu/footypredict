@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\HtmlString;
 
 class SportEventResource extends Resource
@@ -149,8 +150,10 @@ class SportEventResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextInputColumn::make('team1_score')
+                    ->width(40)
                     ->hidden(app()->environment(['production'])),
                 Tables\Columns\TextInputColumn::make('team2_score')
+                    ->width(40)
                     ->hidden(app()->environment(['production'])),
                 Tables\Columns\TextColumn::make('score')
                     ->alignCenter()
@@ -267,7 +270,17 @@ class SportEventResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->action(function (Collection $records, Tables\Actions\DeleteBulkAction $action) {
+                            $records->each(function (SportEvent $record) {
+                                if ($record->bets()->count() > 0) {
+                                    $record->delete();
+                                }
+                            });
+
+                            $action->success();
+                        })
+                        ->successNotificationTitle("Only matches without bets were deleted"),
                 ]),
             ]);
     }
