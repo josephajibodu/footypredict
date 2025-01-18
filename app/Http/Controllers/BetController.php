@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Bets\PlaceBet;
+use App\Enums\LogChannel;
 use App\Http\Resources\ApiBetResource;
 use App\Http\Resources\ApiBetSummaryResource;
 use App\Models\Bet;
+use App\Settings\BetSetting;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BetController extends Controller
@@ -33,20 +36,20 @@ class BetController extends Controller
         ]);
     }
 
-    public function store(Request $request, PlaceBet $placeBet)
+    public function store(Request $request, PlaceBet $placeBet, BetSetting $betSetting)
     {
-        try {
-            $data = request()->validate([
-                'amount' => ['required', 'numeric', 'min:1'],
-                'events' => ['required', 'array'],
-                'events.*' => ['required', 'array'],
-                'events.*.event_id' => ['required', 'integer', 'exists:sport_events,id'],
-                'events.*.bet_option' => ['required', 'string', 'in:home_win,draw,away_win'],
-                'is_flexed' => ['required', 'boolean'],
-            ], [
-                'events.min' => 'Please select at least 4 events.',
-            ]);
+        $data = request()->validate([
+            'amount' => ['required', 'numeric', 'min:1'],
+            'events' => ['required', 'array', "min:$betSetting->min_selection"],
+            'events.*' => ['required', 'array'],
+            'events.*.event_id' => ['required', 'integer', 'exists:sport_events,id'],
+            'events.*.bet_option' => ['required', 'string', 'in:home_win,draw,away_win'],
+            'is_flexed' => ['required', 'boolean'],
+        ], [
+            'events.min' => "Please select at least $betSetting->min_selection events.",
+        ]);
 
+        try {
             $user = Auth::user();
 
             $placeBet($user, $data['amount'], $data['events'], $data['is_flexed']);
@@ -54,8 +57,13 @@ class BetController extends Controller
             return back();
         } catch (Exception $ex) {
             report($ex);
+            Log::channel(LogChannel::Bet->value)->error('Bet placement failed', [
+                'user_id' => Auth::id(),
+                'error' => $ex->getMessage(),
+                'trace' => $ex->getTraceAsString(),
+            ]);
 
-            return back()->withErrors($ex->getMessage());
+            return back()->withErrors("An error occurred while placing your bet. Please try again later.");
         }
     }
 }
