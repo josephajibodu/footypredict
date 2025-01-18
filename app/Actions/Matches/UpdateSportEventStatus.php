@@ -4,6 +4,7 @@ namespace App\Actions\Matches;
 
 use App\Enums\MatchOption;
 use App\Enums\SportEventStatus;
+use App\Jobs\ProcessCancelledSportEvent;
 use App\Jobs\ProcessCompletedSportEvent;
 use App\Models\Option;
 use App\Models\SportEvent;
@@ -29,8 +30,8 @@ class UpdateSportEventStatus
 
             Log::info("Match ID {$match->id} status updated to {$status->value}.");
 
-            if ($this->isCompleteState($status)) {
-                $this->completeSportEvent($match);
+            if ($this->isFailedState($status)) {
+                $this->cancelSportEvent($match);
             }
 
             if ($match->status === SportEventStatus::Completed) {
@@ -42,7 +43,7 @@ class UpdateSportEventStatus
     }
 
     /**
-     * Explicitly completeSportEvent the match.
+     * Explicitly complete the match.
      */
     protected function completeSportEvent(SportEvent $sportEvent): void
     {
@@ -74,6 +75,21 @@ class UpdateSportEventStatus
         ProcessCompletedSportEvent::dispatch($sportEvent);
     }
 
+    /**
+     * Explicitly process cancelled match.
+     */
+    protected function cancelSportEvent(SportEvent $sportEvent): void
+    {
+        $sportEvent->options->each(function (Option $betOption) {
+            $betOption->value = false;
+            $betOption->save();
+        });
+
+        Log::info("Match ID {$sportEvent->id} has been marked as cancelled.");
+
+        ProcessCancelledSportEvent::dispatch($sportEvent);
+    }
+
     protected function canComplete(SportEvent $match): bool
     {
         if (is_null($match->team1_score) || is_null($match->team2_score)) {
@@ -83,8 +99,8 @@ class UpdateSportEventStatus
         return in_array($match->status, [SportEventStatus::Pending, SportEventStatus::InProgress]);
     }
 
-    protected function isCompleteState(SportEventStatus $status): bool
+    protected function isFailedState(SportEventStatus $status): bool
     {
-        return in_array($status, [SportEventStatus::Completed, SportEventStatus::Cancelled, SportEventStatus::Postponed]);
+        return in_array($status, [SportEventStatus::Cancelled, SportEventStatus::Postponed]);
     }
 }

@@ -21,6 +21,8 @@ class Team extends Model
 {
     protected $fillable = [
         'name',
+        'short_name',
+        'short_code',
         'logo_url',
         'country',
     ];

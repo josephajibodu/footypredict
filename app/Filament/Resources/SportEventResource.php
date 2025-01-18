@@ -197,6 +197,7 @@ class SportEventResource extends Resource
                             ]),
                         ])
                         ->action(function (UpdateScores $updateScores, SportEvent $record, Tables\Actions\Action $action, array $data) {
+
                             try {
                                 $updateScores($record, $data);
                                 $action->success();

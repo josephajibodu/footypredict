@@ -20,6 +20,7 @@ class League extends Model
 {
     protected $fillable = [
         'name',
+        'short_code',
         'logo_url',
         'country',
     ];
