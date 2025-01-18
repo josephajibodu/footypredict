@@ -56,7 +56,7 @@ export default function Betslip() {
 
             if (matchedMultiplier) {
                 setMultiplierSetting(matchedMultiplier);
-                const bestMultiplier = (matchedMultiplier.allow_flex && isFlexed) ? matchedMultiplier.flex_all : matchedMultiplier.main;
+                const bestMultiplier = (matchedMultiplier.allow_flex && isFlexed) ? matchedMultiplier.flex_0 : matchedMultiplier.main;
                 setMultiplier(bestMultiplier)
             }
 

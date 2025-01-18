@@ -26,7 +26,7 @@ class BetController extends Controller
 
     public function show(Bet $bet)
     {
-        $bet->load(['sportEvents.team1', 'sportEvents.team2', 'transaction']);
+        $bet->load(['sportEvents', 'sportEvents.team1', 'sportEvents.team2', 'transaction']);
 
         return Inertia::render('BetShow', [
             'bet' => ApiBetResource::make($bet),

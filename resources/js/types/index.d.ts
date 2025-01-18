@@ -73,7 +73,7 @@ export interface BetMultiplier {
     selection: number,
     main: number,
     allow_flex: boolean,
-    flex_all: number,
+    flex_0: number,
     flex_1: number,
     flex_2: number,
 }

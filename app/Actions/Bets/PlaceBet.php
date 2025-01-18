@@ -28,11 +28,16 @@ class PlaceBet
     public function __invoke(User $user, float $amount, array $sportEvents, bool $isFlexed): Bet
     {
         return DB::transaction(function () use ($isFlexed, $user, $amount, $sportEvents) {
-            foreach ($sportEvents as $event) {
-                $kickoffTime = Carbon::createFromFormat('H:i:s', $event['kickoff_time']);
-                if (now()->greaterThanOrEqualTo($kickoffTime)) {
-                    throw new Exception("Match with ID {$event['event_id']} has already started.");
-                }
+            $eventIds = collect($sportEvents)->pluck('event_id');
+            $currentTime = Carbon::now()->format('H:i:s');
+
+            $invalidEvents = DB::table('sport_events')
+                ->whereIn('id', $eventIds)
+                ->whereTime('kickoff_time', '<=', $currentTime)
+                ->pluck('id');
+
+            if ($invalidEvents->isNotEmpty()) {
+                throw new Exception("Some matches have already started");
             }
 
             $amountInUnit = $amount * 100;
