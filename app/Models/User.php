@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AvailablePermission;
 use App\Enums\Currency;
 use App\Enums\UserGender;
 use App\Traits\HasBets;
@@ -123,7 +124,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
             return true;
         }
 
-        return str_contains($this->email, 'gideon') || str_contains($this->email, 'ajibodu');
+        return $this->can(AvailablePermission::AccessAdminDashboard);
     }
 
     public function getFilamentName(): string

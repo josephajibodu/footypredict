@@ -148,6 +148,10 @@ class SportEventResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
+                Tables\Columns\TextInputColumn::make('team1_score')
+                    ->hidden(app()->environment(['production'])),
+                Tables\Columns\TextInputColumn::make('team2_score')
+                    ->hidden(app()->environment(['production'])),
                 Tables\Columns\TextColumn::make('score')
                     ->alignCenter()
                     ->getStateUsing(fn (SportEvent $record) => "$record->team1_score : $record->team2_score"),

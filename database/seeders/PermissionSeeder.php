@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
@@ -24,6 +25,13 @@ class PermissionSeeder extends Seeder
         $admin = Role::query()->updateOrCreate([
             'name' => 'Admin'
         ]);
+
+        $adminPanelAccess = Permission::query()->updateOrCreate(
+            ['name' => 'admin_dashboard.access'],
+            ['group' => 'Dashboard']
+        );
+
+        $admin->givePermissionTo($adminPanelAccess);
 
         $policiesPath = app_path('Policies');
         $policies = File::allFiles($policiesPath);
@@ -52,5 +60,7 @@ class PermissionSeeder extends Seeder
                 }
             }
         }
+
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
