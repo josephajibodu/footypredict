@@ -101,6 +101,6 @@ class SwervPayWebhookController extends Controller
             'data' => $data,
         ]);
 
-        return response("");
+        return response("Processed", 200);
     }
 }

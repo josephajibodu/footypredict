@@ -72,6 +72,7 @@ class UserResource extends Resource
                     ->description(fn (User $record) => $record->email)
                     ->searchable(['first_name', 'last_name', 'email']),
                 Tables\Columns\TextColumn::make('username')
+                    ->description(fn (User $record) => "Bal: " . to_money($record->balance))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mobile_number'),
@@ -96,6 +97,7 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -135,6 +137,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
+            'view' => Pages\ViewUser::route('/{record}/view'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
