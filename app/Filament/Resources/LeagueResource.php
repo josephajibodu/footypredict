@@ -36,7 +36,6 @@ class LeagueResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('logo_url')
                             ->label('')
-                            ->required()
                             ->disk('public')
                             ->directory('leagues')
                             ->avatar()
