@@ -17,7 +17,7 @@ class BetController extends Controller
     {
         $user = Auth::user();
 
-        $bets = $user->bets()->latest()->with(['sportEvents'])->get();
+        $bets = $user->bets()->latest()->with(['sportEvents', 'sportEvents.team1', 'sportEvents.team2'])->get();
 
         return Inertia::render('BetHistory', [
             'bets' => Inertia::defer(fn() => ApiBetSummaryResource::collection($bets)),

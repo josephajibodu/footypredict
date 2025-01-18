@@ -19,6 +19,7 @@ class ApiBetSummaryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /** @var SportEvent $sportEvents */
         $sportEvents = $this->sportEvents;
 
         $formattedEvents = collect($sportEvents)->map(fn (SportEvent $item, int $key) => [

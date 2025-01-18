@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Currency;
 use App\Enums\UserGender;
 use App\Traits\HasBets;
+use App\Traits\HasManyTransactions;
 use App\Traits\HasTransaction;
 use App\Traits\HasWallet;
 use App\Traits\HasWithdrawalAccount;
@@ -51,6 +52,7 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
 
     use HasRoles;
     use HasTransaction;
+    use HasManyTransactions;
     use HasWallet;
     use HasWithdrawalAccount;
 

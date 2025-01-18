@@ -80,7 +80,8 @@ class UserResource extends Resource
                     ->label('Verified')
                     ->boolean()
                     ->alignCenter(),
-                Tables\Columns\TextColumn::make('nationality'),
+                Tables\Columns\TextColumn::make('nationality')
+                    ->description(fn (User $record) => "Currency: " . $record->currency->name),
                 Tables\Columns\TextColumn::make('date_of_birth')
                     ->date()
                     ->sortable(),
@@ -97,8 +98,10 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
