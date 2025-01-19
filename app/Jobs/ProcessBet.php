@@ -8,6 +8,7 @@ use App\Enums\LogChannel;
 use App\Enums\SportEventStatus;
 use App\Models\Bet;
 use App\Models\SportEvent;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class ProcessBet implements ShouldQueue
 
     /**
      * Execute the job.
+     * @throws Exception
      */
     public function handle(CreateWinningPayout $createWinningPayout): void
     {
@@ -39,7 +41,8 @@ class ProcessBet implements ShouldQueue
             return;
         }
 
-        DB::transaction(function () use ($createWinningPayout) {
+        DB::beginTransaction();
+        try {
             $lostEvents = $this->getLostEvents();
             $unCompletedEvents = $this->getUncompletedEvents();
 
@@ -49,7 +52,18 @@ class ProcessBet implements ShouldQueue
 
             $this->updateBetStatus($lostEvents, $createWinningPayout);
             $this->bet->save();
-        });
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+
+            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet processing failed", [
+                'bet_id' => $this->bet->reference,
+                'sport_event' => $this->sportEvent->id,
+            ]);
+
+            throw $ex;
+        }
     }
 
     private function getLostEvents(): array
@@ -86,6 +100,9 @@ class ProcessBet implements ShouldQueue
         return $unCompletedEvents;
     }
 
+    /**
+     * @throws Exception
+     */
     private function updateBetStatus(array $lostEvents, CreateWinningPayout $createWinningPayout): void
     {
         $noOfLostEvents = count($lostEvents);
@@ -102,6 +119,9 @@ class ProcessBet implements ShouldQueue
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function handleFlexedBet(int $noOfLostEvents, array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
     {
         $allowFlex = $multiplierSettings['allow_flex'] ?? false;
@@ -117,6 +137,9 @@ class ProcessBet implements ShouldQueue
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function processWinningBet(array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
     {
         $amountWon = $this->bet->stake * $multiplierSettings['main'];
@@ -127,9 +150,13 @@ class ProcessBet implements ShouldQueue
             'multiplier' => $multiplierSettings,
             'amount_won' => $amountWon
         ]);
+
         $createWinningPayout($this->bet->user, $amountWon / 100, "Bet winning payout");
     }
 
+    /**
+     * @throws Exception
+     */
     private function processFlexedBet(int $noOfLostEvents, array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
     {
         $allowedLossKey = "flex_{$noOfLostEvents}";
