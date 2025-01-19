@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\LogChannel;
 use App\Enums\TransactionStatus;
 use App\Models\Transaction;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,7 +27,7 @@ class ProcessWithdrawalJob implements ShouldQueue
     public function handle(): void
     {
         if ($this->transaction->status !== TransactionStatus::Pending) {
-            Log::info('[ProcessWithdrawalJOB] Transaction already processed', [
+            Log::channel(LogChannel::Withdrawals->value)->info('[ProcessWithdrawalJOB] Transaction already processed', [
                 'reference' => $this->transaction->reference,
                 'status' => $this->transaction->status,
             ]);

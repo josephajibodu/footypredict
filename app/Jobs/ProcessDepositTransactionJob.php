@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\LogChannel;
 use App\Enums\TransactionStatus;
 use App\Models\Transaction;
 use Exception;
@@ -33,7 +34,7 @@ class ProcessDepositTransactionJob implements ShouldQueue
             DB::transaction(function () {
 
                 if ($this->transaction->status !== TransactionStatus::Pending) {
-                    Log::info('[ProcessDepositTransactionJOB] Transaction already processed', [
+                    Log::channel(LogChannel::Withdrawals->value)->info('[ProcessDepositTransactionJOB] Transaction already processed', [
                         'reference' => $this->transaction->reference,
                         'status' => $this->transaction->status,
                     ]);
@@ -62,14 +63,14 @@ class ProcessDepositTransactionJob implements ShouldQueue
 
             });
 
-            Log::info('[ProcessDepositTransactionJOB] Transaction processed successfully', [
+            Log::channel(LogChannel::Withdrawals->value)->info('[ProcessDepositTransactionJOB] Transaction processed successfully', [
                 'reference' => $this->transaction->reference,
                 'user_id' => $this->transaction->user_id,
                 'amount' => $this->data['amount'] ?? null,
             ]);
 
         } catch (Exception $ex) {
-            Log::error('[ProcessDepositTransactionJOB] Error processing transaction in job', [
+            Log::channel(LogChannel::Withdrawals->value)->error('[ProcessDepositTransactionJOB] Error processing transaction in job', [
                 'reference' => $this->transaction->reference,
                 'error' => $ex->getMessage(),
             ]);

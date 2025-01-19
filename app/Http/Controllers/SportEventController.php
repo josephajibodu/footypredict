@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SportEventStatus;
 use App\Http\Resources\ApiSportEventResource;
 use App\Models\SportEvent;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ class SportEventController extends Controller
             ->with(['team1', 'team2'])
             ->whereDay('match_date', today())
             ->whereTime('kickoff_time', '>', $currentTime)
+            ->whereIn('status', [SportEventStatus::Pending, SportEventStatus::InProgress])
             ->get();
 
         return Inertia::render('SportEvents', [

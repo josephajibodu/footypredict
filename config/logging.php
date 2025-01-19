@@ -159,6 +159,22 @@ return [
             'replace_placeholders' => true,
         ],
 
+        \App\Enums\LogChannel::BetProcessing->value => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/bets.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
+        \App\Enums\LogChannel::SportEvent->value => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/bets.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];
