@@ -33,7 +33,7 @@ class ProcessBet implements ShouldQueue
      */
     public function handle(CreateWinningPayout $createWinningPayout): void
     {
-        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing bet after event: $this->sportEvent->id", [
+        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing bet after event: {$this->sportEvent->id}", [
             'bet_id' => $this->bet->reference,
         ]);
 
@@ -92,6 +92,7 @@ class ProcessBet implements ShouldQueue
     private function getUncompletedEvents(): array
     {
         $unCompletedEvents = [];
+        Log::info("It got here: getting uncompleted events", ['bet_id' => $this->bet->reference]);
 
         foreach ($this->bet->sportEvents as $sportEvent) {
             if (! in_array($sportEvent->status, [SportEventStatus::Completed, SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
@@ -111,13 +112,16 @@ class ProcessBet implements ShouldQueue
         $noOfLostEvents = count($lostEvents);
         $multiplierSettings = $this->bet->multiplier_settings;
 
+        Log::info("It got here", ['bet_id' => $this->bet->reference]);
         if (!$this->bet->is_flexed) {
             $this->bet->status = $noOfLostEvents > 0 ? BetStatus::Lost : BetStatus::Won;
 
             if ($this->bet->status === BetStatus::Won) {
+                Log::info("Bet won", ['bet_id' => $this->bet->reference]);
                 $this->processWinningBet($multiplierSettings, $createWinningPayout);
             }
         } else {
+            Log::info("Handling flexed bet", ['bet_id' => $this->bet->reference]);
             $this->handleFlexedBet($noOfLostEvents, $multiplierSettings, $createWinningPayout);
         }
     }
@@ -128,6 +132,8 @@ class ProcessBet implements ShouldQueue
     private function handleFlexedBet(int $noOfLostEvents, array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
     {
         $allowFlex = $multiplierSettings['allow_flex'] ?? false;
+
+        Log::info("It got here too: handling flexed bet", ['bet_id' => $this->bet->reference]);
 
         if (!$allowFlex) {
             $this->bet->status = $noOfLostEvents > 0 ? BetStatus::Lost : BetStatus::Won;
