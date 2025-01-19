@@ -21,7 +21,7 @@ class UpdateSportEventStatus
      */
     public function __invoke(SportEvent $match, SportEventStatus $status): SportEvent
     {
-        if ($match->status === SportEventStatus::Completed && ! $this->canComplete($match)) {
+        if ($status === SportEventStatus::Completed && ! $this->canComplete($match)) {
             throw new Exception("Match ID {$match->id} cannot be completed. Ensure all necessary conditions are met.");
         }
 
