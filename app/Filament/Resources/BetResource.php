@@ -92,7 +92,7 @@ class BetResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.username')
                     ->description(fn(Bet $record) => $record->reference)
-                    ->searchable(['user.username', 'reference']),
+                    ->searchable(['reference']),
                 Tables\Columns\TextColumn::make('stake')
                     ->numeric()
                     ->formatStateUsing(fn(Bet $record) => to_money($record->stake, 100))
