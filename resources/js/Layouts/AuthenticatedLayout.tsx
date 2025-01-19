@@ -44,11 +44,11 @@ export default function Authenticated({
 
                         {auth.user === null && (
                             <>
-                                <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>
+                                <Button className="rounded-none" variant={'outline'}>
                                     <Link href={route('login')}>Login</Link>
                                 </Button>
 
-                                <Button className="rounded-none" variant={'outline'} onClick={gotoWallet}>
+                                <Button className="rounded-none" variant={'outline'}>
                                     <Link href={route('register')}>Register</Link>
                                 </Button>
                             </>

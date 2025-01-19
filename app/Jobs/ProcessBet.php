@@ -52,6 +52,11 @@ class ProcessBet implements ShouldQueue
         $lostEvents = [];
 
         foreach ($this->bet->sportEvents as $sportEvent) {
+            // Only compute for the completed events
+            if ($sportEvent->status !== SportEventStatus::Completed) {
+                continue;
+            }
+
             $pivotData = $sportEvent->pivot;
 
             if ($pivotData->selected_option_id !== $pivotData->outcome_option_id) {
@@ -67,7 +72,7 @@ class ProcessBet implements ShouldQueue
         $unCompletedEvents = [];
 
         foreach ($this->bet->sportEvents as $sportEvent) {
-            if ($sportEvent->status !== SportEventStatus::Completed) {
+            if (! in_array($sportEvent->status, [SportEventStatus::Completed, SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
                 $unCompletedEvents[] = $sportEvent->id;
                 break;
             }

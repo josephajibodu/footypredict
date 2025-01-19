@@ -1,10 +1,11 @@
-import { Link } from "@inertiajs/react";
+import {Link, usePage} from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { motion } from "framer-motion";
 
 export default function StaticLayoutHeader() {
+    const { auth } = usePage().props;
     const [menuOpen, setMenuOpen] = useState(false);
     const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
@@ -78,7 +79,7 @@ export default function StaticLayoutHeader() {
                     className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
                     asChild
                 >
-                    <Link href={route('login')}>Sign In</Link>
+                    <Link href={auth ? route('events') : route('login')}>Sign In</Link>
                 </Button>
 
                 {/* Mobile Menu */}

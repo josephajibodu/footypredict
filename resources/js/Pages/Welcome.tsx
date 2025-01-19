@@ -62,7 +62,7 @@ export default function Welcome() {
                             size="lg"
                             className="bg-gradient-to-r from-secondary to-accent text-base h-12"
                         >
-                            <Link href={route('login')}>Get Started</Link>
+                            <Link href={route('events')}>Get Started</Link>
                         </Button>
                     </div>
 

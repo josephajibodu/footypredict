@@ -15,7 +15,7 @@ export default function Password({
             <Head title="Update Password" />
 
             <div className="py-12">
-                <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+                <div className="mx-auto space-y-6 max-w-7xl px-4">
                     <div className="p-4 bg-card text-card-foreground sm:rounded-lg sm:p-8">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>

@@ -19,8 +19,8 @@ class SportEventController extends Controller
             ->whereTime('kickoff_time', '>', $currentTime)
             ->get();
 
-        return Inertia::render('Events', [
-            'events' => ApiSportEventResource::collection($events),
+        return Inertia::render('SportEvents', [
+            'events' => Inertia::defer(fn() => ApiSportEventResource::collection($events)),
         ]);
     }
 }

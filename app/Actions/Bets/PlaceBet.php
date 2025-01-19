@@ -53,7 +53,7 @@ class PlaceBet
                 throw new Exception('This is an error from us. Please contact our support if it persists');
             }
 
-            $multiplier = floatval($validMultiplier['main']);
+            $multiplier = $isFlexed && $validMultiplier['allow_flex'] ? floatval($validMultiplier['flex_0']) : floatval($validMultiplier['main']);
 
             // Create a transaction record
             $transaction = Transaction::query()->create([

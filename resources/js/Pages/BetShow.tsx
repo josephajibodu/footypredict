@@ -2,11 +2,11 @@ import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Head, Link} from '@inertiajs/react';
 import {ReactNode} from 'react';
 import dayjs from 'dayjs';
-import {BetStatus} from '@/types/enums';
+import {BetStatus, SportEventStatus} from '@/types/enums';
 import {Bet, PageProps} from '@/types';
 import {cn, toMoney} from '@/lib/utils';
 import {MatchOptionEnum, MatchOptionLabels} from "@/enums/MatchOptionEnum";
-import {CheckCircle, XCircle} from "lucide-react";
+import {CheckCircle, CircleOff, XCircle} from "lucide-react";
 
 interface BetDetailsProps extends PageProps {
     bet: Bet;
@@ -41,7 +41,7 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                             <span>Expected Multiplier</span>
                             <span className="font-bold">
                                 {bet.is_flexed && <span className="text-sm me-2">(Flexed)</span>}
-                                x{bet.multiplier_settings.main}
+                                x{bet.is_flexed ? bet.multiplier_settings.flex_0 : bet.multiplier_settings.main}
                             </span>
                         </div>
                         <div className="flex justify-between">
@@ -73,10 +73,18 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                                     <span className="font-bold flex items-center gap-2">
                                         {event.selected_option?.id === event.outcome_option?.id
                                             && <CheckCircle className="text-green-600 size-4" />}
+
                                         {event.selected_option?.id !== event.outcome_option?.id
                                             && event.outcome_option !== null
                                             && <XCircle className="text-destructive size-4" />}
+
                                         {MatchOptionLabels[MatchOptionEnum[event.outcome_option?.type.toUpperCase() as keyof typeof MatchOptionEnum]]}
+
+                                        {[SportEventStatus.Canceled, SportEventStatus.Postponed].includes(event.status)
+                                            ? <div className="flex gap-2 items-center text-destructive bg-destructive/20 rounded px-2">
+                                                <CircleOff className="text-destructive size-4" />
+                                                <span className="uppercase">{event.status}</span>
+                                            </div> : null }
                                     </span>
                                 </div>
                             </div>

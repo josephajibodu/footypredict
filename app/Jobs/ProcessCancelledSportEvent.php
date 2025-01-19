@@ -33,19 +33,9 @@ class ProcessCancelledSportEvent implements ShouldQueue
         }
 
         $this->sportEvent->bets()->each(function (Bet $bet) {
-            Log::info("Dispatching Bet Processor for [ bet ($bet->reference) - event ($this->sportEvent->id) ]", $bet->toArray());
+            Log::info("Downgrade Multiplier: Dispatching Bet Downgrader for [ bet ($bet->reference) - event ($this->sportEvent->id) ]", $bet->toArray());
 
-            /** @var BetSportEvent $betSportEvent */
-            $betSportEvent = BetSportEvent::query()->where('bet_id', $bet->id)
-                ->where('sport_event_id', $this->sportEvent->id)
-                ->first();
-
-            /** @var Option $validOutcomeOption */
-            $validOutcomeOption = $this->sportEvent->options()->where('value', true)->first();
-
-            $betSportEvent->update(['outcome_option_id' => $validOutcomeOption->id]);
-
-            ProcessBet::dispatch($bet, $this->sportEvent);
+            ProcessBetForCancelledSportEvent::dispatch($bet, $this->sportEvent);
         });
     }
 }

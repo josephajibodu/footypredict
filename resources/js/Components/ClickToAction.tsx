@@ -17,7 +17,7 @@ export default function ClickToAction() {
                 size="lg"
                 className="bg-gradient-to-r from-secondary to-accent text-base h-12"
             >
-                <Link href={route('login')}>Watch out for launch</Link>
+                <Link href={route('login')}>Get Started</Link>
             </Button>
         </div>
     );

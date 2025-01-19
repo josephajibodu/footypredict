@@ -1,7 +1,7 @@
 import { Config } from 'ziggy-js';
 import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
 import { Transaction } from "@/types/transactions";
-import {BetStatus} from "@/types/enums";
+import {BetStatus, SportEventStatus} from "@/types/enums";
 
 export interface User {
     id: number;
@@ -27,7 +27,7 @@ export interface SportEvent {
     match_date: string;
     kickoff_time: string;
     sport: string;
-    status: "Pending" | "Completed" | "Cancelled";
+    status: SportEventStatus;
     team1_score?: number | null;
     team2_score?: number | null;
     main_outcome?: string | null;
