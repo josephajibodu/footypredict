@@ -50,9 +50,14 @@ class ProcessBet implements ShouldQueue
             $unCompletedEvents = $this->getUncompletedEvents();
 
             if (! empty($unCompletedEvents)) {
+                Log::info("All games not yet completed", $unCompletedEvents);
                 return;
             }
 
+            Log::info("About to update bet status", [
+                'lost_events' => $lostEvents,
+                'uncompleted_events' => $unCompletedEvents,
+            ]);
             $this->updateBetStatus($lostEvents, $createWinningPayout);
             $this->bet->save();
 
@@ -97,7 +102,6 @@ class ProcessBet implements ShouldQueue
         foreach ($this->bet->sportEvents as $sportEvent) {
             if (! in_array($sportEvent->status, [SportEventStatus::Completed, SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
                 $unCompletedEvents[] = $sportEvent->id;
-                break;
             }
         }
 
