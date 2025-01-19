@@ -21,7 +21,10 @@ class ProcessBet implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Bet $bet, public SportEvent $sportEvent)
+    public function __construct(
+        public Bet $bet,
+        public SportEvent $sportEvent
+    )
     {}
 
     /**
