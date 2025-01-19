@@ -27,7 +27,6 @@ class UpdateSportEventStatus
         }
 
         DB::beginTransaction();
-
         try {
             $match->update(['status' => $status]);
 
