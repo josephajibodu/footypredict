@@ -26,7 +26,9 @@ class UpdateSportEventStatus
             throw new Exception("Match ID {$match->id} cannot be completed. Ensure all necessary conditions are met.");
         }
 
-        return DB::transaction(function () use ($status, $match) {
+        DB::beginTransaction();
+
+        try {
             $match->update(['status' => $status]);
 
             Log::channel(LogChannel::SportEvent->value)->info("Match ID {$match->id} status updated to {$status->value}.");
@@ -39,8 +41,15 @@ class UpdateSportEventStatus
                 $this->completeSportEvent($match);
             }
 
+            DB::commit();
+
             return $match->refresh();
-        });
+        } catch (Exception $ex) {
+            DB::rollBack();
+
+            report($ex);
+            throw $ex;
+        }
     }
 
     /**

@@ -34,7 +34,7 @@ class ProcessCompletedSportEvent implements ShouldQueue
         }
 
         $this->sportEvent->bets()->each(function (Bet $bet) {
-            Log::channel(LogChannel::SportEvent->value)->info("[ProcessCompletedSportEventJob] Dispatching Bet Processor for [ bet ($bet->reference) - event ($this->sportEvent->id) ]", $bet->toArray());
+            Log::channel(LogChannel::SportEvent->value)->info("[ProcessCompletedSportEventJob] Dispatching Bet Processor for [ bet ($bet->reference) - event ({$this->sportEvent->id}) ]", $bet->toArray());
 
             /** @var BetSportEvent $betSportEvent */
             $betSportEvent = BetSportEvent::query()->where('bet_id', $bet->id)
