@@ -44,32 +44,26 @@ class ProcessBet implements ShouldQueue
             return;
         }
 
+        $lostEvents = $this->getLostEvents();
+        $unCompletedEvents = $this->getUncompletedEvents();
+
+        if (! empty($unCompletedEvents)) {
+            Log::info("All games not yet completed", $unCompletedEvents);
+            return;
+        }
+
         DB::beginTransaction();
         try {
-            $lostEvents = $this->getLostEvents();
-            $unCompletedEvents = $this->getUncompletedEvents();
-
-            if (! empty($unCompletedEvents)) {
-                Log::info("All games not yet completed", $unCompletedEvents);
-                return;
-            }
-
-            Log::info("About to update bet status", [
-                'lost_events' => $lostEvents,
-                'uncompleted_events' => $unCompletedEvents,
-            ]);
             $this->updateBetStatus($lostEvents, $createWinningPayout);
             $this->bet->save();
-
             DB::commit();
         } catch (Exception $ex) {
             DB::rollBack();
-
-            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet processing failed", [
+            Log::channel(LogChannel::BetProcessing->value)->error("[ProcessBetJob] Bet processing failed", [
                 'bet_id' => $this->bet->reference,
                 'sport_event' => $this->sportEvent->id,
+                'error' => $ex->getMessage(),
             ]);
-
             throw $ex;
         }
     }
