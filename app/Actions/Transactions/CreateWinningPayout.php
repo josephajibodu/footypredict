@@ -5,9 +5,11 @@ namespace App\Actions\Transactions;
 use App\Enums\Currency;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
+use App\Models\Bet;
 use App\Models\Deposit;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Winning;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,12 +21,14 @@ class CreateWinningPayout
     /**
      * @throws Exception
      */
-    public function __invoke(User $user, float $amount, string $description): Transaction
+    public function __invoke(Bet $bet, float $amount, string $description): Transaction
     {
         DB::beginTransaction();
 
         try {
             $reference = Str::uuid()->toString();
+
+            $user = $bet->user;
 
             $user->credit($amount, $description);
 
@@ -44,6 +48,10 @@ class CreateWinningPayout
             ]);
 
             // Winning can be used if the winning transaction needs to store more data
+            Winning::query()->create([
+                'transaction_id' => $transaction->id,
+                'bet_id' => $bet->id
+            ]);
 
             DB::commit();
 

@@ -154,7 +154,7 @@ class ProcessBet implements ShouldQueue
             'amount_won' => $amountWon
         ]);
 
-        $createWinningPayout($this->bet->user, $amountWon / 100, "Bet winning payout");
+        $createWinningPayout($this->bet, $amountWon / 100, "Bet winning payout");
     }
 
     /**
@@ -174,7 +174,7 @@ class ProcessBet implements ShouldQueue
                 'multiplier' => $multiplierSettings,
                 'amount_won' => $amountWon
             ]);
-            $createWinningPayout($this->bet->user, $amountWon / 100, "Bet winning payout");
+            $createWinningPayout($this->bet, $amountWon / 100, "Bet winning payout");
         } else {
             $this->bet->status = BetStatus::Lost;
         }
