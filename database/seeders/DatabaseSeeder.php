@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             LeagueSeeder::class,
             TeamSeeder::class,
             SportEventSeeder::class,
-            SingleUserBetSeeder::class,
+            // SingleUserBetSeeder::class,
         ]);
     }
 }
