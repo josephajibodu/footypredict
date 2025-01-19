@@ -27,7 +27,7 @@ class ApiSportEventResource extends JsonResource
                 ->with(['selectedOption', 'outcomeOption'])
                 ->where('bet_id', $this->pivot->bet_id)
                 ->where('sport_event_id', $this->pivot->sport_event_id)
-                ->first(['is_correct', 'selected_option_id', 'outcome_option_id', 'i']);
+                ->first(['is_correct', 'selected_option_id', 'outcome_option_id']);
 
             $betSportEventArray = $betSportEvent->toArray();
         }

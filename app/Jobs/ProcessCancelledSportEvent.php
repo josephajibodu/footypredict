@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\LogChannel;
 use App\Enums\SportEventStatus;
 use App\Models\Bet;
 use App\Models\BetSportEvent;
@@ -33,7 +34,7 @@ class ProcessCancelledSportEvent implements ShouldQueue
         }
 
         $this->sportEvent->bets()->each(function (Bet $bet) {
-            Log::info("Downgrade Multiplier: Dispatching Bet Downgrader for [ bet ($bet->reference) - event ($this->sportEvent->id) ]", $bet->toArray());
+            Log::channel(LogChannel::SportEvent->value)->info("[ProcessCancelledSportEventJob] Downgrade Multiplier: Dispatching Bet Downgrader for [ bet ($bet->reference) - event ($this->sportEvent->id) ]", $bet->toArray());
 
             ProcessBetForCancelledSportEvent::dispatch($bet, $this->sportEvent);
         });

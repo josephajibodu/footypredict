@@ -11,5 +11,7 @@ enum LogChannel: string
     case Deposits = 'deposits';
     case Withdrawals = 'withdrawals';
     case Bet = 'bet';
+    case SportEvent = 'sports-event';
+    case BetProcessing = 'bet-processing';
     case ExternalAPI = 'external-api';
 }

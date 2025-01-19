@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\Transactions\CreateWinningPayout;
 use App\Enums\BetStatus;
+use App\Enums\LogChannel;
 use App\Enums\SportEventStatus;
 use App\Models\Bet;
 use App\Models\SportEvent;
@@ -27,10 +28,14 @@ class ProcessBet implements ShouldQueue
      */
     public function handle(CreateWinningPayout $createWinningPayout): void
     {
-        Log::info("Processing bet after event: $this->sportEvent->id");
+        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing bet after event: $this->sportEvent->id", [
+            'bet_id' => $this->bet->reference,
+        ]);
 
         if ($this->bet->status !== BetStatus::Pending) {
-            Log::info("Bet will not be processed. Status = {$this->bet->status->value}", $this->bet->toArray());
+            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet will not be processed. Status = {$this->bet->status->value}", [
+                'bet_id' => $this->bet->reference,
+            ]);
             return;
         }
 
@@ -117,7 +122,11 @@ class ProcessBet implements ShouldQueue
         $amountWon = $this->bet->stake * $multiplierSettings['main'];
         $this->bet->potential_winnings = $amountWon;
 
-        Log::info("Processing non-flexed bet win", $multiplierSettings, $amountWon);
+        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing non-flexed bet win", [
+            'bet_id' => $this->bet->reference,
+            'multiplier' => $multiplierSettings,
+            'amount_won' => $amountWon
+        ]);
         $createWinningPayout($this->bet->user, $amountWon / 100, "Bet winning payout");
     }
 
@@ -130,7 +139,11 @@ class ProcessBet implements ShouldQueue
             $amountWon = $this->bet->stake * $multiplierSettings[$allowedLossKey];
             $this->bet->potential_winnings = $amountWon;
 
-            Log::info("Processing flexed bet win", $multiplierSettings, $amountWon);
+            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing flexed bet win", [
+                'bet_id' => $this->bet->reference,
+                'multiplier' => $multiplierSettings,
+                'amount_won' => $amountWon
+            ]);
             $createWinningPayout($this->bet->user, $amountWon / 100, "Bet winning payout");
         } else {
             $this->bet->status = BetStatus::Lost;

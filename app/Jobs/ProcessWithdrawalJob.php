@@ -26,7 +26,7 @@ class ProcessWithdrawalJob implements ShouldQueue
     public function handle(): void
     {
         if ($this->transaction->status !== TransactionStatus::Pending) {
-            Log::info('[JOB] Transaction already processed', [
+            Log::info('[ProcessWithdrawalJOB] Transaction already processed', [
                 'reference' => $this->transaction->reference,
                 'status' => $this->transaction->status,
             ]);

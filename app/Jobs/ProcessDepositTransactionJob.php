@@ -33,7 +33,7 @@ class ProcessDepositTransactionJob implements ShouldQueue
             DB::transaction(function () {
 
                 if ($this->transaction->status !== TransactionStatus::Pending) {
-                    Log::info('[JOB] Transaction already processed', [
+                    Log::info('[ProcessDepositTransactionJOB] Transaction already processed', [
                         'reference' => $this->transaction->reference,
                         'status' => $this->transaction->status,
                     ]);
@@ -62,14 +62,14 @@ class ProcessDepositTransactionJob implements ShouldQueue
 
             });
 
-            Log::info('Transaction processed successfully', [
+            Log::info('[ProcessDepositTransactionJOB] Transaction processed successfully', [
                 'reference' => $this->transaction->reference,
                 'user_id' => $this->transaction->user_id,
                 'amount' => $this->data['amount'] ?? null,
             ]);
 
         } catch (Exception $ex) {
-            Log::error('Error processing transaction in job', [
+            Log::error('[ProcessDepositTransactionJOB] Error processing transaction in job', [
                 'reference' => $this->transaction->reference,
                 'error' => $ex->getMessage(),
             ]);

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Matches;
 
+use App\Enums\LogChannel;
 use App\Enums\MatchOption;
 use App\Enums\SportEventStatus;
 use App\Jobs\ProcessCancelledSportEvent;
@@ -28,7 +29,7 @@ class UpdateSportEventStatus
         return DB::transaction(function () use ($status, $match) {
             $match->update(['status' => $status]);
 
-            Log::info("Match ID {$match->id} status updated to {$status->value}.");
+            Log::channel(LogChannel::SportEvent->value)->info("Match ID {$match->id} status updated to {$status->value}.");
 
             if ($this->isFailedState($status)) {
                 $this->cancelSportEvent($match);
@@ -70,7 +71,7 @@ class UpdateSportEventStatus
             $betOption->save();
         });
 
-        Log::info("Match ID {$sportEvent->id} has been marked as completed(either of the completed status).");
+        Log::channel(LogChannel::SportEvent->value)->info("Match ID {$sportEvent->id} has been marked as completed(either of the completed status).");
 
         ProcessCompletedSportEvent::dispatch($sportEvent);
     }
@@ -85,7 +86,7 @@ class UpdateSportEventStatus
             $betOption->save();
         });
 
-        Log::info("Match ID {$sportEvent->id} has been marked as cancelled.");
+        Log::channel(LogChannel::SportEvent->value)->info("Match ID {$sportEvent->id} has been marked as cancelled(canceled or postponed).");
 
         ProcessCancelledSportEvent::dispatch($sportEvent);
     }
