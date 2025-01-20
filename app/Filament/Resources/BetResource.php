@@ -73,7 +73,7 @@ class BetResource extends Resource
                             ->step(0.01)
                             ->disabled(),
 
-                        Forms\Components\TextInput::make('flex_2')
+                        Forms\Components\TextInput::make('multiplier_settings.flex_2')
                             ->label('Flex -2')
                             ->prefixIcon('heroicon-o-x-mark')
                             ->columnSpan(3)
