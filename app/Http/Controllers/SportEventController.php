@@ -16,9 +16,11 @@ class SportEventController extends Controller
 
         $events = SportEvent::query()
             ->with(['team1', 'team2'])
-            ->whereDay('match_date', today())
+            ->whereBetween('match_date', [today(), today()->addDay()])
             ->whereTime('kickoff_time', '>', $currentTime)
             ->whereIn('status', [SportEventStatus::Pending, SportEventStatus::InProgress])
+            ->orderBy('match_date', 'asc')
+            ->orderBy('kickoff_time', 'asc')
             ->get();
 
         return Inertia::render('SportEvents', [
