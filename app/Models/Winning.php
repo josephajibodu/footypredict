@@ -23,4 +23,9 @@ use Illuminate\Database\Eloquent\Model;
 class Winning extends Model
 {
     use HasTransaction;
+
+    protected $fillable = [
+        'transaction_id',
+        'bet_id',
+    ];
 }
