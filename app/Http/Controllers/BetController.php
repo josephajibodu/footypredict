@@ -49,6 +49,15 @@ class BetController extends Controller
             'events.min' => "Please select at least $betSetting->min_selection events.",
         ]);
 
+        if (count($data['events']) > $betSetting->max_selection) {
+            return back()->withErrors("You can only select up to {$betSetting->max_selection} matches");
+        }
+
+        if (floatval($data['amount']) > $betSetting->max_stake) {
+            $maxStake = to_money($betSetting->max_stake);
+            return back()->withErrors("Maximum stake allowed is $maxStake");
+        }
+
         try {
             $user = Auth::user();
 
