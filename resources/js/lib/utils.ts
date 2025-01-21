@@ -30,8 +30,8 @@ export function extractErrorMessage(error: any): string|null {
   return null;
 }
 
-function calculatePagination(current_page: number, last_page: number) {
-  const max_items = 7;
+export function calculatePagination(current_page: number, last_page: number) {
+  const max_items = 5;
   const pagination = [];
 
   // Always include the first page

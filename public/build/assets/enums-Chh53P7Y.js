@@ -1,1 +1,0 @@
-var d=(e=>(e.Pending="pending",e.Won="won",e.Lost="lost",e.Canceled="canceled",e))(d||{}),l=(e=>(e.Pending="pending",e.Completed="completed",e.Failed="failed",e.Cancelled="cancelled",e))(l||{}),n=(e=>(e.Bet="bet",e.Winning="winning",e.Withdrawal="withdrawal",e.Deposit="deposit",e.Refunds="refunds",e))(n||{});export{d as B,l as T,n as a};

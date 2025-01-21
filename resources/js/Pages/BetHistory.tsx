@@ -9,7 +9,6 @@ import dayjs from "dayjs";
 import {BetStatus} from "@/types/enums";
 import {Button} from "@/Components/ui/button";
 import {BetsLoader} from "@/Components/Loaders/BetsLoader";
-import Paginator from "@/Components/Paginator";
 
 interface BetHistoryProps extends PageProps {
     bets: PaginatedData<Bet>
