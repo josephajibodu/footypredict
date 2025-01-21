@@ -29,3 +29,37 @@ export function extractErrorMessage(error: any): string|null {
 
   return null;
 }
+
+function calculatePagination(current_page: number, last_page: number) {
+  const max_items = 7;
+  const pagination = [];
+
+  // Always include the first page
+  pagination.push(1);
+
+  // Determine the range of pages to display around the current page
+  const start = Math.max(2, current_page - 2);
+  const end = Math.min(last_page - 1, current_page + 2); // At most 2 pages after current
+
+  // Add ellipsis if there's a gap between the first page and the start
+  if (start > 2) {
+    pagination.push("...");
+  }
+
+  // Add the middle range of pages
+  for (let i = start; i <= end; i++) {
+    pagination.push(i);
+  }
+
+  // Add ellipsis if there's a gap between the end and the last page
+  if (end < last_page - 1) {
+    pagination.push("...");
+  }
+
+  // Always include the last page
+  if (last_page > 1) {
+    pagination.push(last_page);
+  }
+
+  return pagination;
+}

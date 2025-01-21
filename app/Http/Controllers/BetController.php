@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Bets\PlaceBet;
+use App\Enums\BetStatus;
 use App\Enums\LogChannel;
 use App\Http\Resources\ApiBetResource;
 use App\Http\Resources\ApiBetSummaryResource;
@@ -16,11 +17,21 @@ use Inertia\Inertia;
 
 class BetController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+        $betsQuery = $user->bets()
+            ->latest()->with(['sportEvents', 'sportEvents.team1', 'sportEvents.team2']);
 
-        $bets = $user->bets()->latest()->with(['sportEvents', 'sportEvents.team1', 'sportEvents.team2'])->get();
+        if ($request->has('status')) {
+            if ($request->input('status') == 'settled') {
+                $betsQuery->whereIn('status', [BetStatus::Won, BetStatus::Lost, BetStatus::Voided]);
+            } elseif ($request->input('status') == 'unsettled') {
+                $betsQuery->where('status', BetStatus::Pending);
+            }
+        }
+
+        $bets = $betsQuery->paginate(1)->withQueryString();
 
         return Inertia::render('BetHistory', [
             'bets' => Inertia::defer(fn() => ApiBetSummaryResource::collection($bets)),

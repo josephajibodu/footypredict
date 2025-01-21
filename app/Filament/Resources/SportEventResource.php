@@ -35,6 +35,11 @@ class SportEventResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

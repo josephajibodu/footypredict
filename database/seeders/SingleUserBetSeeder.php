@@ -22,7 +22,7 @@ class SingleUserBetSeeder extends Seeder
             return;
         }
 
-        $user->credit(5_000, 'Test runs');
+        $user->credit(50_000, 'Test runs');
 
         $placeBet = app(PlaceBet::class);
 
@@ -32,7 +32,7 @@ class SingleUserBetSeeder extends Seeder
             return;
         }
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $events = SportEvent::query()
                 ->inRandomOrder()
                 ->take(rand(2, 3))

@@ -35,7 +35,10 @@ class ApiSportEventResource extends JsonResource
         return [
             'id' => $this->id,
             'match_date' => $this->match_date,
-            'kickoff_time' => Carbon::createFromFormat('H:i:s', $this->kickoff_time),
+            'kickoff_time' => Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                sprintf('%s %s', Carbon::parse($this->match_date)->format('Y-m-d'), $this->kickoff_time)
+            ),
             'team1_id' => $this->team1_id,
             'team2_id' => $this->team2_id,
             'league_id' => $this->league_id,

@@ -16,8 +16,9 @@ class SportEventController extends Controller
 
         $events = SportEvent::query()
             ->with(['team1', 'team2'])
-            ->whereBetween('match_date', [today(), today()->addDay()])
-            ->whereTime('kickoff_time', '>', $currentTime)
+            ->where(function ($query) use ($currentTime) {
+                $query->whereRaw("CONCAT(match_date, ' ', kickoff_time) > ?", [now()->format('Y-m-d H:i:s')]);
+            })
             ->whereIn('status', [SportEventStatus::Pending, SportEventStatus::InProgress])
             ->orderBy('match_date', 'asc')
             ->orderBy('kickoff_time', 'asc')

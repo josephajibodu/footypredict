@@ -3,18 +3,19 @@ import {Deferred, Head, Link} from '@inertiajs/react';
 import {ReactNode, useState} from 'react';
 import {ChevronDown, ReceiptText} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger,} from "@/Components/ui/tabs"
-import {Bet, PageProps} from "@/types";
+import {Bet, PageProps, PaginatedData} from "@/types";
 import {cn, toMoney} from "@/lib/utils";
 import dayjs from "dayjs";
 import {BetStatus} from "@/types/enums";
 import {Button} from "@/Components/ui/button";
 import {BetsLoader} from "@/Components/Loaders/BetsLoader";
+import Paginator from "@/Components/Paginator";
 
 interface BetHistoryProps extends PageProps {
-    bets: Bet[]
+    bets: PaginatedData<Bet>
 }
 
-const filters = ['all', 'completed', 'pending'] as const;
+const filters = ['all', 'unsettled', 'settled'] as const;
 
 type Filter = typeof filters[number];
 
@@ -30,18 +31,24 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                     <div className="grid px-4 w-full grid-cols-3 p-0 rounded-none mt-4 text-card-foreground rounded-lg overflow-hidden">
                         <Button className={cn("h-full rounded-none rounded-s-lg", {
                             "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "all"
-                        })} value="all">All</Button>
+                        })} value="all">
+                            <Link href={route('bets', {status: null})}>All</Link>
+                        </Button>
                         <Button className={cn("h-full rounded-none", {
-                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "completed"
-                        })} value="unsettled">Unsettled</Button>
+                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "unsettled"
+                        })} value="unsettled">
+                            <Link href={route('bets', {status: 'unsettled'})}>Unsettled</Link>
+                        </Button>
                         <Button className={cn("h-full rounded-none rounded-e-lg", {
-                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "completed"
-                        })} value="settled">Settled</Button>
+                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "settled"
+                        })} value="settled">
+                            <Link href={route('bets', {status: 'settled'})}>Settled</Link>
+                        </Button>
                     </div>
 
                     <Deferred fallback={<BetsLoader />} data="bets">
                         <>
-                            {(!bets || (bets && bets.length === 0)) && (
+                            {(!bets || (bets.data && bets.data.length === 0)) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
                                     <ReceiptText size={56} />
                                     <h3 className="font-bold text-lg">You have no bets</h3>
@@ -49,11 +56,11 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                                 </div>
                             )}
 
-                            {(bets && bets.length > 0) && (
+                            {(bets && bets.data.length > 0) && (
                                 <section className="px-4">
 
                                     <div className="flex flex-col gap-4 py-4">
-                                        {bets.map((bet, index) => (
+                                        {bets.data.map((bet, index) => (
                                             <div key={bet.id} className="bg-card text-card-foreground rounded-lg overflow-hidden">
                                                 <div className={cn("flex justify-between text-primary bg-primary/60 text-primary-foreground py-2 px-4", {
                                                     // "bg-green-100": bet.status === BetStatus.Won,
@@ -88,6 +95,14 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                                         ))}
                                     </div>
                                 </section>
+                            )}
+
+                            {(bets && bets.data.length > 0) && (
+                                <Paginator
+                                    meta={bets.meta}
+                                    links={bets.links}
+                                    onPageChange={console.log}
+                                />
                             )}
                         </>
                     </Deferred>

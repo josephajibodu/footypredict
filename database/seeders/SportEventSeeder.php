@@ -27,7 +27,7 @@ class SportEventSeeder extends Seeder
             $sportEvent = SportEvent::factory()->create([
                 'team1_id' => $teamIds[$i],
                 'team2_id' => $teamIds[$i + 1],
-                'kickoff_time' => sprintf('%02d:00:00', rand(15, 23)),
+                'kickoff_time' => sprintf('%02d:00:00', rand(17, 23)),
             ]);
 
             $options = [
