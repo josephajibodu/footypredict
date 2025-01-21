@@ -31,7 +31,7 @@ class BetController extends Controller
             }
         }
 
-        $bets = $betsQuery->paginate(1)->withQueryString();
+        $bets = $betsQuery->paginate()->withQueryString();
 
         return Inertia::render('BetHistory', [
             'bets' => Inertia::defer(fn() => ApiBetSummaryResource::collection($bets)),

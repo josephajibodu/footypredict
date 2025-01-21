@@ -97,13 +97,6 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
                                 </section>
                             )}
 
-                            {(bets && bets.data.length > 0) && (
-                                <Paginator
-                                    meta={bets.meta}
-                                    links={bets.links}
-                                    onPageChange={console.log}
-                                />
-                            )}
                         </>
                     </Deferred>
 

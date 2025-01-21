@@ -37,7 +37,7 @@ class SportEventResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery();
+        return parent::getEloquentQuery()->orderBy('kickoff_time');
     }
 
     public static function form(Form $form): Form
