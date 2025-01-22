@@ -31,15 +31,17 @@ export function extractErrorMessage(error: any): string|null {
 }
 
 export function calculatePagination(current_page: number, last_page: number) {
-  const max_items = 5;
+  let max_items_on_each_side = 3;
   const pagination = [];
+
+  if (last_page <= 7) max_items_on_each_side = 5;
 
   // Always include the first page
   pagination.push(1);
 
   // Determine the range of pages to display around the current page
-  const start = Math.max(2, current_page - 2);
-  const end = Math.min(last_page - 1, current_page + 2); // At most 2 pages after current
+  const start = Math.max(2, current_page - max_items_on_each_side);
+  const end = Math.min(last_page - 1, current_page + max_items_on_each_side);
 
   // Add ellipsis if there's a gap between the first page and the start
   if (start > 2) {
