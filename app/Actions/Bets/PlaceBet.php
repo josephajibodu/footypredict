@@ -33,7 +33,9 @@ class PlaceBet
 
             $invalidEvents = DB::table('sport_events')
                 ->whereIn('id', $eventIds)
-                ->whereTime('kickoff_time', '<=', $currentTime)
+                ->where(function ($query) use ($currentTime) {
+                    $query->whereRaw("CONCAT(match_date, ' ', kickoff_time) <= ?", [now()->format('Y-m-d H:i:s')]);
+                })
                 ->pluck('id');
 
             if ($invalidEvents->isNotEmpty()) {

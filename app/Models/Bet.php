@@ -6,7 +6,9 @@ use App\Enums\BetStatus;
 use App\Enums\Currency;
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
+use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -35,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Bet extends Model
 {
     use HasTransaction;
+
+    /** @use HasFactory<TransactionFactory> */
+    use HasFactory;
 
     protected $fillable = [
         'user_id',

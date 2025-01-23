@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             SportEventSeeder::class,
             PermissionSeeder::class,
-            SingleUserBetSeeder::class,
+            // SingleUserBetSeeder::class,
         ]);
     }
 }

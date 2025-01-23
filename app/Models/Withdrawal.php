@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\WithdrawalAccountType;
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
+use Database\Factories\TransactionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
 class Withdrawal extends Model
 {
     use HasTransaction;
+
+    /** @use HasFactory<TransactionFactory> */
+    use HasFactory;
 
     protected $guarded = ['id'];
 

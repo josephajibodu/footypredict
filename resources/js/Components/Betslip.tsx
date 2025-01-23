@@ -87,7 +87,8 @@ export default function Betslip() {
             onSuccess: page => {
                 dispatch(clearSelectedSportEvents());
                 setOpen(false);
-                setStake(DEFAULT_AMOUNT.toString());
+                setStake("");
+                setIsFlexed(false);
 
                 toast({
                     title: "Bet Successfully Placed",

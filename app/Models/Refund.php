@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,4 +18,6 @@ use Illuminate\Database\Eloquent\Model;
 class Refund extends Model
 {
     use HasTransaction;
+
+    use HasFactory;
 }

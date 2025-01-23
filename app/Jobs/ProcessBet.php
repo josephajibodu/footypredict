@@ -49,9 +49,14 @@ class ProcessBet implements ShouldQueue
                 $lostMatches = 0;
                 $unCompletedCount = 0;
 
-                $maxAllowedLosses = $this->bet->multiplier_settings['allow_flex']
-                    ? ($this->bet->multiplier_settings['flex_2'] ?? $this->bet->multiplier_settings['flex_1'] ?? 0)
-                    : 0;
+                $maxAllowedLosses = 0;
+                if ($this->bet->multiplier_settings['allow_flex']) {
+                    if ($this->bet->multiplier_settings['flex_2'] !== null) {
+                        $maxAllowedLosses = 2;
+                    } elseif ($this->bet->multiplier_settings['flex_1'] !== null) {
+                        $maxAllowedLosses = 1;
+                    }
+                }
 
                 foreach ($this->bet->sportEvents as $sportEvent) {
                     if (in_array($sportEvent->status, [SportEventStatus::Pending, SportEventStatus::InProgress])) {
@@ -80,6 +85,7 @@ class ProcessBet implements ShouldQueue
                     }
 
                     if ($this->bet->is_flexed && $lostMatches > $maxAllowedLosses) {
+                        Log::info("The number of lost matches $lostMatches, and max allowed loss is $maxAllowedLosses");
                         $this->markBetAsLost();
                         return;
                     }

@@ -29,4 +29,15 @@ class SportEventFactory extends Factory
             'league_id' => League::query()->first(),
         ];
     }
+
+    public function withScoresAndStatus(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'team1_score' => $this->faker->numberBetween(0, 10),
+                'team2_score' => $this->faker->numberBetween(0, 10),
+                'status' => SportEventStatus::Completed,
+            ];
+        });
+    }
 }
