@@ -95,6 +95,30 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 {/* Additional Actions */}
                 <div className="bg-card text-center p-4 mt-4">
                     <span>Number of Matches: {bet.sport_events?.length}</span>
+
+                    {bet.is_flexed && (
+                        <div className="flex flex-col text-sm bg-primary/50 rounded my-3 py-2">
+                            <span className="font-bold mb-2">Multiplier Details</span>
+                            <p>
+                                <span className="text-gray-300">Get all {bet.multiplier_settings.selection} correct for x{bet.multiplier_settings.flex_0}</span>
+                            </p>
+                            {bet.multiplier_settings.flex_1 && (
+                                <p>
+                                <span className="text-gray-300">
+                                    Get {bet.multiplier_settings.selection - 1} correct for x{bet.multiplier_settings.flex_1}
+                                </span>
+                                </p>
+                            )}
+                            {bet.multiplier_settings.flex_2 && (
+                                <p>
+                                <span className="text-gray-300">
+                                    Get {bet.multiplier_settings.selection - 2} correct for x{bet.multiplier_settings.flex_2}
+                                </span>
+                                </p>
+                            )}
+                        </div>
+                    )}
+
                     <Link
                         href={route('transaction.show', {transaction: bet.transaction.reference})}
                         className="block mt-4 text-center text-gray-400 underline font-semibold"
