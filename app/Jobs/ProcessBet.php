@@ -33,62 +33,82 @@ class ProcessBet implements ShouldQueue
      */
     public function handle(CreateWinningPayout $createWinningPayout): void
     {
-        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing bet after event: {$this->sportEvent->id}", [
-            'bet_id' => $this->bet->reference,
-        ]);
-
-        if ($this->bet->status !== BetStatus::Pending) {
-            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet will not be processed. Status = {$this->bet->status->value}", [
+        try {
+            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing bet after event: {$this->sportEvent->id}", [
                 'bet_id' => $this->bet->reference,
             ]);
-            return;
-        }
 
-        $lostMatches = 0;
-        $unCompletedCount = 0;
-
-        $maxAllowedLosses = $this->bet->multiplier_settings['allow_flex']
-            ? ($this->bet->multiplier_settings['flex_2'] ?? $this->bet->multiplier_settings['flex_1'])
-            : 0;
-
-        foreach ($this->bet->sportEvents as $sportEvent) {
-            if (in_array($sportEvent->status, [SportEventStatus::Pending, SportEventStatus::InProgress])) {
-                $unCompletedCount++;
-                continue;
-            }
-
-            if (in_array($sportEvent->status, [SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
-                // we don't care, cancelled sport events should have been handled elsewhere already
-                continue;
-            }
-
-            $pivotData = $sportEvent->pivot;
-
-            if ($pivotData->selected_option_id !== $pivotData->outcome_option_id) {
-                $lostMatches++;
-            }
-
-            if (! $this->bet->is_flexed && $lostMatches > 0) {
-                $this->markBetAsLost();
+            if ($this->bet->status !== BetStatus::Pending) {
+                Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet will not be processed. Status = {$this->bet->status->value}", [
+                    'bet_id' => $this->bet->reference,
+                ]);
                 return;
             }
 
-            if ($this->bet->is_flexed && $lostMatches > $maxAllowedLosses) {
-                $this->markBetAsLost();
-                return;
-            }
-        }
+            DB::transaction(function () use ($createWinningPayout) {
+                $lostMatches = 0;
+                $unCompletedCount = 0;
 
-        if ($unCompletedCount > 0) {
-            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet processing incomplete due to uncompleted matches", [
+                $maxAllowedLosses = $this->bet->multiplier_settings['allow_flex']
+                    ? ($this->bet->multiplier_settings['flex_2'] ?? $this->bet->multiplier_settings['flex_1'] ?? 0)
+                    : 0;
+
+                foreach ($this->bet->sportEvents as $sportEvent) {
+                    if (in_array($sportEvent->status, [SportEventStatus::Pending, SportEventStatus::InProgress])) {
+                        $unCompletedCount++;
+                        continue;
+                    }
+
+                    if (in_array($sportEvent->status, [SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
+                        Log::channel(LogChannel::BetProcessing->value)->debug("[ProcessBetJob] Skipping postponed or cancelled event", [
+                            'bet_id' => $this->bet->reference,
+                            'sport_event_id' => $sportEvent->id,
+                            'event_status' => $sportEvent->status,
+                        ]);
+                        continue;
+                    }
+
+                    $pivotData = $sportEvent->pivot;
+
+                    if ($pivotData->selected_option_id !== $pivotData->outcome_option_id) {
+                        $lostMatches++;
+                    }
+
+                    if (! $this->bet->is_flexed && $lostMatches > 0) {
+                        $this->markBetAsLost();
+                        return;
+                    }
+
+                    if ($this->bet->is_flexed && $lostMatches > $maxAllowedLosses) {
+                        $this->markBetAsLost();
+                        return;
+                    }
+                }
+
+                if ($unCompletedCount > 0) {
+                    Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet processing incomplete due to uncompleted matches", [
+                        'bet_id' => $this->bet->reference,
+                        'uncompleted_count' => $unCompletedCount,
+                        'sport_event_id' => $this->sportEvent->id,
+                        'uncompleted_sport_event_ids' => $this->bet->sportEvents
+                            ->filter(fn($event) => in_array($event->status, [SportEventStatus::Pending, SportEventStatus::InProgress]))
+                            ->pluck('id')
+                            ->toArray(),
+                    ]);
+                    return;
+                }
+
+                $this->markBetAsWon($createWinningPayout, $lostMatches);
+            });
+        } catch (Exception $ex) {
+            Log::channel(LogChannel::BetProcessing->value)->error("[ProcessBetJob] Bet processing failed", [
                 'bet_id' => $this->bet->reference,
-                'uncompleted_count' => $unCompletedCount,
-                'sport_event_id' => $this->sportEvent->id
+                'error' => $ex->getMessage(),
+                'trace' => $ex->getTraceAsString(),
             ]);
-            return;
-        }
 
-        $this->markBetAsWon($createWinningPayout);
+            throw $ex;
+        }
     }
 
     /**

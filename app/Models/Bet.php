@@ -6,6 +6,7 @@ use App\Enums\BetStatus;
 use App\Enums\Currency;
 use App\Traits\HasTransaction;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at Timestamp when the bet was last updated.
  * @property-read User $user
  * @property-read Transaction $transaction The transaction associated with the bet.
- * @property-read SportEvent[] $sportEvents The sport events linked to the bet.
+ * @property-read Collection<SportEvent> $sportEvents The sport events linked to the bet.
  */
 class Bet extends Model
 {
