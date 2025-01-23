@@ -44,138 +44,92 @@ class ProcessBet implements ShouldQueue
             return;
         }
 
-        $lostEvents = $this->getLostEvents();
-        $unCompletedEvents = $this->getUncompletedEvents();
+        $lostMatches = 0;
+        $unCompletedCount = 0;
 
-        if (! empty($unCompletedEvents)) {
-            Log::info("All games not yet completed", $unCompletedEvents);
-            return;
-        }
-
-        DB::beginTransaction();
-        try {
-            $this->updateBetStatus($lostEvents, $createWinningPayout);
-            $this->bet->save();
-            DB::commit();
-        } catch (Exception $ex) {
-            DB::rollBack();
-            Log::channel(LogChannel::BetProcessing->value)->error("[ProcessBetJob] Bet processing failed", [
-                'bet_id' => $this->bet->reference,
-                'sport_event' => $this->sportEvent->id,
-                'error' => $ex->getMessage(),
-            ]);
-            throw $ex;
-        }
-    }
-
-    private function getLostEvents(): array
-    {
-        $lostEvents = [];
+        $maxAllowedLosses = $this->bet->multiplier_settings['allow_flex']
+            ? ($this->bet->multiplier_settings['flex_2'] ?? $this->bet->multiplier_settings['flex_1'])
+            : 0;
 
         foreach ($this->bet->sportEvents as $sportEvent) {
-            // Only compute for the completed events
-            if ($sportEvent->status !== SportEventStatus::Completed) {
+            if (in_array($sportEvent->status, [SportEventStatus::Pending, SportEventStatus::InProgress])) {
+                $unCompletedCount++;
+                continue;
+            }
+
+            if (in_array($sportEvent->status, [SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
+                // we don't care, cancelled sport events should have been handled elsewhere already
                 continue;
             }
 
             $pivotData = $sportEvent->pivot;
 
             if ($pivotData->selected_option_id !== $pivotData->outcome_option_id) {
-                $lostEvents[] = $sportEvent->id;
+                $lostMatches++;
+            }
+
+            if (! $this->bet->is_flexed && $lostMatches > 0) {
+                $this->markBetAsLost();
+                return;
+            }
+
+            if ($this->bet->is_flexed && $lostMatches > $maxAllowedLosses) {
+                $this->markBetAsLost();
+                return;
             }
         }
 
-        return $lostEvents;
-    }
-
-    private function getUncompletedEvents(): array
-    {
-        $unCompletedEvents = [];
-
-        foreach ($this->bet->sportEvents as $sportEvent) {
-            if (! in_array($sportEvent->status, [SportEventStatus::Completed, SportEventStatus::Postponed, SportEventStatus::Cancelled])) {
-                $unCompletedEvents[] = $sportEvent->id;
-            }
+        if ($unCompletedCount > 0) {
+            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet processing incomplete due to uncompleted matches", [
+                'bet_id' => $this->bet->reference,
+                'uncompleted_count' => $unCompletedCount,
+                'sport_event_id' => $this->sportEvent->id
+            ]);
+            return;
         }
 
-        return $unCompletedEvents;
+        $this->markBetAsWon($createWinningPayout);
     }
 
     /**
+     * Mark the bet as lost and save.
+     */
+    private function markBetAsLost(): void
+    {
+        $this->bet->status = BetStatus::Lost;
+        $this->bet->save();
+
+        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet marked as lost", [
+            'bet_id' => $this->bet->reference,
+            'sport_event_id' => $this->sportEvent->id
+        ]);
+    }
+
+    /**
+     * Mark the bet as won and save.
      * @throws Exception
      */
-    private function updateBetStatus(array $lostEvents, CreateWinningPayout $createWinningPayout): void
+    private function markBetAsWon(CreateWinningPayout $createWinningPayout, int $lostMatches): void
     {
-        $noOfLostEvents = count($lostEvents);
+        $this->bet->status = BetStatus::Won;
+
         $multiplierSettings = $this->bet->multiplier_settings;
 
-        if (!$this->bet->is_flexed) {
-            $this->bet->status = $noOfLostEvents > 0 ? BetStatus::Lost : BetStatus::Won;
-
-            if ($this->bet->status === BetStatus::Won) {
-                $this->processWinningBet($multiplierSettings, $createWinningPayout);
-            }
+        if ($this->bet->is_flexed) {
+            $allowedLossKey = "flex_{$lostMatches}";
+            $amountWon = $this->bet->stake * $multiplierSettings[$allowedLossKey];
         } else {
-            Log::info("Handling flexed bet", ['bet_id' => $this->bet->reference]);
-            $this->handleFlexedBet($noOfLostEvents, $multiplierSettings, $createWinningPayout);
+            $amountWon = $this->bet->stake * $multiplierSettings['main'];
         }
-    }
 
-    /**
-     * @throws Exception
-     */
-    private function handleFlexedBet(int $noOfLostEvents, array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
-    {
-        $allowFlex = $multiplierSettings['allow_flex'] ?? false;
-
-        if (!$allowFlex) {
-            $this->bet->status = $noOfLostEvents > 0 ? BetStatus::Lost : BetStatus::Won;
-
-            if ($this->bet->status === BetStatus::Won) {
-                $this->processWinningBet($multiplierSettings, $createWinningPayout);
-            }
-        } else {
-            $this->processFlexedBet($noOfLostEvents, $multiplierSettings, $createWinningPayout);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function processWinningBet(array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
-    {
-        $amountWon = $this->bet->stake * $multiplierSettings['main'];
         $this->bet->potential_winnings = $amountWon;
+        $this->bet->save();
 
-        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing non-flexed bet win", [
+        Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Bet marked as won", [
             'bet_id' => $this->bet->reference,
-            'multiplier' => $multiplierSettings,
-            'amount_won' => $amountWon
+            'amount_won' => $amountWon,
         ]);
 
         $createWinningPayout($this->bet, $amountWon / 100, "Bet winning payout");
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function processFlexedBet(int $noOfLostEvents, array $multiplierSettings, CreateWinningPayout $createWinningPayout): void
-    {
-        $allowedLossKey = "flex_{$noOfLostEvents}";
-
-        if ($noOfLostEvents <= 2 && isset($multiplierSettings[$allowedLossKey])) {
-            $this->bet->status = BetStatus::Won;
-            $amountWon = $this->bet->stake * $multiplierSettings[$allowedLossKey];
-            $this->bet->potential_winnings = $amountWon;
-
-            Log::channel(LogChannel::BetProcessing->value)->info("[ProcessBetJob] Processing flexed bet win", [
-                'bet_id' => $this->bet->reference,
-                'multiplier' => $multiplierSettings,
-                'amount_won' => $amountWon
-            ]);
-            $createWinningPayout($this->bet, $amountWon / 100, "Bet winning payout");
-        } else {
-            $this->bet->status = BetStatus::Lost;
-        }
     }
 }
