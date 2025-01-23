@@ -8,7 +8,9 @@ use App\Filament\Resources\UserResource\RelationManagers\TransactionsRelationMan
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -66,7 +68,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultPaginationPageOption(100)
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('full_name')
                     ->label('Name')
@@ -102,11 +104,44 @@ class UserResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\Action::make('credit_user')
+                        ->icon('heroicon-o-banknotes')
+                        ->label('Credit User')
+                        ->modalSubmitActionLabel('Credit User')
+                        ->form([
+                            Forms\Components\TextInput::make('amount')
+                                ->minValue(1)
+                                ->mask(RawJs::make('$money($input)'))
+                                ->stripCharacters(',')
+                                ->numeric()
+                                ->required(),
+                            Forms\Components\TextInput::make('reason')
+                                ->required(),
+                        ])
+                        ->action(function (User $record, array $data) {
+                            try {
+                                $record->credit($data["amount"], $data["reason"]);
+
+                                Notification::make()
+                                    ->color("success")
+                                    ->success()
+                                    ->title("User account credited")
+                                    ->send();
+                            } catch (\Exception $ex) {
+                                report($ex);
+
+                                Notification::make()
+                                    ->danger()
+                                    ->title($ex->getMessage())
+                                    ->send();
+                            }
+                        }),
+
                 ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
