@@ -6,8 +6,6 @@ use App\Jobs\ProcessBet;
 use App\Models\Bet;
 use App\Models\SportEvent;
 use App\Models\Team;
-use Illuminate\Support\Facades\Log;
-use Mockery\MockInterface;
 
 it('marks the bet as lost if non-flexed and loses a match', function () {
     // Arrange: Create a mock Bet with a lost match
@@ -43,7 +41,7 @@ it('marks the bet as lost if non-flexed and loses a match', function () {
         'outcome_option_id' => $options->last()->id,
     ]);
 
-        // Act: Dispatch the job
+    // Act: Dispatch the job
     ProcessBet::dispatchSync($bet, $sportEvent1);
 
     // Assert: Bet should be marked as lost
@@ -139,7 +137,7 @@ it('bet is still pending if uncompleted matches exist', function () {
     ]);
 
     $bet->sportEvents()->attach($sportEvent, [
-        'selected_option_id' => $sportEvent->options->first()->id
+        'selected_option_id' => $sportEvent->options->first()->id,
     ]);
 
     // Act: Dispatch the job
@@ -182,9 +180,9 @@ it('correctly calculates winnings based on flex levels', function () {
     }
 
     // Mark one match as lost
-     $bet->sportEvents()->where('sport_event_id', $sportEvent->id)->update([
-         'outcome_option_id' => $sportEvent->options->last()->id
-     ]);
+    $bet->sportEvents()->updateExistingPivot($sportEvent->id, [
+        'outcome_option_id' => $sportEvent->options->last()->id,
+    ]);
 
     // Act: Dispatch the job
     ProcessBet::dispatchSync($bet, $bet->sportEvents->last());
@@ -227,7 +225,7 @@ it('marks the bet as lost early even when there are still matches', function () 
 
     // Mark one match as lost
     $sportEvent->update(['status' => SportEventStatus::Completed]);
-    $bet->sportEvents()->where('sport_event_id', $sportEvent->id)->update([
+    $bet->sportEvents()->updateExistingPivot($sportEvent->id, [
         'outcome_option_id' => $sportEvent->options->last()->id
     ]);
 
