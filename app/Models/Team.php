@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\TransactionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -19,6 +21,9 @@ use Illuminate\Support\Carbon;
  */
 class Team extends Model
 {
+    /** @use HasFactory<TransactionFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'short_name',
