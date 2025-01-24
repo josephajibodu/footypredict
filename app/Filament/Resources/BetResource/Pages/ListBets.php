@@ -16,4 +16,11 @@ class ListBets extends ListRecords
             // Actions\CreateAction::make(),
         ];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            BetResource\Widgets\BetsOverviewStat::class
+        ];
+    }
 }
