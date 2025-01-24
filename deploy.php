@@ -8,7 +8,6 @@ require 'contrib/npm.php';
 
 set('repository', 'git@github.com:josephajibodu/footypredict.git');
 set('remote_user', 'josephajibodu');
-set('identity_file', '~/.ssh/id_rsa');
 
 add('shared_files', []);
 add('shared_dirs', []);
