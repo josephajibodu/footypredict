@@ -6,12 +6,13 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/Components/ui/avatar"
-import {ChevronRight, Lock, LogOut, Shield, UserCog} from "lucide-react";
+import {ChevronRight, Lock, LogOut, PhoneCall, Shield, UserCog} from "lucide-react";
 import {Badge} from "@/Components/ui/badge";
 
 interface ILink {
     label: string,
     icon: ReactNode,
+    external?: boolean,
     props: InertiaLinkProps
 }
 
@@ -28,6 +29,14 @@ const links: ILink[] = [
         icon: <Lock size={18} />,
         props: {
             href: route('update-password'),
+        }
+    },
+    {
+        label: 'Support',
+        icon: <PhoneCall size={18} />,
+        external: true,
+        props: {
+            href: 'https://t.me/footypredictSupport',
         }
     },
     {
@@ -72,22 +81,27 @@ export default function Settings() {
 
                     <ul>
                         {links.map((link, index) => {
+                            // If the link's href includes 'logout' and the user is not authenticated, skip rendering this link.
                             if (link.props.href.includes('logout') && !auth?.user) return null;
 
-                            return <li key={index}>
-                                <Link { ...(link.props || {})} className={"w-full"}>
-                                    <div className="flex justify-between items-center gap-4 py-2">
-                                    <span className="size-10 bg-primary/60 rounded-full flex items-center justify-center text-primary-foreground">
-                                        {link.icon}
-                                    </span>
+                            // Choose the appropriate element type ('a' for external links, 'Link' for internal links).
+                            const Element = link.external ? 'a' : Link;
 
-                                        <div className="flex gap-4 items-center flex-1 justify-between border-b py-4">
-                                            <span>{link.label}</span>
-                                            <ChevronRight />
+                            return (
+                                <li key={index}>
+                                    <Element href={link.props.href} className="w-full">
+                                        <div className="flex justify-between items-center gap-4 py-2">
+                                            <span className="size-10 bg-primary/60 rounded-full flex items-center justify-center text-primary-foreground">
+                                                {link.icon}
+                                            </span>
+                                            <div className="flex gap-4 items-center flex-1 justify-between border-b py-4">
+                                                <span>{link.label}</span>
+                                                <ChevronRight />
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            </li>
+                                    </Element>
+                                </li>
+                            );
                         })}
                     </ul>
                 </div>
