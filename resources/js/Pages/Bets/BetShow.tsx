@@ -140,7 +140,7 @@ BetDetails.layout = (page: ReactNode) => (
     <Authenticated
         title="Bet Details"
         showHeader={false}
-        backUrl={route('bets')}
+        backUrl={route('bets.open-bets')}
         hideBottomNav
     >
         {page}
