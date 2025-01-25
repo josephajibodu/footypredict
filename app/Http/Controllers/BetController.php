@@ -21,7 +21,7 @@ class BetController extends Controller
     {
         $user = Auth::user();
         $betsQuery = $user->bets()
-            ->latest()->with(['sportEvents', 'sportEvents.team1', 'sportEvents.team2']);
+            ->with(['sportEvents', 'sportEvents.team1', 'sportEvents.team2']);
 
         if ($request->has('status')) {
             if ($request->input('status') == 'settled') {
@@ -31,9 +31,9 @@ class BetController extends Controller
             }
         }
 
-        $bets = $betsQuery->paginate()->withQueryString();
+        $bets = $betsQuery->latest()->paginate()->withQueryString();
 
-        return Inertia::render('BetHistory', [
+        return Inertia::render('Bets/BetHistory', [
             'bets' => Inertia::defer(fn() => ApiBetSummaryResource::collection($bets)),
         ]);
     }

@@ -6,6 +6,7 @@ use App\Enums\BetStatus;
 use App\Filament\Resources\BetResource\Pages;
 use App\Filament\Resources\BetResource\RelationManagers\BetSportEventRelationManager;
 use App\Filament\Resources\BetResource\RelationManagers\SportEventsRelationManager;
+use App\Filament\Resources\BetResource\Widgets\BetsOverviewStat;
 use App\Models\Bet;
 use App\Models\Transaction;
 use App\Models\User;
@@ -89,6 +90,7 @@ class BetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('user.username')
                     ->description(fn(Bet $record) => $record->reference)
@@ -128,6 +130,13 @@ class BetResource extends Resource
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            BetsOverviewStat::class
+        ];
     }
 
     public static function getRelations(): array

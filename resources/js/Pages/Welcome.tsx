@@ -42,7 +42,7 @@ const features = [
 export default function Welcome() {
     return (
         <>
-            <Head title="FootyPredict - Predict. Stake. Win Big" />
+            <Head title="Predict. Stake. Win Big" />
 
             <section>
                 <div className="max-w-screen-xl mx-auto flex items-center flex-col md:flex-row pt-12 pb-0 md:pb-12">

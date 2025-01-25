@@ -1,5 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
+import {Head, Link} from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 import {Button} from "@/Components/ui/button";
 import {Facebook, Instagram, Mail, Phone, Twitter} from "lucide-react";
