@@ -14,15 +14,7 @@ interface BetHistoryProps extends PageProps {
     bets: PaginatedData<Bet>
 }
 
-const filters = ['all', 'unsettled', 'settled'] as const;
-
-type Filter = typeof filters[number];
-
-export default function BetHistory({ bets, settings } : BetHistoryProps) {
-    const queryParams = new URLSearchParams(new URL(location.href).search);
-    const urlStatus = queryParams.get('status') as Filter;
-
-    const [filter, setFilter] = useState<Filter>(urlStatus ?? null);
+export default function OpenBet({ bets, settings } : BetHistoryProps) {
 
     return (
         <>
@@ -30,27 +22,17 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
 
             <div className="flex h-full">
                 <div className="flex-1">
-                    <div className="grid px-4 w-full grid-cols-3 p-0 rounded-none mt-4 text-card-foreground rounded-lg overflow-hidden">
-                        <Link className={cn("h-full flex items-center justify-center h-12 bg-card hover:bg-primary rounded-none rounded-s-lg", {
-                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === null
-                        })} href={route('bets', {status: null})}>All</Link>
-
-                        <Link className={cn("h-full flex items-center justify-center h-12 bg-card hover:bg-primary rounded-none", {
-                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "unsettled"
-                        })} href={route('bets', {status: 'unsettled'})}>Unsettled</Link>
-
-                        <Link className={cn("h-full flex items-center justify-center h-12 bg-card hover:bg-primary rounded-none rounded-e-lg", {
-                            "bg-gradient-to-r from-secondary to-accent text-primary-foreground": filter === "settled"
-                        })} href={route('bets', {status: 'settled'})}>Settled</Link>
-                    </div>
 
                     <Deferred fallback={<BetsLoader />} data="bets">
                         <>
                             {(!bets || (bets.data && bets.data.length === 0)) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
-                                    <ReceiptText size={56} />
+                                    <img src="/images/betting.png" className="w-16" alt="you have no bet"/>
                                     <h3 className="font-bold text-lg">You have no bets</h3>
-                                    <p className="text-center">Get started by selecting games now.</p>
+                                    <p className="text-center">Try Web4 again, you can win!</p>
+                                    <Button asChild>
+                                        <Link href={route('bets')} className="mt-4">View Bet History</Link>
+                                    </Button>
                                 </div>
                             )}
 
@@ -109,4 +91,4 @@ export default function BetHistory({ bets, settings } : BetHistoryProps) {
     );
 }
 
-BetHistory.layout = (page: ReactNode) => <Authenticated>{page}</Authenticated>;
+OpenBet.layout = (page: ReactNode) => <Authenticated>{page}</Authenticated>;

@@ -77,16 +77,17 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                     </div>
                 </div>
 
+                <h2 className="px-4 pb-2 font-bold text-lg">Transactions</h2>
+
                 {/* Body: Transaction History */}
                 <div className="flex-1 rounded-t-[24px] bg-background overflow-y-auto">
-                    <h2 className="px-4 pt-8 font-bold text-lg">Transactions</h2>
                     <Deferred fallback={<WalletTransactionLoader />} data="transactions">
                         <>
                             {(transactions && transactions.length === 0) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
-                                    <TicketSlash size={56} />
+                                    <img src="/images/transaction.png" className="w-16 mb-2" alt="you have no transaction"/>
                                     <h3 className="font-bold text-lg">No transactions yet</h3>
-                                    <p className="text-center">Once you make you first deposit, you will be able to view it here.</p>
+                                    <p className="text-center">Your transactions will appear here once you get started</p>
                                 </div>
                             )}
 

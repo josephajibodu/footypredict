@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddWithdrawalAccountController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\OpenBetController;
 use App\Http\Controllers\PasswordUpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
@@ -25,6 +26,7 @@ Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
     Route::resource('/bets', BetController::class)
         ->only(['index', 'store', 'show'])
         ->parameters(['bets' => 'bet:reference'])

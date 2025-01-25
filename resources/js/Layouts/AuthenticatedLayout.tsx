@@ -86,7 +86,7 @@ export default function Authenticated({
                         </li>
                         <li>
                             <Link
-                                href={route('bets', { status: 'unsettled'} )}
+                                href={route('bets.open-bets' )}
                                 className={cn(
                                     "flex flex-col items-center px-4 py-2",
                                     { "bg-gradient": url.startsWith('/bets') }
