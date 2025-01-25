@@ -6,6 +6,9 @@ use App\Enums\TransactionType;
 use App\Filament\Resources\WinningResource\Pages;
 use App\Models\Transaction;
 use App\Models\Winning;
+use Carbon\Carbon;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Split;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -22,7 +25,8 @@ class WinningResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return Transaction::query()->where('type', TransactionType::Winning);
+        return Transaction::query()->where('type', TransactionType::Winning)
+            ->latest();
     }
 
     public static function form(Form $form): Form
@@ -61,8 +65,42 @@ class WinningResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Split::make([
+                            DatePicker::make('from')
+                                ->default(now()),
+                            DatePicker::make('until')
+                                ->default(now()),
+                        ])
+                    ])
+                    ->indicateUsing(function (array $data): ?array {
+                        $indicators = [];
+
+                        if ($data['from'] ?? null) {
+                            $indicators[] = Tables\Filters\Indicator::make('From ' . Carbon::parse($data['from'])->toFormattedDateString())
+                                ->removeField('from');
+                        }
+
+                        if ($data['until'] ?? null) {
+                            $indicators[] = Tables\Filters\Indicator::make('To ' . Carbon::parse($data['until'])->toFormattedDateString())
+                                ->removeField('until');
+                        }
+
+                        return $indicators;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
+            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
