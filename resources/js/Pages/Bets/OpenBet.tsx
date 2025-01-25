@@ -9,6 +9,7 @@ import {Button} from "@/Components/ui/button";
 import {BetsLoader} from "@/Components/Loaders/BetsLoader";
 import Paginator from "@/Components/Paginator";
 import {BetStatus} from "@/types/enums";
+import emptyBettingIcon from "@/Images/betting.png"
 
 interface BetHistoryProps extends PageProps {
     bets: PaginatedData<Bet>
@@ -27,7 +28,7 @@ export default function OpenBet({ bets, settings } : BetHistoryProps) {
                         <>
                             {(!bets || (bets.data && bets.data.length === 0)) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
-                                    <img src="/images/betting.png" className="w-16" alt="you have no bet"/>
+                                    <img src={emptyBettingIcon} className="w-16" alt="you have no bet"/>
                                     <h3 className="font-bold text-lg">You have no bets</h3>
                                     <p className="text-center">Try Web4 again, you can win!</p>
                                     <Button asChild>

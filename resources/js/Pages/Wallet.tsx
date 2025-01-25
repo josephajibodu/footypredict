@@ -3,6 +3,7 @@ import {Deferred, Head, Link, useForm} from '@inertiajs/react';
 import {FormEvent, ReactNode, useState} from 'react';
 import {Button} from "@/Components/ui/button";
 import {ArrowDown, ArrowUp, HandCoins, Loader, TicketSlash, Wallet2} from "lucide-react";
+import emptyTransactionIcon from "@/Images/transaction.png"
 
 import {
     Drawer,
@@ -85,7 +86,7 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                         <>
                             {(transactions && transactions.length === 0) && (
                                 <div className="h-full flex flex-col items-center justify-center px-8">
-                                    <img src="/images/transaction.png" className="w-16 mb-2" alt="you have no transaction"/>
+                                    <img src={emptyTransactionIcon} className="w-16 mb-2" alt="you have no transaction"/>
                                     <h3 className="font-bold text-lg">No transactions yet</h3>
                                     <p className="text-center">Your transactions will appear here once you get started</p>
                                 </div>
