@@ -5,11 +5,9 @@ namespace App\Filament\Resources;
 use App\Enums\BetStatus;
 use App\Filament\Resources\BetResource\Pages;
 use App\Filament\Resources\BetResource\RelationManagers\BetSportEventRelationManager;
-use App\Filament\Resources\BetResource\RelationManagers\SportEventsRelationManager;
 use App\Filament\Resources\BetResource\Widgets\BetsOverviewStat;
 use App\Models\Bet;
-use App\Models\Transaction;
-use App\Models\User;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -25,22 +23,27 @@ class BetResource extends Resource
 
     protected static ?string $navigationGroup = 'Bet';
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->latest();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('user_id')
-                    ->label("Username")
-                    ->formatStateUsing(fn(Bet $record) => $record->user->username)
+                    ->label('Username')
+                    ->formatStateUsing(fn (Bet $record) => $record->user->username)
                     ->disabled(),
                 Forms\Components\TextInput::make('stake')
                     ->required()
                     ->disabled()
-                    ->formatStateUsing(fn($state) => to_money($state, 100)),
+                    ->formatStateUsing(fn ($state) => to_money($state, 100)),
                 Forms\Components\TextInput::make('potential_winnings')
                     ->required()
                     ->disabled()
-                    ->formatStateUsing(fn($state) => to_money($state, 100)),
+                    ->formatStateUsing(fn ($state) => to_money($state, 100)),
                 Forms\Components\ToggleButtons::make('status')
                     ->inline()
                     ->grouped()
@@ -83,7 +86,7 @@ class BetResource extends Resource
                             ->disabled(),
 
                     ])
-                    ->columns(12)
+                    ->columns(12),
             ]);
     }
 
@@ -93,15 +96,15 @@ class BetResource extends Resource
             ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('user.username')
-                    ->description(fn(Bet $record) => $record->reference)
+                    ->description(fn (Bet $record) => $record->reference)
                     ->searchable(['reference']),
                 Tables\Columns\TextColumn::make('stake')
                     ->numeric()
-                    ->formatStateUsing(fn(Bet $record) => to_money($record->stake, 100))
+                    ->formatStateUsing(fn (Bet $record) => to_money($record->stake, 100))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('potential_winnings')
                     ->numeric()
-                    ->formatStateUsing(fn(Bet $record) => to_money($record->potential_winnings, 100))
+                    ->formatStateUsing(fn (Bet $record) => to_money($record->potential_winnings, 100))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sport_events_count')
                     ->counts('sportEvents')
@@ -120,8 +123,42 @@ class BetResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\Split::make([
+                            Forms\Components\DatePicker::make('from')
+                                ->default(now()),
+                            Forms\Components\DatePicker::make('until')
+                                ->default(now()),
+                        ])
+                    ])
+                    ->indicateUsing(function (array $data): ?array {
+                        $indicators = [];
+
+                        if ($data['from'] ?? null) {
+                            $indicators[] = Tables\Filters\Indicator::make('From ' . Carbon::parse($data['from'])->toFormattedDateString())
+                                ->removeField('from');
+                        }
+
+                        if ($data['until'] ?? null) {
+                            $indicators[] = Tables\Filters\Indicator::make('To ' . Carbon::parse($data['until'])->toFormattedDateString())
+                                ->removeField('until');
+                        }
+
+                        return $indicators;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
+            ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
                 // Tables\Actions\EditAction::make(),
             ])
@@ -135,14 +172,14 @@ class BetResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            BetsOverviewStat::class
+            BetsOverviewStat::class,
         ];
     }
 
     public static function getRelations(): array
     {
         return [
-            BetSportEventRelationManager::class
+            BetSportEventRelationManager::class,
         ];
     }
 
