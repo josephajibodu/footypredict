@@ -24,11 +24,12 @@ class SportEventSeeder extends Seeder
                 break;
             }
 
+            $today = now()->addHours(rand(1, 8));
             $sportEvent = SportEvent::factory()->create([
-                'match_date' => today()->format('Y-m-d'),
+                'match_date' => $today->format('Y-m-d'),
                 'team1_id' => $teamIds[$i],
                 'team2_id' => $teamIds[$i + 1],
-                'kickoff_time' => sprintf('%02d:00:00', rand(17, 23)),
+                'kickoff_time' => $today->format('H:i:s'),
             ]);
 
             $options = [

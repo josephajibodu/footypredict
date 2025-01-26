@@ -26,9 +26,10 @@ dayjs.extend(localizedFormat);
 interface WithdrawPageProps extends PageProps {
     accounts: WithdrawalAccount[]
     defaultAccount?: WithdrawalAccount
+    can_withdraw: boolean
 }
 
-export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPageProps) {
+export default function Withdraw({ defaultAccount, can_withdraw, auth, accounts }: WithdrawPageProps) {
     const {toast} = useToast();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -45,6 +46,13 @@ export default function Withdraw({ defaultAccount, auth, accounts }: WithdrawPag
     };
 
     const handleWithdraw = () => {
+        if (! can_withdraw) {
+            return toast({
+                title: 'You are currently unable to process withdrawal.',
+                variant: 'destructive'
+            })
+        }
+
         if (! amount) {
             return toast({
                 title: 'Amount to withdraw is required',

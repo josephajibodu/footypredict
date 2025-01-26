@@ -8,6 +8,7 @@ use App\Actions\Wallets\GetPaymentBanks;
 use App\Http\Resources\ApiWithdrawalAccountResource;
 use App\Integrations\SwervPay\PayoutData;
 use App\Models\WithdrawalAccount;
+use App\Models\WithdrawalBlacklist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,10 +24,12 @@ class WithdrawalController extends Controller
 
         $withdrawalAccounts = $user->withdrawalAccounts()->get();
         $defaultWithdrawalAccount = $withdrawalAccounts->where('is_default', true)->first();
+        $isBlacklisted = WithdrawalBlacklist::query()->where('user_id', $user->id)->exists();
 
         return Inertia::render('Withdraw', [
             'accounts' => ApiWithdrawalAccountResource::collection($withdrawalAccounts),
             'defaultAccount' => $defaultWithdrawalAccount ? ApiWithdrawalAccountResource::make($defaultWithdrawalAccount) : null,
+            'can_withdraw' => !$isBlacklisted
         ]);
     }
 
@@ -36,6 +39,14 @@ class WithdrawalController extends Controller
             'amount' => ['required', 'numeric', 'min:1'],
             'account_id' => ['required', 'numeric'],
         ]);
+
+        $isBlacklisted = WithdrawalBlacklist::query()->where('user_id', auth()->id())->exists();
+
+        if ($isBlacklisted) {
+            Log::error('The user is blacklisted from withdrawals');
+
+            return back()->withErrors(['account_id' => 'You are not allowed to make withdrawals at the moment.']);
+        }
 
         DB::beginTransaction();
 

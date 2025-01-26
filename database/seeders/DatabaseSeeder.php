@@ -13,8 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         $user = User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -28,7 +26,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             SportEventSeeder::class,
             PermissionSeeder::class,
-            // SingleUserBetSeeder::class,
+            SingleUserBetSeeder::class,
         ]);
     }
 }
