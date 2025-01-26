@@ -40,6 +40,14 @@ export default function OpenBet({ bets, settings } : BetHistoryProps) {
                             {(bets && bets.data.length > 0) && (
                                 <section className="px-4">
 
+                                    <div className="flex justify-between items-center mt-4">
+                                        <h2 className="px-4 font-bold text-lg">Open Bets</h2>
+
+                                        <Button asChild>
+                                            <Link href={route('bets')} className="">View Bet History</Link>
+                                        </Button>
+                                    </div>
+
                                     <div className="flex flex-col gap-4 py-4">
                                         {bets.data.map((bet, index) => (
                                             <div key={bet.id} className="bg-card text-card-foreground rounded-lg overflow-hidden">
