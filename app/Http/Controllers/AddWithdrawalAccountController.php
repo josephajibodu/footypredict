@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Wallets\GetPaymentBanks;
+use App\Enums\Currency;
 use App\Enums\WithdrawalAccountType;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,6 +58,7 @@ class AddWithdrawalAccountController extends Controller
                 'account_number' => $validated['account_number'],
                 'account_name' => $validated['account_name'],
                 'is_default' => $numberOfAccounts === 0,
+                'currency' => Currency::NGN,
             ]);
 
             return to_route('withdraw')->with('success', 'Withdrawal account added successfully.');
