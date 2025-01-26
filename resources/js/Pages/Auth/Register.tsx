@@ -155,6 +155,7 @@ export default function Register() {
                                         value={data.nationality}
                                         onChange={(e) => setData('nationality', e.target.value)}
                                         placeholder="Nationality"
+                                        disabled
                                         autoComplete="country"
                                         className="mt-1 block w-full"
                                     />
