@@ -278,7 +278,7 @@ class SportEventResource extends Resource
                     Tables\Actions\DeleteBulkAction::make()
                         ->action(function (Collection $records, Tables\Actions\DeleteBulkAction $action) {
                             $records->each(function (SportEvent $record) {
-                                if ($record->bets()->count() > 0) {
+                                if ($record->bets()->count() === 0) {
                                     $record->delete();
                                 }
                             });
