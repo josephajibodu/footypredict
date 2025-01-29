@@ -37,6 +37,8 @@ class ListBets extends ListRecords
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BetStatus::Pending)),
             'settled' => Tab::make('Settled')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', [BetStatus::Won, BetStatus::Lost])),
+            'voided' => Tab::make('Voided')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', BetStatus::Voided)),
         ];
     }
 

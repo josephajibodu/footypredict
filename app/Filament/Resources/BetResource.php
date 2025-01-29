@@ -173,11 +173,17 @@ class BetResource extends Resource
                         ->icon('heroicon-o-x-mark')
                         ->color('danger')
                         ->action(function (Bet $record, CancelBet $cancelBet, Tables\Actions\Action $action) {
+                            if ($record->status !== BetStatus::Pending) {
+                                $action->failure();
+                                $action->halt();
+                            }
+
                             $cancelBet($record);
 
                             $action->success();
                         })
                         ->successNotificationTitle("Bet cancelled successfully and the user refunded.")
+                        ->failureNotificationTitle("Invalid action")
                 ])
             ])
             ->bulkActions([
