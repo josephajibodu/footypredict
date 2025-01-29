@@ -7,6 +7,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import {Provider} from "react-redux";
 import {store} from "@/store";
 import {Toaster} from "@/Components/ui/toaster";
+import {Toaster as SoonerToast} from "@/Components/ui/sonner";
 
 const appName = import.meta.env.VITE_APP_NAME || 'FootyPredict';
 
@@ -22,6 +23,7 @@ createInertiaApp({
             <Provider store={store}>
                 <App {...props} />
                 <Toaster />
+                <SoonerToast richColors />
             </Provider>
         );
 

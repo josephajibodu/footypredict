@@ -21,13 +21,13 @@ import Checkbox from "@/Components/Checkbox";
 import {BetMultiplier, SelectedSportEvent, SportEvent} from "@/types";
 import {cn, extractErrorMessage, toMoney} from "@/lib/utils";
 import {AnimatePresence, motion} from "framer-motion";
+import {toast} from "sonner";
 
 const DEFAULT_AMOUNT = 500;
 
 export default function Betslip() {
 
     const { auth, settings: { bet: betSettings } } = usePage().props;
-    const {toast} = useToast();
     const events = useAppSelector(state => state.event.selectedEvents);
     const dispatch = useAppDispatch();
 
@@ -90,23 +90,19 @@ export default function Betslip() {
                 setStake("");
                 setIsFlexed(false);
 
-                toast({
-                    title: "Bet Successfully Placed",
+                toast.success("Bet Successfully Placed", {
                     description: "Your bet has been placed successfully. You can view the details in your bet history.",
-                    variant: "success",
                     action: (
-                        <ToastAction altText="View Bet">
-                            <Link href={route('bets')}>View Bet</Link>
-                        </ToastAction>
+                        <Button aria-label="View Bet" size={"sm"}>
+                            <Link href={route('bets.open-bets')}>View Bet</Link>
+                        </Button>
                     ),
                 });
             },
             onError: error => {
                 const errorMessage = extractErrorMessage(error)
-                toast({
-                    title: "Error Placing Bet",
+                toast.error("Error Placing Bet", {
                     description: errorMessage ?? "There was an issue placing your bet. Try again or contact support.",
-                    variant: 'destructive',
                 });
             },
             onFinish: () => setProcessing(false),
@@ -116,7 +112,7 @@ export default function Betslip() {
     const renderEventItem = (event: SelectedSportEvent) => (
         <div key={event.id} className="flex items-center justify-between py-2 bg-primary/20 border px-2 rounded-lg">
             <div className="flex flex-col">
-                <span className="text-sm text-gray-500">{MatchOptionLabels[event.betOption]}</span>
+                <span className="text-sm text-gray-300">{MatchOptionLabels[event.betOption]}</span>
                 <span className="line-clamp-1">
                     {event.team1.name} vs {event.team2.name}
                 </span>
@@ -139,10 +135,13 @@ export default function Betslip() {
             <div className="flex justify-between w-full items-start py-2 text-sm">
                 <div className="whitespace-nowrap flex flex-col">
                     <span>Multiplier</span>
-                    <div className="mt-1 flex gap-2 items-center">
+                    {!multiplierSetting.allow_flex && (
+                        <div className="mt-1 flex gap-2 items-center">
                         <span className={cn({"opacity-25": !multiplierSetting.allow_flex})}>Flex</span>
-                        <Checkbox disabled={!multiplierSetting.allow_flex} checked={isFlexed} onChange={(e) => setIsFlexed(e.target.checked)} />
-                    </div>
+                        <Checkbox disabled={!multiplierSetting.allow_flex} checked={isFlexed}
+                                  onChange={(e) => setIsFlexed(e.target.checked)}/>
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col items-end">
                     <p>
