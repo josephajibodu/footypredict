@@ -3,6 +3,7 @@
 namespace App\Integrations\NowPayment;
 
 use App\Enums\LogChannel;
+use App\Integrations\NowPayment\DataObjects\PaymentRequestDTO;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
@@ -44,12 +45,12 @@ class NowPayment
             return $cachedToken;
         }
 
-        $credentials = base64_encode($this->businessId.':'.$this->secretKey);
-
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'x-api-key' => $this->apiKey,
-        ])->post($this->baseUrl.'/auth')->json();
+        ])->post($this->baseUrl.'/auth', [
+            'email' => $this->email,
+            'password' => $this->password,
+        ])->json();
 
         if (isset($response['token'])) {
             $token = $response['token'];
@@ -72,13 +73,13 @@ class NowPayment
             $bearerToken = $this->getAccessToken();
 
             $headers = [
-                'Authorization' => 'Bearer ' . $bearerToken,
+                'x-api-key' => $this->apiKey,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ];
 
             $response = Http::withHeaders($headers)
-                ->$method($this->baseUrl . $endpoint, $data);
+                ->$method($this->baseUrl.$endpoint, $data);
 
             Log::channel(LogChannel::ExternalAPI->value)->info('HTTP Request', [
                 'method' => $method,
@@ -96,7 +97,7 @@ class NowPayment
 
                 Log::channel(LogChannel::ExternalAPI->value)->error('HTTP Error Response', $errorDetails);
 
-                throw new Exception('API request failed: ' . $response->status() . ' - ' . json_encode($response->json()));
+                throw new Exception('API request failed: '.$response->status().' - '.json_encode($response->json()));
             }
 
             return $response->json();
@@ -119,9 +120,58 @@ class NowPayment
     /**
      * @throws Throwable
      */
-    public function createPayment(array $data)
+    public function getCurrencies(bool $fixedRate = true)
     {
-        return $this->makeRequest('post', '/payment', $data);
+        return $this->makeRequest('get', "/currencies", [
+            'fixed_rate' => $fixedRate
+        ]);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function createPayment(PaymentRequestDTO $data)
+    {
+        return $this->makeRequest('post', '/payment', $data->toArray());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getPaymentStatus(string $paymentId)
+    {
+        return $this->makeRequest('get', "/payment/$paymentId");
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getMinimumPaymentAmount(string $currencyFrom, ?string $currencyTo = null)
+    {
+        $data = [
+            'currency_from' => $currencyFrom,
+            'is_fee_paid_by_user' => true,
+        ];
+
+        if ($currencyTo) {
+            $data['currency_to'] = $currencyTo;
+        }
+
+        return $this->makeRequest('get', '/min-amount', $data);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getEstimatedPrice(float $amount, string $currencyFrom, string $currencyTo)
+    {
+        $data = [
+            'amount' => $amount,
+            'currency_from' => $currencyFrom,
+            'currency_to' => $currencyTo,
+        ];
+
+        return $this->makeRequest('post', '/min-amount', $data);
     }
 
     /**
@@ -135,22 +185,25 @@ class NowPayment
     /**
      * @throws Throwable
      */
-    public function getMinimumPaymentAmount()
+    public function getPayoutStatus(string $payoutId)
     {
-        $data = [
-            "currency_from" => "usdttrc20",
-            "currency_to" => "usdttrc20",
-            "is_fee_paid_by_user" => true,
-        ];
-
-        return $this->makeRequest('get', "/min-amount", $data);
+        return $this->makeRequest('get', "/payout/$payoutId");
     }
 
     /**
      * @throws Throwable
      */
-    public function resolveAccount(array $data)
+    public function validateAddress(string $walletAddress, string $currency, ?string $extraId)
     {
+        $data = [
+            'address' => $walletAddress,
+            'currency' => $currency,
+        ];
+
+        if ($extraId) {
+            $data['extra_id'] = $extraId;
+        }
+
         return $this->makeRequest('post', '/resolve-account-number', $data);
     }
 }
