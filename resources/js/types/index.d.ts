@@ -59,7 +59,6 @@ export interface Team {
 }
 
 export interface BetSetting {
-    required_selections : number;
     pool_size : number;
     winning_multiplier : number;
     min_stake : number;

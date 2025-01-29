@@ -20,7 +20,7 @@ class BetPolicy
      */
     public function view(User $user, Bet $bet): bool
     {
-        return true;
+        return $user->id === $bet->user_id || $user->hasPermissionTo('bet.view');
     }
 
     /**

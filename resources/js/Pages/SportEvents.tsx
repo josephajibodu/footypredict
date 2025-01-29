@@ -9,6 +9,7 @@ import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
 import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
 import dayjs from "dayjs";
 import {EventsLoader} from "@/Components/Loaders/EventsLoader";
+import {toast} from "sonner";
 
 interface EventPageProps extends PageProps {
     events: SportEvent[]
@@ -19,8 +20,9 @@ export default function SportEvents({ events, settings }: EventPageProps) {
     const dispatch = useAppDispatch();
 
     const handleGameSelection = (event: SportEvent, value: MatchOptionEnum | null) => {
-        if (selectedEvents.length === settings.bet.required_selections) {
-            return alert('Maximum selection reached');
+        if (selectedEvents.length === settings.bet.max_selection) {
+            toast.error(`You cannot select more than ${settings.bet.max_selection} matches`)
+            return;
         }
 
         if (! value) {

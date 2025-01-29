@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\WithdrawalBlacklistResource\Pages;
 
+use App\Filament\Resources\WinningResource\Widgets\WinningStatOverview;
 use App\Filament\Resources\WithdrawalBlacklistResource;
 use App\Models\WithdrawalBlacklist;
 use Filament\Actions;

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\Bets\CancelBet;
 use App\Enums\BetStatus;
 use App\Filament\Resources\BetResource\Pages;
 use App\Filament\Resources\BetResource\RelationManagers\BetSportEventRelationManager;
@@ -160,7 +161,24 @@ class BetResource extends Resource
                     })
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    // Tables\Actions\EditAction::make(),
+                    Tables\Actions\Action::make('view_bet')
+                        ->label('View Slip')
+                        ->icon('heroicon-o-newspaper')
+                        ->url(fn(Bet $record) => route('bets.share', $record))
+                        ->openUrlInNewTab(),
+                    Tables\Actions\Action::make('cancel_bet')
+                        ->label('Cancel Bet')
+                        ->icon('heroicon-o-x-mark')
+                        ->color('danger')
+                        ->action(function (Bet $record, CancelBet $cancelBet, Tables\Actions\Action $action) {
+                            $cancelBet($record);
+
+                            $action->success();
+                        })
+                        ->successNotificationTitle("Bet cancelled successfully and the user refunded.")
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

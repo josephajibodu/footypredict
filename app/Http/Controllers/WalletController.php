@@ -20,6 +20,7 @@ class WalletController extends Controller
                     ->orWhere('type', TransactionType::Deposit)
                     ->orWhere('type', TransactionType::Withdrawal)
                     ->orWhere('type', TransactionType::Bet)
+                    ->orWhere('type', TransactionType::Refunds)
                     ->orWhere('type', TransactionType::Winning);
             })
             ->latest()
