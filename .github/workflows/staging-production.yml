@@ -1,8 +1,6 @@
-name: (Production) Build Image and Deploy
+name: (Staging) Build Image and Deploy
 
-on:
-  push:
-    branches: [main]
+on: [workflow_dispatch]
 
 concurrency: production_environment
 
