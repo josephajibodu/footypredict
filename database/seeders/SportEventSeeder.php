@@ -24,7 +24,7 @@ class SportEventSeeder extends Seeder
                 break;
             }
 
-            $today = now()->addHours(rand(1, 8));
+            $today = now()->addHours(rand(36,40));
             $sportEvent = SportEvent::factory()->create([
                 'match_date' => $today->format('Y-m-d'),
                 'team1_id' => $teamIds[$i],
