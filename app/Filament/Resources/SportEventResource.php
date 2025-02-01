@@ -92,7 +92,17 @@ class SportEventResource extends Resource
                             Forms\Components\DatePicker::make('match_date')
                                 ->required(),
                             Forms\Components\TimePicker::make('kickoff_time')
-                                ->required(),
+                                ->required()
+                                ->default(fn() => now()->format('H:0:0'))
+                                ->datalist([
+                                    '09:00',
+                                    '09:30',
+                                    '10:00',
+                                    '10:30',
+                                    '11:00',
+                                    '11:30',
+                                    '12:00',
+                                ]),
                             Forms\Components\Select::make('status')
                                 ->disabled()
                                 ->hidden(fn () => $form->getOperation() === 'create')

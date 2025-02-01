@@ -89,7 +89,7 @@ export default function Settings() {
 
                             return (
                                 <li key={index}>
-                                    <Element href={link.props.href} className="w-full">
+                                    <Element href={link.props.href} method={link.props.method} as={link.props.as} className="w-full">
                                         <div className="flex justify-between items-center gap-4 py-2">
                                             <span className="size-10 bg-primary/60 rounded-full flex items-center justify-center text-primary-foreground">
                                                 {link.icon}

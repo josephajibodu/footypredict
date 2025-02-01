@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -70,6 +71,7 @@ class RegisteredUserController extends Controller
             return redirect(route('events', absolute: false));
         } catch (Exception $ex) {
             DB::rollBack();
+            Log::error('User registration failed', ['error' => $ex->getMessage()]);
             throw $ex;
         }
     }

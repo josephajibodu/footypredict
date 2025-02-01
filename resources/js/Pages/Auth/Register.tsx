@@ -30,6 +30,7 @@ export default function Register() {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
+
         post(route('register'), {
             onFinish: () => {
                 reset('password', 'password_confirmation')
