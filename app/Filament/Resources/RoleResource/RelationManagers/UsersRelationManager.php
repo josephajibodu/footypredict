@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\RoleResource\RelationManagers;
 
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -9,11 +10,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Permission;
 
-class PermissionsRelationManager extends RelationManager
+class UsersRelationManager extends RelationManager
 {
-    protected static string $relationship = 'permissions';
+    protected static string $relationship = 'users';
 
     public function form(Form $form): Form
     {
@@ -28,10 +28,12 @@ class PermissionsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
-            ->defaultPaginationPageOption(50)
+            ->recordTitleAttribute('username')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('full_name')
+                    ->description(fn(User $record) => $record->email)
+                    ->searchable(['first_name', 'last_name', 'email']),
+                Tables\Columns\TextColumn::make('username'),
             ])
             ->filters([
                 //
@@ -39,10 +41,10 @@ class PermissionsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
-                    ->label('Add Permission')
+                    ->label('Add User')
                     ->icon('heroicon-o-plus')
-                    ->modalHeading("Add Permission to Role")
-                    ->modalSubmitActionLabel('Add Permission')
+                    ->modalHeading("Add User to the Role")
+                    ->modalSubmitActionLabel('Add User')
                     ->attachAnother(false),
             ])
             ->actions([

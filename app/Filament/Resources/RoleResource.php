@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers\PermissionsRelationManager;
+use App\Filament\Resources\RoleResource\RelationManagers\UsersRelationManager;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -26,7 +28,7 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name'),
             ]);
     }
 
@@ -67,6 +69,7 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
+            UsersRelationManager::class,
             PermissionsRelationManager::class
         ];
     }
@@ -75,8 +78,9 @@ class RoleResource extends Resource
     {
         return [
             'index' => Pages\ListRoles::route('/'),
-            'create' => Pages\CreateRole::route('/create'),
+            // 'create' => Pages\CreateRole::route('/create'),
             'view' => Pages\ViewRole::route('/{record}'),
         ];
     }
+
 }
