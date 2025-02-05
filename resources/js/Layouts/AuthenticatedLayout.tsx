@@ -4,6 +4,7 @@ import clsx, {ClassValue} from 'clsx';
 import { PropsWithChildren, ReactNode } from 'react';
 import {ChevronLeft, Home, List, User, Wallet} from "lucide-react";
 import {cn, toMoney} from "@/lib/utils";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 interface AuthLayoutProps extends PropsWithChildren {
     showHeader?: boolean,
@@ -36,7 +37,7 @@ export default function Authenticated({
                 </header>}
 
                 {showHeader && <header className="flex items-center justify-between px-2 py-2 h-full bg-primary border-b">
-                    <h3 className="font-bold text-white">FootyPredict</h3>
+                    <ApplicationLogo className="h-8 w-fit" />
                     <div className="flex gap-2">
                         {auth.user && (
                             <div className="bg-card text-card-foreground rounded-lg border-none py-2 px-2 text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>

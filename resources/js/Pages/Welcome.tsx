@@ -59,7 +59,6 @@ export default function Welcome() {
                         <Button
                             asChild
                             variant="secondary"
-                            size="lg"
                             className="bg-gradient-to-r from-secondary to-accent text-base h-12"
                         >
                             <Link href={route('events')}>Get Started</Link>
