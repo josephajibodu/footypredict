@@ -1,4 +1,4 @@
-const VERSION = "v1";
+const VERSION = "v1.0.1";
 
 const CACHE_NAME = `footypredict-${VERSION}`;
 

@@ -1,9 +1,18 @@
 import { Button } from '@/Components/ui/button';
 import {Link, router, usePage} from '@inertiajs/react';
 import clsx, {ClassValue} from 'clsx';
-import { PropsWithChildren, ReactNode } from 'react';
+import {PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import {ChevronLeft, Home, List, User, Wallet} from "lucide-react";
 import {cn, toMoney} from "@/lib/utils";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription, DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/Components/ui/dialog";
+import {Badge} from "@/Components/ui/badge";
 
 interface AuthLayoutProps extends PropsWithChildren {
     showHeader?: boolean,
@@ -25,6 +34,31 @@ export default function Authenticated({
     const gotoWallet = () => {
         router.visit(route('wallet'));
     }
+
+    const [isPWA, setIsPWA] = useState(false);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    useEffect(() => {
+        const checkPWA = () => {
+            const standalone = window.matchMedia('(display-mode: standalone)').matches;
+            const navigatorStandalone = (window.navigator as any).standalone; // For iOS Safari
+
+            let isPWA = standalone || navigatorStandalone;
+
+            if (! isPWA) {
+                document.body.style.pointerEvents = "none";
+            }
+
+            setIsPWA(isPWA);
+        };
+
+        checkPWA();
+        window.addEventListener('resize', checkPWA);
+
+        return () => window.removeEventListener('resize', checkPWA);
+    }, []);
+
+    const showPWAGuide = auth.user && (!isMobile || !isPWA);
 
     return (
         <div className="flex flex-col h-screen bg-background text-foreground">
@@ -123,6 +157,23 @@ export default function Authenticated({
                     </ul>
                 </nav>
             )}
+
+            {/* Dialog for PWA Restriction */}
+            <Dialog open={showPWAGuide}>
+                <DialogContent className="sm:max-w-[425px]" dismissible={false}>
+                    <DialogHeader>
+                        <DialogTitle>Install FootyPredict for a Seamless Experience</DialogTitle>
+                    </DialogHeader>
+                    <div className="text-sm">
+                        Quickly access FootyPredict from your home screen by following these steps:
+                        <ul className="mt-2 space-y-2 list-disc ps-8">
+                            <li>Tap the three dots <Badge className="rounded">⋮</Badge> in the top-right corner of your browser.</li>
+                            <li>Select <strong>"Install App"</strong> or <strong>"Add to Home Screen"</strong>.</li>
+                            <li>Tap <strong>"Add"</strong>, and you're all set!</li>
+                        </ul>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
