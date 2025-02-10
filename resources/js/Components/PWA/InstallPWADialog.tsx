@@ -111,8 +111,10 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
                         </p>
                     </div>
 
-                    {isMobile ? (
-                        <InstallDialogAction platform={platform} onClose={console.log} onSubmit={handleInstall} />
+                    {!isMobile ? (
+                        <div className="mt-4">
+                            <InstallDialogAction platform={platform} onClose={console.log} onSubmit={handleInstall} />
+                        </div>
                     ) : (
                         <Alert variant="destructive" className="mt-4 bg-white">
                             <Terminal className="h-4 w-4" />

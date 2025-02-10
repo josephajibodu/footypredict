@@ -39,11 +39,8 @@ export default function InstallDialogAction({ platform, onClose, onSubmit }: Ins
         <DialogFooter>
             {platform === platforms.NATIVE && (
                 <>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button onClick={onSubmit} variant="default">
-                        Install
+                    <Button onClick={onSubmit} variant="default" className="bg-gradient">
+                        Install FootyPredict App
                     </Button>
                 </>
             )}
