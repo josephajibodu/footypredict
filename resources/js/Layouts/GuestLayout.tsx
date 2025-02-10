@@ -8,7 +8,7 @@ export default function Guest({ children }: PropsWithChildren) {
             <div className="flex flex-col h-full max-w-md w-full mx-auto bg-background">
                 <div className="h-40 flex justify-center items-center">
                     <Link href={route('events')}>
-                        <h3 className="font-bold text-3xl">FootyPredict</h3>
+                        <ApplicationLogo />
                     </Link>
                 </div>
 

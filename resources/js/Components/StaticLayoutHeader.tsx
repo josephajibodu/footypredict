@@ -3,6 +3,7 @@ import { Button } from "@/Components/ui/button";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { motion } from "framer-motion";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function StaticLayoutHeader() {
     const { auth } = usePage().props;
@@ -60,7 +61,9 @@ export default function StaticLayoutHeader() {
             <nav className="flex flex-1 justify-between items-center max-w-screen-xl mx-auto">
                 {/* Logo */}
                 <div>
-                    <Link href={route('landing')}><span className="font-bold text-lg">FootyPredict</span></Link>
+                    <Link href={route('landing')}>
+                        <ApplicationLogo className="w-fit" />
+                    </Link>
                 </div>
 
                 {/* Desktop Menu */}
@@ -74,13 +77,37 @@ export default function StaticLayoutHeader() {
                     ))}
                 </ul>
 
-                <Button
-                    size="lg"
-                    className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
-                    asChild
-                >
-                    <Link href={auth ? route('events') : route('login')}>Sign In</Link>
-                </Button>
+                <div className="flex gap-4">
+                    {!auth.user && (
+                        <>
+                            <Button
+                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                asChild
+                            >
+                                <Link href={route('login')}>Sign In</Link>
+                            </Button>
+
+                            <Button
+                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                asChild
+                            >
+                                <Link href={route('register')}>Register</Link>
+                            </Button>
+                        </>
+                    )}
+
+                    {auth.user && (
+                        <>
+                            <Button
+                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                asChild
+                            >
+                                <Link href={auth ? route('settings') : route('login')}>View Events</Link>
+                            </Button>
+
+                        </>
+                    )}
+                </div>
 
                 {/* Mobile Menu */}
                 {menuOpen && (

@@ -17,16 +17,18 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [StaticPageController::class, 'index'])->name('landing');
+Route::get('/', [StaticPageController::class, 'index'])
+    ->name('landing');
 
-Route::get('/frequently-asked-questions', [StaticPageController::class, 'faq'])->name('faq');
+Route::get('/frequently-asked-questions', [StaticPageController::class, 'faq'])
+    ->name('faq');
 
-Route::get('/how-to-play', [StaticPageController::class, 'howToPlay'])->name('how-to-play');
-
-Route::get('/events', [SportEventController::class, 'index'])->name('events');
+Route::get('/how-to-play', [StaticPageController::class, 'howToPlay'])
+    ->name('how-to-play');
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/events', [SportEventController::class, 'index'])->name('events');
     Route::get('/view-bets/{bet:reference}', ViewBetSlipController::class)->name('bets.share');
 
     Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
