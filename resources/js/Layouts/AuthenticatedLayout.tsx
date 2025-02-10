@@ -41,7 +41,7 @@ export default function Authenticated({
                     <ApplicationLogo className="h-8 w-fit" />
                     <div className="flex gap-2">
                         {auth.user && (
-                            <div className="bg-card text-card-foreground rounded-lg border-none py-2 px-2 text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>
+                            <div className="bg-card font-bold text-card-foreground rounded-lg border-none py-2 px-2 text-sm" onClick={gotoWallet}>{toMoney(auth.user.balance)}</div>
                         )}
 
                         {auth.user === null && (
@@ -72,13 +72,13 @@ export default function Authenticated({
 
             {/* Bottom Navigation */}
             {!hideBottomNav && (
-                <div className="max-w-md mx-auto text-white bg-primary border-t dark:bg-gray-800 fixed bottom-0 right-0 left-0">
-                    <nav className="grid grid-cols-4 items-center justify-between pb-[env(safe-area-inset-bottom,16px)]">
+                <div className="max-w-md mx-auto text-white bg-primary border-t dark:bg-gray-800 fixed bottom-0 right-0 left-0 pb-[env(safe-area-inset-bottom,16px)]">
+                    <nav className="grid grid-cols-4 items-center justify-between h-[54px]">
                         <Link
                             href={route('events')}
                             className={cn(
-                                "flex flex-col items-center px-4 py-2",
-                                { "bg-gradient": url.startsWith('/events') }
+                                "flex flex-col items-center px-4 py-2 text-white/50",
+                                { "text-white": url.startsWith('/events') }
                             )}
                         >
                             <Home size={20} />
@@ -88,8 +88,8 @@ export default function Authenticated({
                         <Link
                             href={route('bets.open-bets' )}
                             className={cn(
-                                "flex flex-col items-center px-4 py-2",
-                                { "bg-gradient": url.startsWith('/bets') }
+                                "flex flex-col items-center px-4 py-2 text-white/50",
+                                { "text-white": url.startsWith('/bets') }
                             )}
                         >
                             <List size={20} />
@@ -99,8 +99,8 @@ export default function Authenticated({
                         <Link
                             href={route('wallet')}
                             className={cn(
-                                "flex flex-col items-center px-4 py-2",
-                                { "bg-gradient": url.startsWith('/wallet') }
+                                "flex flex-col items-center px-4 py-2 text-white/50",
+                                { "text-white": url.startsWith('/wallet') }
                             )}
                         >
                             <Wallet size={20} />
@@ -110,8 +110,8 @@ export default function Authenticated({
                         <Link
                             href={route('settings')}
                             className={cn(
-                                "flex flex-col items-center px-4 py-2",
-                                { "bg-gradient": url.startsWith('/settings') }
+                                "flex flex-col items-center px-4 py-2 text-white/50",
+                                { "text-white": url.startsWith('/settings') }
                             )}
                         >
                             <User size={20} />
