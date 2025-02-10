@@ -1,9 +1,10 @@
 import { Button } from '@/Components/ui/button';
 import {Link, router, usePage} from '@inertiajs/react';
 import clsx, {ClassValue} from 'clsx';
-import { PropsWithChildren, ReactNode } from 'react';
+import {PropsWithChildren, ReactNode, useEffect, useState} from 'react';
 import {ChevronLeft, Home, List, User, Wallet} from "lucide-react";
 import {cn, toMoney} from "@/lib/utils";
+import InstallPWADialog from "@/Components/PWA/InstallPWADialog";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
 interface AuthLayoutProps extends PropsWithChildren {
@@ -124,6 +125,8 @@ export default function Authenticated({
                     </ul>
                 </nav>
             )}
+
+            <InstallPWADialog />
         </div>
     );
 }

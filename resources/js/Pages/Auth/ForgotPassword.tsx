@@ -2,7 +2,6 @@ import InputError from '@/Components/InputError';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {FormEventHandler, ReactNode} from 'react';
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import {Input} from "@/Components/ui/input";
 import {Button} from "@/Components/ui/button";
 
