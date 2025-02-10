@@ -15,8 +15,6 @@ class CreateRefund
 {
     public function execute(User $user, float $amount, string $description): Transaction
     {
-        $user = Auth::user();
-
         $reference = Str::uuid()->toString();
 
         $user->credit($amount, $description);

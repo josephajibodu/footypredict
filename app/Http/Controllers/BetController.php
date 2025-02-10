@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use function Filament\authorize;
 
 class BetController extends Controller
 {
@@ -40,6 +41,12 @@ class BetController extends Controller
 
     public function show(Bet $bet)
     {
+        authorize('view', $bet);
+
+        if ($bet->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
         $bet->load(['sportEvents', 'sportEvents.team1', 'sportEvents.team2', 'transaction']);
 
         return Inertia::render('Bets/BetShow', [

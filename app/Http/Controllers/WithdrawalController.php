@@ -40,12 +40,21 @@ class WithdrawalController extends Controller
             'account_id' => ['required', 'numeric'],
         ]);
 
-        $isBlacklisted = WithdrawalBlacklist::query()->where('user_id', auth()->id())->exists();
+        $user = Auth::user();
 
+        $isBlacklisted = WithdrawalBlacklist::query()->where('user_id', $user->id)->exists();
         if ($isBlacklisted) {
             Log::error('The user is blacklisted from withdrawals');
 
             return back()->withErrors(['account_id' => 'You are not allowed to make withdrawals at the moment.']);
+        }
+
+        if (!$user->bets()->exists()) {
+            Log::error('Withdrawal attempt blocked: User has not placed any bets.', [
+                'user_id' => $user->id
+            ]);
+
+            return back()->withErrors(['account_id' => 'You must place a bet before withdrawing.']);
         }
 
         DB::beginTransaction();

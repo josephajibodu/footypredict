@@ -14,10 +14,20 @@ class SportEventController extends Controller
     {
         $currentTime = Carbon::now()->format('H:i:s');
 
+        $theresMatchToday = SportEvent::query()
+            ->whereDay('match_date', today())
+            ->whereTime('kickoff_time', '>', now()->format('H:i:s'))
+            ->whereIn('status', [SportEventStatus::Pending, SportEventStatus::InProgress])
+            ->exists();
+
+        $dayFilter = $theresMatchToday ? today() : today()->addDay();
+        $dayFilterIsCurrentDay = $dayFilter->isToday();
+
         $events = SportEvent::query()
             ->with(['team1', 'team2'])
-            ->where(function ($query) {
-                $query->whereRaw("CONCAT(match_date, ' ', kickoff_time) > ?", [now()->format('Y-m-d H:i:s')]);
+            ->whereDay('match_date', $dayFilter)
+            ->when($dayFilterIsCurrentDay, function ($query) {
+                $query->whereTime('kickoff_time', '>', now()->format('H:i:s'));
             })
             ->whereIn('status', [SportEventStatus::Pending, SportEventStatus::InProgress])
             ->orderBy('match_date', 'asc')

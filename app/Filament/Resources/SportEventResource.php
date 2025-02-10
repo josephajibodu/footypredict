@@ -92,7 +92,17 @@ class SportEventResource extends Resource
                             Forms\Components\DatePicker::make('match_date')
                                 ->required(),
                             Forms\Components\TimePicker::make('kickoff_time')
-                                ->required(),
+                                ->required()
+                                ->default(fn() => now()->format('H:0:0'))
+                                ->datalist([
+                                    '09:00',
+                                    '09:30',
+                                    '10:00',
+                                    '10:30',
+                                    '11:00',
+                                    '11:30',
+                                    '12:00',
+                                ]),
                             Forms\Components\Select::make('status')
                                 ->disabled()
                                 ->hidden(fn () => $form->getOperation() === 'create')
@@ -278,7 +288,7 @@ class SportEventResource extends Resource
                     Tables\Actions\DeleteBulkAction::make()
                         ->action(function (Collection $records, Tables\Actions\DeleteBulkAction $action) {
                             $records->each(function (SportEvent $record) {
-                                if ($record->bets()->count() > 0) {
+                                if ($record->bets()->count() === 0) {
                                     $record->delete();
                                 }
                             });

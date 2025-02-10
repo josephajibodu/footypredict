@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\TransactionType;
 use App\Filament\Resources\WinningResource\Pages;
+use App\Filament\Resources\WinningResource\Widgets\WinningStatOverview;
 use App\Models\Transaction;
 use App\Models\Winning;
 use Carbon\Carbon;
@@ -115,6 +116,13 @@ class WinningResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            WinningStatOverview::class
         ];
     }
 

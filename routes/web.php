@@ -12,6 +12,7 @@ use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\SwervPayWebhookController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\VerifyBankAccountController;
+use App\Http\Controllers\ViewBetSlipController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::get('/how-to-play', [StaticPageController::class, 'howToPlay'])->name('ho
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/events', [SportEventController::class, 'index'])->name('events');
+    Route::get('/view-bets/{bet:reference}', ViewBetSlipController::class)->name('bets.share');
 
     Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
     Route::resource('/bets', BetController::class)
