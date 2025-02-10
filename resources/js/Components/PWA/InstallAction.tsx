@@ -3,6 +3,7 @@ import { DialogFooter, DialogClose } from "@/Components/ui/dialog";
 import { Button } from "@/Components/ui/button";
 import { IOSShareIcon, FireFoxA2HSIcon, MenuIcon, OperaA2HSIcon } from "./Icons";
 import {platforms} from "@/lib/platforms";
+import {Separator} from "@/Components/ui/separator";
 
 interface DialogActionWithInstructionsProps {
     action1: React.ReactNode;
@@ -13,13 +14,15 @@ interface DialogActionWithInstructionsProps {
 function DialogActionWithInstructions({ action1, action2, onSubmit }: DialogActionWithInstructionsProps) {
     return (
         <div className="flex flex-col w-full space-y-4">
+            <Separator />
             <div>
-                <p className="text-sm font-medium">To install this app:</p>
-                <ul className="list-disc list-inside space-y-2">
+                <p className="text-lg font-medium text-secondary mb-2">To install this app:</p>
+                <ul className="list-disc list-inside space-y-2 text-sm">
                     <li className="flex items-center gap-2">{action1}</li>
                     <li>{action2}</li>
                 </ul>
             </div>
+            <Separator />
             <div className="w-full text-right">
                 <Button onClick={onSubmit}>Ok</Button>
             </div>
@@ -34,7 +37,6 @@ interface InstallDialogActionProps {
 }
 
 export default function InstallDialogAction({ platform, onClose, onSubmit }: InstallDialogActionProps) {
-    console.log("platform is : ", platform)
     return (
         <DialogFooter>
             {platform === platforms.NATIVE && (

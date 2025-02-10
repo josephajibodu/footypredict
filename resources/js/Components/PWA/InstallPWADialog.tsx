@@ -76,10 +76,8 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
         }
     }
 
-    const showPWAGuide = auth.user && (!isMobile || !isPWA);
-
     return (
-        <Dialog open={true}>
+        <Dialog open={auth.user !== null && !isPWA}>
             <DialogContent className="sm:max-w-[425px]" dismissible={false}>
                 <DialogHeader>
                     <DialogTitle>
@@ -111,7 +109,7 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
                         </p>
                     </div>
 
-                    {!isMobile ? (
+                    {isMobile ? (
                         <div className="mt-4">
                             <InstallDialogAction platform={platform} onClose={console.log} onSubmit={handleInstall} />
                         </div>

@@ -22,9 +22,9 @@ Route::get('/frequently-asked-questions', [StaticPageController::class, 'faq'])-
 
 Route::get('/how-to-play', [StaticPageController::class, 'howToPlay'])->name('how-to-play');
 
-Route::get('/events', [SportEventController::class, 'index'])->name('events');
-
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/events', [SportEventController::class, 'index'])->name('events');
 
     Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
     Route::resource('/bets', BetController::class)
