@@ -28,6 +28,8 @@ task('npm:build', function () {
 task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
+    'npm:install',
+    'npm:build',
     'artisan:storage:link',
     'artisan:config:cache',
     'artisan:route:cache',
@@ -40,5 +42,3 @@ task('deploy', [
 // Hooks
 
 after('deploy:failed', 'deploy:unlock');
-after('deploy:vendors', 'npm:install');
-after('npm:install', 'npm:build');

@@ -105,7 +105,7 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
                     <div className="mt-3">
                         <p className="font-semibold">What is FootyPredict?</p>
                         <p className="text-gray-300">
-                            FootyPredict helps you get live football predictions, track your favorite matches, and make informed betting decisions.
+                            Footy Predict is a Jackpot-style predict-to-win service for football matches. We use social wagering to share games among users. We are also out to solve the perennial issue of bookies locking and unlocking games unfairly by ensuring that all games are booked before they start and only truthful outcomes are rewarded.
                         </p>
                     </div>
 
