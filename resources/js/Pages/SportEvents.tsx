@@ -55,18 +55,18 @@ export default function SportEvents({ events, settings }: EventPageProps) {
                     <div className="flex items-center">
                         <span className="w-8 font-bold"></span>
                         <div className="flex flex-col">
-                            <span>Events</span>
+                            <span className="font-bold">Events</span>
                         </div>
                     </div>
-                    <div className="flex justify-end w-48 gap-1 text-sm py-2 pe-4">
-                        <span className="w-14 text-center">1(Home)</span>
-                        <span className="w-14 text-center">X(Draw)</span>
-                        <span className="w-14 text-center">2(Away)</span>
+                    <div className="flex justify-end w-48 gap-1 text-sm py-2 pe-4 font-bold">
+                        <span className="w-14 text-center">Home</span>
+                        <span className="w-14 text-center">Draw</span>
+                        <span className="w-14 text-center">Away</span>
                     </div>
                 </div>
 
                 <Deferred fallback={<EventsLoader />} data="events">
-                    <div className="px-4">
+                    <div className="px-4 flex-1">
                         {/* Empty State */}
                         {(events && events.length === 0) && (
                             <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -84,7 +84,7 @@ export default function SportEvents({ events, settings }: EventPageProps) {
                                         d="M9 17v-2a4 4 0 01.879-2.57l.87-.87a4 4 0 015.682 0l.87.87A4 4 0 0115 15v2M12 7v.01M12 12h.01"
                                     />
                                 </svg>
-                                <p className="mt-4 text-lg font-medium text-gray-200">No Events Available</p>
+                                <p className="mt-4 text-lg font-bold text-gray-200">No Events Available</p>
                                 <p className="mt-2 text-sm text-gray-300">Currently, there are no events to display. Please check back later.</p>
                             </div>
                         )}
