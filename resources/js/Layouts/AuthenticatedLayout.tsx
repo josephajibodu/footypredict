@@ -64,7 +64,7 @@ export default function Authenticated({
                 "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto",
                 {
                     "mt-[64px]": showHeader || backUrl,
-                    "mb-[64px]": !hideBottomNav,
+                    "mb-[54px]": !hideBottomNav,
                 }
             )}>
                 {children}
@@ -72,58 +72,53 @@ export default function Authenticated({
 
             {/* Bottom Navigation */}
             {!hideBottomNav && (
-                <nav className="max-w-md mx-auto text-white bg-primary border-t dark:bg-gray-800 fixed bottom-0 right-0 left-0 h-[64px]">
-                    <ul className="grid grid-cols-4 items-center justify-between h-full">
-                        <li className="h-full">
-                            <Link
-                                href={route('events')}
-                                className={cn(
-                                    "flex flex-col items-center px-4 py-2 h-full",
-                                    { "bg-gradient": url.startsWith('/events') }
-                                )}
-                            >
-                                <Home size={20} />
-                                <span className="text-sm whitespace-nowrap">Home</span>
-                            </Link>
-                        </li>
-                        <li className="h-full">
-                            <Link
-                                href={route('bets.open-bets' )}
-                                className={cn(
-                                    "flex flex-col items-center px-4 py-2 h-full",
-                                    { "bg-gradient": url.startsWith('/bets') }
-                                )}
-                            >
-                                <List size={20} />
-                                <span className="text-sm whitespace-nowrap">Open Bets</span>
-                            </Link>
-                        </li>
-                        <li className="h-full">
-                            <Link
-                                href={route('wallet')}
-                                className={cn(
-                                    "flex flex-col items-center px-4 py-2 h-full",
-                                    { "bg-gradient": url.startsWith('/wallet') }
-                                )}
-                            >
-                                <Wallet size={20} />
-                                <span className="text-sm whitespace-nowrap">Wallet</span>
-                            </Link>
-                        </li>
-                        <li className="h-full">
-                            <Link
-                                href={route('settings')}
-                                className={cn(
-                                    "flex flex-col items-center px-4 py-2 h-full",
-                                    { "bg-gradient": url.startsWith('/settings') }
-                                )}
-                            >
-                                <User size={20} />
-                                <span className="text-sm whitespace-nowrap">Profile</span>
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
+                <div className="max-w-md mx-auto text-white bg-primary border-t dark:bg-gray-800 fixed bottom-0 right-0 left-0">
+                    <nav className="grid grid-cols-4 items-center justify-between pb-[env(safe-area-inset-bottom,16px)]">
+                        <Link
+                            href={route('events')}
+                            className={cn(
+                                "flex flex-col items-center px-4 py-2",
+                                { "bg-gradient": url.startsWith('/events') }
+                            )}
+                        >
+                            <Home size={20} />
+                            <span className="text-sm whitespace-nowrap">Home</span>
+                        </Link>
+
+                        <Link
+                            href={route('bets.open-bets' )}
+                            className={cn(
+                                "flex flex-col items-center px-4 py-2",
+                                { "bg-gradient": url.startsWith('/bets') }
+                            )}
+                        >
+                            <List size={20} />
+                            <span className="text-sm whitespace-nowrap">Open Bets</span>
+                        </Link>
+
+                        <Link
+                            href={route('wallet')}
+                            className={cn(
+                                "flex flex-col items-center px-4 py-2",
+                                { "bg-gradient": url.startsWith('/wallet') }
+                            )}
+                        >
+                            <Wallet size={20} />
+                            <span className="text-sm whitespace-nowrap">Wallet</span>
+                        </Link>
+
+                        <Link
+                            href={route('settings')}
+                            className={cn(
+                                "flex flex-col items-center px-4 py-2",
+                                { "bg-gradient": url.startsWith('/settings') }
+                            )}
+                        >
+                            <User size={20} />
+                            <span className="text-sm whitespace-nowrap">Profile</span>
+                        </Link>
+                    </nav>
+                </div>
             )}
 
             {/*<InstallPWADialog />*/}
