@@ -121,7 +121,7 @@ export default function Authenticated({
                 </div>
             )}
 
-            {/*<InstallPWADialog />*/}
+            <InstallPWADialog />
         </div>
     );
 }
