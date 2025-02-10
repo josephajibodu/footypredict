@@ -7,6 +7,7 @@ import InstallDialogAction from "@/Components/PWA/InstallAction";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
 import {Terminal} from "lucide-react";
+import {toast} from "sonner";
 
 // Custom type for beforeinstallprompt event
 interface BeforeInstallPromptEvent extends Event {
@@ -67,6 +68,9 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
 
                 if (choiceResult.outcome === "accepted") {
                     logger("PWA installed successfully.");
+                    toast("FootyPredict App Installed!", {
+                        description: "You can now close your browser and launch the app from your device's app menu.",
+                    });
                 } else {
                     logger("User canceled the installation.");
                 }
