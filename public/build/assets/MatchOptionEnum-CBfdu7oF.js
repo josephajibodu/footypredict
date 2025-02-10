@@ -1,1 +1,0 @@
-var w=(a=>(a.HOME_WIN="home_win",a.DRAW="draw",a.AWAY_WIN="away_win",a))(w||{});const n={home_win:"Home Win",away_win:"Away Win",draw:"Draw"},o={home_win:"1",away_win:"2",draw:"X"};export{n as M,w as a,o as b};
