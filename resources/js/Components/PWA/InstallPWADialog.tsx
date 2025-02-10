@@ -81,7 +81,7 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
             <DialogContent className="sm:max-w-[425px]" dismissible={false}>
                 <DialogHeader>
                     <DialogTitle>
-                        <ApplicationLogo />
+                        <ApplicationLogo className="mb-8" />
                         <p className="mt-3" >Install FootyPredict for a Seamless Experience</p>
                     </DialogTitle>
                 </DialogHeader>
