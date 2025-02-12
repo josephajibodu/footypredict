@@ -3,7 +3,7 @@ import SingleEvent from '@/Components/SingleEvent';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import {Deferred, Head, usePage} from '@inertiajs/react';
 import {ReactNode, useEffect, useMemo} from 'react';
-import {PageProps, SportEvent} from "@/types";
+import {PageProps, SelectedSportEvent, SportEvent} from "@/types";
 import {useAppDispatch, useAppSelector} from "@/store/hooks";
 import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
 import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
@@ -20,19 +20,22 @@ export default function SportEvents({ events, settings }: EventPageProps) {
     const dispatch = useAppDispatch();
 
     const handleGameSelection = (event: SportEvent, value: MatchOptionEnum | null) => {
-        if (selectedEvents.length === settings.bet.max_selection) {
+        const isSelected = selectedEvents.some((selectedEvent) => selectedEvent.id === event.id);
+
+        if (! value) {
+            dispatch(deselectSportEvent(event.id))
+            return;
+        }
+
+        if (!isSelected && selectedEvents.length === settings.bet.max_selection) {
             toast.error(`You cannot select more than ${settings.bet.max_selection} matches`)
             return;
         }
 
-        if (! value) {
-            dispatch(deselectSportEvent(event.id))
-        } else {
-            dispatch(selectSportEvent({
-                ...event,
-                betOption: value
-            }))
-        }
+        dispatch(selectSportEvent({
+            ...event,
+            betOption: value
+        }))
     }
 
     const isEventSelected = (eventId: number) => {
