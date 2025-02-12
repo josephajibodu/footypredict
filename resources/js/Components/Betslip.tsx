@@ -182,7 +182,7 @@ export default function Betslip() {
                         animate="visible"
                         exit="hidden"
                         transition={{ duration: 0.3 }}
-                        className="fixed right-0 bottom-[70px] flex gap-2 items-center justify-center ps-8 pe-2 h-8 bg-card text-white border rounded-l cursor-pointer pb-[env(safe-area-inset-bottom,16px)]"
+                        className="fixed right-0 bottom-[calc(70px + env(safe-area-inset-bottom,16px))] flex gap-2 items-center justify-center ps-8 pe-2 h-8 bg-card text-white border rounded-l cursor-pointer"
                     >
                         <Info className="size-4" />
                         <span className="text-xs">Select at least {betSettings.min_selection} matches</span>
@@ -199,7 +199,7 @@ export default function Betslip() {
                         animate="visible"
                         exit="hidden"
                         transition={{ duration: 0.3 }}
-                        className="fixed right-0 bottom-[70px] flex flex-col items-center justify-center w-12 h-16 bg-primary rounded-l cursor-pointer pb-[env(safe-area-inset-bottom,16px)]"
+                        className="fixed right-0 bottom-[calc(70px + env(safe-area-inset-bottom,16px))] flex flex-col items-center justify-center w-12 h-16 bg-primary rounded-l cursor-pointer"
                         onClick={() => setOpen(true)}
                         aria-label="Open bet slip"
                     >
