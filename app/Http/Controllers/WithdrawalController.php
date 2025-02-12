@@ -9,6 +9,7 @@ use App\Http\Resources\ApiWithdrawalAccountResource;
 use App\Integrations\SwervPay\PayoutData;
 use App\Models\WithdrawalAccount;
 use App\Models\WithdrawalBlacklist;
+use App\Settings\WalletSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,9 @@ use Throwable;
 
 class WithdrawalController extends Controller
 {
+    public function __construct(public WalletSetting $walletSetting)
+    {}
+
     public function create(GetPaymentBanks $getPaymentBanks)
     {
         $user = Auth::user();
@@ -47,6 +51,18 @@ class WithdrawalController extends Controller
             Log::error('The user is blacklisted from withdrawals');
 
             return back()->withErrors(['account_id' => 'You are not allowed to make withdrawals at the moment.']);
+        }
+
+        if (floatval($data['amount']) < $this->walletSetting->minimum_withdrawal_ngn) {
+            $minWithdrawal = to_money($this->walletSetting->minimum_withdrawal_ngn);
+
+            return back()->withErrors("The minimum withdrawal amount is $minWithdrawal.");
+        }
+
+        if (floatval($data['amount']) > $this->walletSetting->maximum_withdrawal_ngn) {
+            $maxWithdrawal = to_money($this->walletSetting->maximum_withdrawal_ngn);
+
+            return back()->withErrors("The maximum withdrawal amount is $maxWithdrawal.");
         }
 
         if (!$user->bets()->exists()) {
