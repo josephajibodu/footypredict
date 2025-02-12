@@ -40,16 +40,18 @@ class RegisteredUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
-            'mobile_number' => ['required', 'string', 'max:20'],
+            'mobile_number' => ['required', 'string', 'regex:/^(?:\+234|0)(70|80|81|90|91)\d{8}$/'],
             'nationality' => ['required', 'string', 'max:255'],
-            'date_of_birth' => ['required', 'date', 'before:today'],
+            'date_of_birth' => ['required', 'date', 'before:' . now()->subYears(18)->toDateString()],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'mobile_number.regex' => 'Enter a valid phone number (e.g., 08012345678 or +2348012345678).',
+            'date_of_birth.before' => 'You must be at least 18 years old to register.'
         ]);
 
         try {
             DB::beginTransaction();
-            Log::info('Registration process started', ['email' => $request->email]);
 
             $user = User::query()->create([
                 'first_name' => $request->first_name,
@@ -67,13 +69,10 @@ class RegisteredUserController extends Controller
             Log::info('Wallet created successfully', ['wallet_id' => $wallet->id]);
 
             event(new Registered($user));
-            Log::info('Registered event dispatched', ['user_id' => $user->id]);
 
             Auth::login($user);
-            Log::info('User logged in successfully', ['user_id' => $user->id]);
 
             DB::commit();
-            Log::info('Transaction committed successfully');
 
             return redirect(route('events', absolute: false));
         } catch (Exception $ex) {

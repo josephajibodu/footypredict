@@ -145,7 +145,10 @@ export type PageProps<
     ziggy: Config & { location: string };
     settings: {
         bet: BetSetting,
-        wallet: WalletSetting
+        wallet: WalletSetting,
+        pwa: {
+            disabled: boolean
+        }
     },
     flash: {
         info?: string,

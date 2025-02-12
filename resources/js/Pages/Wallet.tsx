@@ -39,8 +39,6 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
         post(route('deposit.store'));
     }
 
-    console.log("deferred: ", transactions)
-
     return (
         <>
             <Head title="Events" />
@@ -92,47 +90,36 @@ export default function Wallet({ transactions, settings, auth }: WalletPageProps
                                 </div>
                             )}
 
-                            {(transactions && transactions.length > 0) && (
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="h-1">
-                                            <TableHead className="h-4" aria-description="Description and Amount"></TableHead>
-                                            <TableHead className="h-4 w-40" aria-description="Date"></TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {transactions.map((transaction, index) => (
+                            {
+                                (transactions && transactions.length > 0)  && (
+                                    <div className="w-full flex flex-col gap-2 px-4 pt-8">
 
-                                            <TableRow key={transaction.id} className="bg-card text-card-foreground mt-4 hover:bg-primary/50">
-                                                <TableCell className={cn("font-medium border-s-green-500 border-l-4", {
-                                                    "border-s-green-400": transaction.trend_up,
-                                                    "border-s-red-400": !transaction.trend_up,
-                                                })}>
-                                                    <Link href={route('transaction.show', {transaction})}>
-                                                        <div className="flex items-center">
-                                                            <span className="text-sm line-clamp-1">{transaction.description}</span>
-                                                        </div>
-                                                        <div className="text-base">
-                                                            <span>{toMoney(Number(transaction.amount))}</span>
-                                                        </div>
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell className={'text-right ps-0'}>
-                                                    <Link href={route('transaction.show', {transaction})} className="flex flex-col items-end gap-1">
-                                                        <span className="text-xs">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</span>
-                                                        <span className={cn("text-xs w-fit px-2 rounded font-bold", {
-                                                            "bg-destructive/20 text-red-500": [TransactionStatus.Failed,TransactionStatus.Cancelled].includes(transaction.status),
-                                                            "bg-green-500/50 text-green-500": transaction.status === TransactionStatus.Completed,
-                                                            "bg-orange-500/20 text-orange-500": transaction.status === TransactionStatus.Pending,
-                                                        })}>{transaction.status}</span>
-                                                    </Link>
-                                                </TableCell>
-                                            </TableRow>
-
+                                        {transactions.map((transaction) => (
+                                            <div key={transaction.id} className="flex justify-between items-center p-4 bg-card rounded-lg shadow-sm">
+                                                <Link href={route('transaction.show', { transaction })} className="flex-1">
+                                                    <div className={cn("border-l-4 pl-2", {
+                                                        "border-green-400": transaction.trend_up,
+                                                        "border-red-400": !transaction.trend_up,
+                                                    })}>
+                                                        <p className="text-sm line-clamp-1">{transaction.description}</p>
+                                                        <p className="text-base font-medium">{toMoney(Number(transaction.amount))}</p>
+                                                    </div>
+                                                </Link>
+                                                <Link href={route('transaction.show', { transaction })} className="flex flex-col items-end justify-between gap-2">
+                                                    <p className="text-xs">{dayjs(transaction.created_at).format('D MMM YYYY ・ HH:mA')}</p>
+                                                    <p className={cn("text-xs w-fit px-2 rounded font-bold", {
+                                                        "bg-red-500/20 text-red-500": [TransactionStatus.Failed, TransactionStatus.Cancelled].includes(transaction.status),
+                                                        "bg-green-500/50 text-green-500": transaction.status === TransactionStatus.Completed,
+                                                        "bg-orange-500/20 text-orange-500": transaction.status === TransactionStatus.Pending,
+                                                    })}>{transaction.status}</p>
+                                                </Link>
+                                            </div>
                                         ))}
-                                    </TableBody>
-                                </Table>
-                            )}
+
+                                    </div>
+                                )
+                            }
+
                         </>
                     </Deferred>
                 </div>

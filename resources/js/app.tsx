@@ -23,7 +23,7 @@ createInertiaApp({
             <Provider store={store}>
                 <App {...props} />
                 <Toaster />
-                <SoonerToast richColors />
+                <SoonerToast richColors position="top-center" />
             </Provider>
         );
 

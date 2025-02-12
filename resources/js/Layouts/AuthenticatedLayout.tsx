@@ -64,9 +64,12 @@ export default function Authenticated({
                 "relative flex-1 overflow-y-scroll w-full max-w-md mx-auto",
                 {
                     "mt-[64px]": showHeader || backUrl,
-                    "mb-[54px]": !hideBottomNav,
                 }
-            )}>
+            )}
+                  style={{
+                      marginBottom: hideBottomNav ? undefined : "calc(54px + env(safe-area-inset-bottom,16px))",
+                  }}
+            >
                 {children}
             </main>
 
@@ -121,7 +124,7 @@ export default function Authenticated({
                 </div>
             )}
 
-            <InstallPWADialog />
+            <InstallPWADialog enableLogging />
         </div>
     );
 }

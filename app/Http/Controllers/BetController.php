@@ -70,6 +70,11 @@ class BetController extends Controller
         if (count($data['events']) > $betSetting->max_selection) {
             return back()->withErrors("You can only select up to {$betSetting->max_selection} matches");
         }
+        
+        if (floatval($data['amount']) < $betSetting->min_stake) {
+            $maxStake = to_money($betSetting->max_stake);
+            return back()->withErrors("Minimum stake allowed is $maxStake");
+        }
 
         if (floatval($data['amount']) > $betSetting->max_stake) {
             $maxStake = to_money($betSetting->max_stake);
