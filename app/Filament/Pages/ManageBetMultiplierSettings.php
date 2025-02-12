@@ -58,6 +58,7 @@ class ManageBetMultiplierSettings extends SettingsPage
                                         ->prefixIcon('heroicon-o-x-mark')
                                         ->reactive()
                                         ->columnSpan(3)
+                                        ->numeric()
                                         ->minValue(1)
                                         ->step(0.01),
 
@@ -92,5 +93,21 @@ class ManageBetMultiplierSettings extends SettingsPage
 
                     ]),
             ]);
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['selection_config'] = array_map(function ($item) {
+            return [
+                'main' => (int) $item['main'],
+                'selection' => (int) $item['selection'],
+                'allow_flex' => $item['allow_flex'],
+                "flex_0" => isset($item['flex_0']) ? (int) $item['flex_0'] : null,
+                "flex_1" => isset($item['flex_1']) ? (int) $item['flex_1'] : null,
+                "flex_2" => isset($item['flex_2']) ? (int) $item['flex_2'] : null,
+            ];
+        }, $data['selection_config']);
+
+        return $data;
     }
 }

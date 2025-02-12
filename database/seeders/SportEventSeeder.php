@@ -19,12 +19,12 @@ class SportEventSeeder extends Seeder
 
         shuffle($teamIds);
 
-        for ($i = 0; $i < 16; $i += 2) {
+        for ($i = 0; $i < 20; $i += 2) {
             if (! isset($teamIds[$i]) || ! isset($teamIds[$i + 1])) {
                 break;
             }
 
-            $today = now()->addHours(rand(36,40));
+            $today = now()->addHours(rand(2, 6));
             $sportEvent = SportEvent::factory()->create([
                 'match_date' => $today->format('Y-m-d'),
                 'team1_id' => $teamIds[$i],

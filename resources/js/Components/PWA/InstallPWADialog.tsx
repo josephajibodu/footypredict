@@ -20,10 +20,11 @@ interface InstallPWADialogProps {
 }
 
 export default function InstallPWADialog({ enableLogging = false }: InstallPWADialogProps) {
-    const { props: { auth } } = usePage();
+    const { props: { auth, settings } } = usePage();
     const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
     const [isPWA, setIsPWA] = useState(false);
     const platform = getPlatform();
+    const pwaDisabled = settings.pwa.disabled;
 
     useEffect(() => {
         window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -61,6 +62,8 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
     async function handleInstall() {
         logger("handleInstall called");
 
+        if (pwaDisabled) return;
+
         if (deferredPrompt.current) {
             try {
                 await deferredPrompt.current.prompt();
@@ -79,6 +82,8 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
             }
         }
     }
+
+    if (pwaDisabled) return;
 
     return (
         <Dialog open={auth.user !== null && !isPWA}>

@@ -50,6 +50,9 @@ class HandleInertiaRequests extends Middleware
             'settings' => [
                 'bet' => app(BetSetting::class)->toArray(),
                 'wallet' => app(WalletSetting::class)->toArray(),
+                'pwa' => [
+                    'disabled' => config('pwa.disabled')
+                ]
             ],
         ];
     }
