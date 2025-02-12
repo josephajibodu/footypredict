@@ -80,6 +80,10 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
             } catch (error) {
                 logger("Installation error:", error);
             }
+        } else {
+            toast("FootyPredict might already be installed!", {
+                description: "Try opening it from your app menu or home screen.",
+            });
         }
     }
 
@@ -89,9 +93,9 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
         <Dialog open={auth.user !== null && !isPWA}>
             <DialogContent className="sm:max-w-[425px]" dismissible={false}>
                 <DialogHeader>
-                    <DialogTitle>
-                        <ApplicationLogo className="mb-8" />
-                        <p className="mt-3" >Install FootyPredict for a Seamless Experience</p>
+                    <DialogTitle className="">
+                        <ApplicationLogo className="mb-8 h-10" />
+                        <p className="text-start" >Install FootyPredict for a Seamless Experience</p>
                     </DialogTitle>
                 </DialogHeader>
                 <div className="text-base">
@@ -104,7 +108,7 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
 
                     <div className="mt-2">
                         <p className="font-semibold">Why install FootyPredict?</p>
-                        <ul className="text-left list-disc list-inside text-gray-300">
+                        <ul className="text-left list-disc list-inside text-gray-200 text-sm">
                             <li>Fast access without opening a browser</li>
                             <li>Real-time match updates & predictions</li>
                             <li>You hear first when there's a sweet offer</li>
@@ -113,13 +117,13 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
 
                     <div className="mt-3">
                         <p className="font-semibold">What is FootyPredict?</p>
-                        <p className="text-gray-300">
-                            Footy Predict is a Jackpot-style predict-to-win service for football matches. We use social wagering to share games among users. We are also out to solve the perennial issue of bookies locking and unlocking games unfairly by ensuring that all games are booked before they start and only truthful outcomes are rewarded.
+                        <p className="text-gray-200 text-sm">
+                            Footy Predict is a Jackpot-style predict-to-win service for football matches.
                         </p>
                     </div>
 
                     {isMobile ? (
-                        <div className="mt-4">
+                        <div className="mt-12">
                             <InstallDialogAction platform={platform} onClose={console.log} onSubmit={handleInstall} />
                         </div>
                     ) : (
@@ -131,6 +135,10 @@ export default function InstallPWADialog({ enableLogging = false }: InstallPWADi
                             </AlertDescription>
                         </Alert>
                     )}
+
+                    <small className="text-center block">
+                        Already installed? Open your app menu and launch the app.
+                    </small>
                 </div>
             </DialogContent>
         </Dialog>
