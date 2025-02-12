@@ -7,10 +7,9 @@ import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import {cn, extractErrorMessage} from "@/lib/utils";
 import Stepper from "@/Components/Stepper";
-import {useToast} from "@/hooks/use-toast";
+import {toast} from "sonner";
 
 export default function Register() {
-    const {toast} = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -32,21 +31,15 @@ export default function Register() {
         e.preventDefault();
 
         post(route('register.store'), {
-            onFinish: () => {
+            onSuccess: () => {
                 reset('password', 'password_confirmation')
 
-                toast({
-                    title: "Account created successfully",
-                    variant: "success"
-                })
+                toast.success("Account created successfully")
             },
             onError: error => {
                 const errorMessage = extractErrorMessage(error)
 
-                toast({
-                    title: errorMessage ?? "Registration failed",
-                    variant: "destructive"
-                })
+                toast.error(errorMessage ?? "Registration failed")
             }
         });
     };
