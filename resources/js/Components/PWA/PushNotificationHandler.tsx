@@ -8,9 +8,8 @@ import {
 } from '@/Components/ui/dialog';
 import { useIsPWA } from '@/hooks/useIsPWA';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { messaging, requestNotificationPermission } from '@/lib/firebase';
+import { requestNotificationPermission } from '@/lib/firebase';
 import { usePage } from '@inertiajs/react';
-import { onMessage } from 'firebase/messaging';
 import { useEffect, useState } from 'react';
 
 export default function PushNotificationHandler() {
@@ -51,21 +50,6 @@ export default function PushNotificationHandler() {
         setIsDialogOpen(false);
         setLastShownTime(Date.now());
     };
-
-    // 🔹 Handle Foreground Notifications
-    useEffect(() => {
-        const unsubscribe = onMessage(messaging, (payload) => {
-            // Display notification using the Notification API
-            if (Notification.permission === 'granted') {
-                new Notification('Frontend Masters', {
-                    body: payload.notification?.body,
-                    icon: payload.notification?.icon || '/images/logo-icon.png',
-                });
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
 
     return (
         <div>
