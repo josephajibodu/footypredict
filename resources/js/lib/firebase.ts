@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getMessaging, onMessage } from 'firebase/messaging';
+import {getMessaging, getToken, onMessage} from 'firebase/messaging';
 import { toast } from 'sonner';
 
 export const firebaseConfig = {
@@ -20,13 +20,13 @@ export const requestNotificationPermission = async () => {
     try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-            // return await getToken(messaging, {
-            //     vapidKey: VAPID,
-            // });
-
             toast.success(
                 'Notification permission granted! You will receive updates.',
             );
+
+            return await getToken(messaging, {
+                vapidKey: VAPID,
+            });
         } else {
             toast.info(
                 'Notification permission denied. You may not receive updates.',

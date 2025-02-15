@@ -10,33 +10,38 @@ import { useIsPWA } from '@/hooks/useIsPWA';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { requestNotificationPermission } from '@/lib/firebase';
 import { useEffect, useState } from 'react';
+import {usePage} from "@inertiajs/react";
+import {useCopyToClipboard} from "@/hooks/useCopyToClipboard";
 
 export default function NotificationPermissionRequest() {
+    const {props: {auth}} = usePage();
     const [lastShownTime, setLastShownTime] = useLocalStorage(
         'notification_prompt_time',
         0,
     );
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const isPWA = useIsPWA();
+    const [_, copyToClipboard] = useCopyToClipboard();
     const permission = Notification.permission;
 
     useEffect(() => {
         const now = Date.now();
         const threeHours = 3 * 60 * 60 * 1000;
+        // const shouldShow = permission !== 'granted' &&
+        //     now - lastShownTime > threeHours &&
+        //     isPWA;
+        const shouldShow = auth.user.email === 'josephajibodu@gmail.com'
+            || auth.user.email === 'joseph@footypredict.test';
 
-        if (
-            permission !== 'granted' &&
-            now - lastShownTime > threeHours &&
-            isPWA
-        ) {
+        if (shouldShow) {
             setIsDialogOpen(true);
         }
-        console.log('updated: ', permission, lastShownTime, isPWA);
     }, [isPWA, lastShownTime, permission]);
 
     const handleEnableNotifications = async () => {
         setIsDialogOpen(false);
-        await requestNotificationPermission();
+        const token = await requestNotificationPermission();
+        await copyToClipboard(token ?? '');
         setLastShownTime(Date.now());
     };
 
