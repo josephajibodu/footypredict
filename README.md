@@ -7,3 +7,9 @@ hence a better developer experience. Little work for a bigger gain. So as you wo
 properties to any model, add it to the docs at the top.
 
 Do well to format your code at intervals with composer format
+
+
+# For deployments
+
+It's usually very good to update general codes first. For instance, update your .env first in production before pushing the new update.
+This way, all that the system needs are ready. It applies for other things.

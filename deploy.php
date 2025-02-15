@@ -3,6 +3,7 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 require 'contrib/npm.php';
+require 'recipe/deploy/rollback.php';
 
 // Config
 
