@@ -55,6 +55,12 @@ class HandleInertiaRequests extends Middleware
                     'mobileOnly' => config('pwa.mobile_only'),
                 ]
             ],
+            'configs' => fn() => [
+                'firebase' => [
+                    'api_key' => config('services.firebase.api_key'),
+                    'vapid_public_key' => config('services.firebase.vapid.public_key')
+                ]
+            ]
         ];
     }
 }

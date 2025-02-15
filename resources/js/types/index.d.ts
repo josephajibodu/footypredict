@@ -156,4 +156,10 @@ export type PageProps<
         error?: string;
         success?: string;
     };
+    configs: {
+      firebase: {
+          api_key: string;
+          vapid_public_key: string;
+      }
+    };
 };

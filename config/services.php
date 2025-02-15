@@ -38,8 +38,9 @@ return [
     'firebase' => [
         'vapid' => [
             'public_key' => env('VITE_FIREBASE_VAPID_PUBLIC_KEY'),
-            'private_key' => env('VAPID_PRIVATE_KEY'),
+            'private_key' => env('FIREBASE_VAPID_PRIVATE_KEY'),
         ],
+        'api_key' => env('VITE_FIREBASE_API_KEY')
     ],
 
     'misc' => [
