@@ -45,6 +45,8 @@ class RegisteredUserController extends Controller
             'date_of_birth' => ['required', 'date', 'before:' . now()->subYears(18)->toDateString()],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['required', 'boolean'],
+            'account_email' => ['required', 'boolean'],
         ], [
             'mobile_number.regex' => 'Enter a valid phone number (e.g., 08012345678 or +2348012345678).',
             'date_of_birth.before' => 'You must be at least 18 years old to register.'

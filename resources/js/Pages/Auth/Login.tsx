@@ -75,25 +75,26 @@ export default function Login({
 
                        <div className="mt-8 flex flex-col justify-center items-center gap-2">
 
-                           {canResetPassword && (
-                               <Link
-                                   href={route('password.request')}
-                                   className="rounded-md text-sm text-gray-200 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                               >
-                                   Forgot password?
-                               </Link>
-                           )}
-
                            <Button size="lg" className="w-full" disabled={processing}>
                                Log in
                            </Button>
+                           <div className="flex justify-between w-full">
+                               <p className="text-center text-sm">
+                                   Don't have an account? <Link className="underline" href={route('register')}>Register</Link>
+                               </p>
+                               {canResetPassword && (
+                                   <Link
+                                       href={route('password.request')}
+                                       className="rounded-md text-sm text-gray-200 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                                   >
+                                       Forgot password?
+                                   </Link>
+                               )}
+                           </div>
                        </div>
                    </form>
                </div>
 
-               <div className="pt-4 text-center text-sm">
-                   Don't have an account? <Link className="underline" href={route('register')}>Register</Link>
-               </div>
            </div>
         </>
     );

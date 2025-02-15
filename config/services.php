@@ -35,6 +35,13 @@ return [
         ],
     ],
 
+    'firebase' => [
+        'vapid' => [
+            'public_key' => env('VITE_FIREBASE_VAPID_PUBLIC_KEY'),
+            'private_key' => env('VAPID_PRIVATE_KEY'),
+        ],
+    ],
+
     'misc' => [
         'swervpay' => [
             'webhook_secret_key' => env('SWERVPAY_WEBHOOK_SECRET_KEY'),
