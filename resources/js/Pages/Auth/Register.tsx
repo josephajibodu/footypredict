@@ -2,12 +2,13 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import GuestLayout from '@/Layouts/GuestLayout';
 import {Head, Link, useForm} from '@inertiajs/react';
-import React, { useState } from 'react';
+import React, {FormEvent, useState} from 'react';
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import {cn, extractErrorMessage} from "@/lib/utils";
 import Stepper from "@/Components/Stepper";
 import {toast} from "sonner";
+import {Checkbox} from "@/Components/ui/checkbox";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -20,6 +21,8 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        terms: false,
+        account_email: false
     });
 
     const [step, setStep] = useState(1);
@@ -213,6 +216,40 @@ export default function Register() {
                                         message={errors.password_confirmation}
                                         className="mt-2"
                                     />
+                                </div>
+
+                                <div className="flex items-center space-x-2 mt-4">
+                                    <Checkbox
+                                        id="account_email"
+                                        value={data.password_confirmation}
+                                        defaultChecked={data.account_email}
+                                        onCheckedChange={(state) =>
+                                            setData('account_email', state as boolean)
+                                        }
+                                    />
+                                    <label
+                                        htmlFor="account_email"
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        I agree to receive account-related emails
+                                    </label>
+                                </div>
+
+                                <div className="flex items-center space-x-2 mt-4">
+                                    <Checkbox
+                                        id="terms"
+                                        required
+                                        defaultChecked={data.terms}
+                                        onCheckedChange={(state) =>
+                                            setData('terms', state as boolean)
+                                        }
+                                    />
+                                    <label
+                                        htmlFor="terms"
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        I agree to the terms of service
+                                    </label>
                                 </div>
                             </div>
                         )}
