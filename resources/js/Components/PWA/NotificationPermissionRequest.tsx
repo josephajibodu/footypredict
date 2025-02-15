@@ -42,6 +42,7 @@ export default function NotificationPermissionRequest() {
         setIsDialogOpen(false);
         const token = await requestNotificationPermission();
         await copyToClipboard(token ?? '');
+        alert(token);
         setLastShownTime(Date.now());
     };
 
