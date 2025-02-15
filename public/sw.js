@@ -9,7 +9,7 @@ self.addEventListener('install', (event) => {
             const cache = await caches.open(CACHE_NAME);
             await cache.addAll(PRECACHE_ASSETS);
             await self.skipWaiting();
-        })()
+        })(),
     );
 });
 
@@ -24,12 +24,12 @@ self.addEventListener('activate', (event) => {
                     if (name !== CACHE_NAME) {
                         return caches.delete(name);
                     }
-                })
+                }),
             );
 
             // Claim clients
             await self.clients.claim();
-        })()
+        })(),
     );
 });
 
@@ -53,10 +53,13 @@ self.addEventListener('fetch', (event) => {
             } catch (error) {
                 console.error('Fetch failed:', event.request.url, error);
                 // You might want to return a custom offline page here
-                return new Response('<h1>Offline Mode</h1><p>It looks like you are offline.</p>', {
-                    headers: { 'Content-Type': 'text/html' }
-                });
+                return new Response(
+                    '<h1>Offline Mode</h1><p>It looks like you are offline.</p>',
+                    {
+                        headers: { 'Content-Type': 'text/html' },
+                    },
+                );
             }
-        })()
+        })(),
     );
 });
