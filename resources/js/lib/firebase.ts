@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {getMessaging, getToken, onMessage} from 'firebase/messaging';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { toast } from 'sonner';
 
 export const firebaseConfig = {
@@ -33,7 +33,6 @@ export const requestNotificationPermission = async () => {
             );
         }
     } catch (error) {
-        console.error('Error getting FCM token', error);
         toast.error('Failed to enable notifications. Please try again.');
     }
 };

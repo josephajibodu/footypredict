@@ -1,22 +1,32 @@
-// Push event: handle incoming push notifications
-self.addEventListener('push', (event) => {
-    if (event.data) {
-        const data = event.data.json();
-        const options = {
-            body: data.notification.body,
-            icon: '/images/logo-icon.png',
-            data: data.data,
-        };
+self.importScripts(
+    'https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js',
+);
+self.importScripts(
+    'https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging-compat.js',
+);
 
-        event.waitUntil(
-            self.registration.showNotification(
-                data.notification.title,
-                options,
-            ),
-        );
-    } else {
-        console.log('Push event received but no data');
-    }
+// Initialize Firebase
+self.firebase.initializeApp({
+    apiKey: 'AIzaSyB_pEVquxI0Ouzlwxb-YXRnQzEvuO4JoyE',
+    authDomain: 'footypredict-a0f16.firebaseapp.com',
+    projectId: 'footypredict-a0f16',
+    storageBucket: 'footypredict-a0f16.firebasestorage.app',
+    messagingSenderId: '690832368761',
+    appId: '1:690832368761:web:0f0eb9e8e4b8bb7a3fe0a8',
+});
+
+// Initialize Firebase Messaging
+const messaging = self.firebase.messaging();
+
+// Handle background push messages
+messaging.onBackgroundMessage((payload) => {
+    console.log('Background message received:', payload);
+
+    self.registration.showNotification(payload.notification.title, {
+        body: payload.notification.body,
+        icon: payload.notification.icon || '/images/logo-icon.png',
+        data: payload.data,
+    });
 });
 
 // Notification click event: handle user interaction with the notification

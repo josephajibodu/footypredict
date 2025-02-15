@@ -1,6 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import InstallPWADialog from '@/Components/PWA/InstallPWADialog';
-import NotificationPermissionRequest from '@/Components/PWA/NotificationPermissionRequest';
+import PushNotificationHandler from '@/Components/PWA/PushNotificationHandler';
 import { Button } from '@/Components/ui/button';
 import { cn, toMoney } from '@/lib/utils';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -97,7 +97,6 @@ export default function Authenticated({
                         : 'calc(54px + env(safe-area-inset-bottom,16px))',
                 }}
             >
-                <NotificationPermissionRequest />
                 {children}
             </main>
 
@@ -160,6 +159,7 @@ export default function Authenticated({
                 </div>
             )}
 
+            <PushNotificationHandler />
             <InstallPWADialog enableLogging />
         </div>
     );

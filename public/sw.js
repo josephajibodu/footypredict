@@ -1,4 +1,4 @@
-const VERSION = 'v1.2.1';
+const VERSION = 'v1.2.3';
 const CACHE_NAME = `footypredict-${VERSION}`;
 const PRECACHE_ASSETS = ['/', '/events'];
 
@@ -35,8 +35,6 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event: serve cached assets and handle network failures
 self.addEventListener('fetch', (event) => {
-    const requestUrl = new URL(event.request.url);
-
     // Bypass navigation requests (e.g., visiting the main page)
     if (event.request.mode === 'navigate') {
         return; // Let the browser handle it

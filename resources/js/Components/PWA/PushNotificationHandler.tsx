@@ -8,20 +8,21 @@ import {
 } from '@/Components/ui/dialog';
 import { useIsPWA } from '@/hooks/useIsPWA';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { requestNotificationPermission } from '@/lib/firebase';
+import { messaging, requestNotificationPermission } from '@/lib/firebase';
+import { usePage } from '@inertiajs/react';
+import { onMessage } from 'firebase/messaging';
 import { useEffect, useState } from 'react';
-import {usePage} from "@inertiajs/react";
-import {useCopyToClipboard} from "@/hooks/useCopyToClipboard";
 
-export default function NotificationPermissionRequest() {
-    const {props: {auth}} = usePage();
+export default function PushNotificationHandler() {
+    const {
+        props: { auth },
+    } = usePage();
     const [lastShownTime, setLastShownTime] = useLocalStorage(
         'notification_prompt_time',
         0,
     );
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const isPWA = useIsPWA();
-    const [_, copyToClipboard] = useCopyToClipboard();
     const permission = Notification.permission;
 
     useEffect(() => {
@@ -30,8 +31,9 @@ export default function NotificationPermissionRequest() {
         // const shouldShow = permission !== 'granted' &&
         //     now - lastShownTime > threeHours &&
         //     isPWA;
-        const shouldShow = auth.user.email === 'josephajibodu@gmail.com'
-            || auth.user.email === 'joseph@footypredict.test';
+        const shouldShow =
+            auth.user.email === 'josephajibodu@gmail.com' ||
+            auth.user.email === 'joseph@footypredict.test';
 
         if (shouldShow) {
             setIsDialogOpen(true);
@@ -41,7 +43,6 @@ export default function NotificationPermissionRequest() {
     const handleEnableNotifications = async () => {
         setIsDialogOpen(false);
         const token = await requestNotificationPermission();
-        await copyToClipboard(token ?? '');
         alert(token);
         setLastShownTime(Date.now());
     };
@@ -50,6 +51,21 @@ export default function NotificationPermissionRequest() {
         setIsDialogOpen(false);
         setLastShownTime(Date.now());
     };
+
+    // 🔹 Handle Foreground Notifications
+    useEffect(() => {
+        const unsubscribe = onMessage(messaging, (payload) => {
+            // Display notification using the Notification API
+            if (Notification.permission === 'granted') {
+                new Notification(payload.notification?.title || 'New Message', {
+                    body: payload.notification?.body,
+                    icon: payload.notification?.icon || '/images/logo-icon.png',
+                });
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     return (
         <div>
@@ -61,7 +77,7 @@ export default function NotificationPermissionRequest() {
                         updates?
                     </DialogDescription>
                     <DialogFooter className="flex justify-end gap-2">
-                        <Button variant="outline" onClick={handleDismiss}>
+                        <Button variant="destructive" onClick={handleDismiss}>
                             No, thanks
                         </Button>
                         <Button onClick={handleEnableNotifications}>
