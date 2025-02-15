@@ -1,5 +1,9 @@
-import {Bet, User} from "@/types/index";
-import {TransactionStatus, TransactionType, WithdrawalAccountType} from "@/types/enums";
+import {
+    TransactionStatus,
+    TransactionType,
+    WithdrawalAccountType,
+} from '@/types/enums';
+import { Bet, User } from '@/types/index';
 
 export interface Transaction {
     id: number;
@@ -15,14 +19,14 @@ export interface Transaction {
     updated_at: string;
 
     deposit?: Deposit;
-    bet?: Bet,
+    bet?: Bet;
     withdrawal?: Withdrawal;
 }
 
 export interface Deposit {
     id: number;
     transaction_id: number;
-    method: "bank_transfer" | "card" | "crypto" | string;
+    method: 'bank_transfer' | 'card' | 'crypto' | string;
     metadata: SwervPayDepositMetadata;
     amount_received: number;
     fee: number;

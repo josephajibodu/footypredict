@@ -1,4 +1,4 @@
-const VERSION = 'v1.2.0-alpha';
+const VERSION = 'v1.2.1';
 const CACHE_NAME = `footypredict-${VERSION}`;
 const PRECACHE_ASSETS = ['/', '/events'];
 

@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'disabled' => env('DISABLE_PWA', false)
+    'disabled' => env('PWA_DISABLED', false),
+    'mobile_only' => env('PWA_MOBILE_ONLY', true),
+    'logging' => env('PWA_LOGGING', false),
 ];

@@ -1,7 +1,7 @@
+import { MatchOptionEnum } from '@/enums/MatchOptionEnum';
+import { BetStatus, SportEventStatus } from '@/types/enums';
+import { Transaction } from '@/types/transactions';
 import { Config } from 'ziggy-js';
-import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
-import { Transaction } from "@/types/transactions";
-import {BetStatus, SportEventStatus} from "@/types/enums";
 
 export interface User {
     id: number;
@@ -17,7 +17,7 @@ export interface User {
     balance: number;
     date_of_birth: string | null;
     email_verified_at: string | null;
-    avatar: string,
+    avatar: string;
     created_at: string;
     updated_at: string;
 }
@@ -59,28 +59,27 @@ export interface Team {
 }
 
 export interface BetSetting {
-    pool_size : number;
-    winning_multiplier : number;
-    min_stake : number;
-    max_stake : number;
-    min_selection : number;
-    max_selection : number;
-    selection_config: BetMultiplier[]
+    pool_size: number;
+    winning_multiplier: number;
+    min_stake: number;
+    max_stake: number;
+    min_selection: number;
+    max_selection: number;
+    selection_config: BetMultiplier[];
 }
 
 export interface BetMultiplier {
-    selection: number,
-    main: number,
-    allow_flex: boolean,
-    flex_0: number,
-    flex_1: number,
-    flex_2: number,
+    selection: number;
+    main: number;
+    allow_flex: boolean;
+    flex_0: number;
+    flex_1: number;
+    flex_2: number;
 }
 
-
 export interface WalletSetting {
-    minimum_deposit_ngn : number;
-    minimum_deposit_usdt : number;
+    minimum_deposit_ngn: number;
+    minimum_deposit_usdt: number;
 }
 
 export interface Bet {
@@ -106,10 +105,10 @@ export interface Bet {
 }
 
 export interface MatchOption {
-    id: string,
-    sport_event_id: number,
-    type: MatchOptionEnum,
-    value: string,
+    id: string;
+    sport_event_id: number;
+    type: MatchOptionEnum;
+    value: string;
 }
 
 interface PaginatedData<T> {
@@ -144,15 +143,17 @@ export type PageProps<
     };
     ziggy: Config & { location: string };
     settings: {
-        bet: BetSetting,
-        wallet: WalletSetting,
+        bet: BetSetting;
+        wallet: WalletSetting;
         pwa: {
-            disabled: boolean
-        }
-    },
+            disabled: boolean;
+            mobileOnly: boolean;
+            logging: boolean;
+        };
+    };
     flash: {
-        info?: string,
-        error?: string,
-        success?: string
-    }
+        info?: string;
+        error?: string;
+        success?: string;
+    };
 };
