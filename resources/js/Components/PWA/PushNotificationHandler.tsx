@@ -57,10 +57,15 @@ export default function PushNotificationHandler() {
         const unsubscribe = onMessage(messaging, (payload) => {
             // Display notification using the Notification API
             if (Notification.permission === 'granted') {
-                new Notification(payload.notification?.title || 'New Message', {
-                    body: payload.notification?.body,
-                    icon: payload.notification?.icon || '/images/logo-icon.png',
-                });
+                new Notification(
+                    payload.notification?.title || 'New Message' + 'Foreground',
+                    {
+                        body: payload.notification?.body,
+                        icon:
+                            payload.notification?.icon ||
+                            '/images/logo-icon.png',
+                    },
+                );
             }
         });
 

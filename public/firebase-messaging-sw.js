@@ -22,11 +22,14 @@ const messaging = self.firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log('Background message received:', payload);
 
-    self.registration.showNotification(payload.notification.title, {
-        body: payload.notification.body,
-        icon: payload.notification.icon || '/images/logo-icon.png',
-        data: payload.data,
-    });
+    self.registration.showNotification(
+        payload.notification.title + 'Foreground',
+        {
+            body: payload.notification.body,
+            icon: payload.notification.icon || '/images/logo-icon.png',
+            data: payload.data,
+        },
+    );
 });
 
 // Notification click event: handle user interaction with the notification
