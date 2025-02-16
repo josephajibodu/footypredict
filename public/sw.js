@@ -37,7 +37,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     // Bypass navigation requests (e.g., visiting the main page)
     if (event.request.mode === 'navigate') {
-        return; // Let the browser handle it
+        event.respondWith(fetch(event.request));
+        return;
     }
 
     event.respondWith(
