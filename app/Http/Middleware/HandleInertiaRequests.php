@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\BetStatus;
 use App\Http\Resources\ApiUserResource;
+use App\Models\Bet;
 use App\Settings\BetSetting;
 use App\Settings\WalletSetting;
 use Illuminate\Http\Request;
@@ -37,6 +39,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user() ? ApiUserResource::make($request->user()) : null,
+            ],
+            'stats' => [
+                'open_bets' => fn() => $request->user() ? Bet::query()->where('status', BetStatus::Pending)->count() : null,
             ],
             'flash' => [
                 'info' => fn () => $request->session()->get('info'),

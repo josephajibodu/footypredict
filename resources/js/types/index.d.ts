@@ -141,6 +141,9 @@ export type PageProps<
     auth: {
         user: User;
     };
+    stats: {
+        open_bets: number;
+    };
     ziggy: Config & { location: string };
     settings: {
         bet: BetSetting;

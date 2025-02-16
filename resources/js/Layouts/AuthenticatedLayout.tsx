@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import InstallPWADialog from '@/Components/PWA/InstallPWADialog';
+import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
 import { cn, toMoney } from '@/lib/utils';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -119,7 +120,7 @@ export default function Authenticated({
                         <Link
                             href={route('bets.open-bets')}
                             className={cn(
-                                'flex flex-col items-center px-4 py-2 text-white/50',
+                                'relative flex flex-col items-center px-4 py-2 text-white/50',
                                 { 'text-white': url.startsWith('/bets') },
                             )}
                         >
@@ -127,6 +128,9 @@ export default function Authenticated({
                             <span className="whitespace-nowrap text-sm">
                                 Open Bets
                             </span>
+                            <Badge className="bg-gradient absolute left-[58%] top-1 flex size-5 items-center justify-center rounded-full border-none">
+                                2
+                            </Badge>
                         </Link>
 
                         <Link
