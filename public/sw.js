@@ -1,6 +1,6 @@
-const VERSION = 'v1.2.5';
+const VERSION = 'v1.3.0';
 const CACHE_NAME = `footypredict-${VERSION}`;
-const PRECACHE_ASSETS = ['/', '/events'];
+const PRECACHE_ASSETS = [];
 
 // Install event: cache static assets
 self.addEventListener('install', (event) => {
