@@ -1,4 +1,5 @@
 import Checkbox from '@/Components/Checkbox';
+import { Button } from '@/Components/ui/button';
 import {
     Drawer,
     DrawerContent,
@@ -20,11 +21,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Info, Loader, Trash, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from './ui/button';
 
 const DEFAULT_AMOUNT = 500;
 
-export default function Betslip() {
+export default function Index() {
     const {
         auth,
         settings: { bet: betSettings },
@@ -84,7 +84,7 @@ export default function Betslip() {
 
         const data = {
             amount: stake,
-            events: events.map((event, index) => ({
+            events: events.map((event, _) => ({
                 event_id: event.id,
                 bet_option: event.betOption,
             })),
@@ -93,7 +93,7 @@ export default function Betslip() {
 
         router.post(route('bets'), data, {
             onStart: () => setProcessing(true),
-            onSuccess: (page) => {
+            onSuccess: () => {
                 dispatch(clearSelectedSportEvents());
                 setOpen(false);
                 setStake('');
@@ -227,26 +227,24 @@ export default function Betslip() {
             </AnimatePresence>
 
             <AnimatePresence>
-                {events.length >= betSettings.min_selection && (
-                    <motion.div
-                        variants={slipVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        transition={{ duration: 0.3 }}
-                        className="fixed right-0 flex h-16 w-12 cursor-pointer flex-col items-center justify-center rounded-l bg-primary"
-                        style={{
-                            bottom: 'calc(70px + env(safe-area-inset-bottom,16px))',
-                        }}
-                        onClick={() => setOpen(true)}
-                        aria-label="Open bet slip"
-                    >
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-secondary to-accent text-sm text-white">
-                            {events.length}
-                        </span>
-                        <span className="text-sm text-white">Slip</span>
-                    </motion.div>
-                )}
+                <motion.div
+                    variants={slipVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    transition={{ duration: 0.3 }}
+                    className="fixed right-0 flex h-16 w-12 cursor-pointer flex-col items-center justify-center rounded-l bg-primary"
+                    style={{
+                        bottom: 'calc(70px + env(safe-area-inset-bottom,16px))',
+                    }}
+                    onClick={() => setOpen(true)}
+                    aria-label="Open bet slip"
+                >
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-secondary to-accent text-sm text-white">
+                        {events.length}
+                    </span>
+                    <span className="text-sm text-white">Slip</span>
+                </motion.div>
             </AnimatePresence>
 
             <Drawer open={open} onOpenChange={setOpen}>

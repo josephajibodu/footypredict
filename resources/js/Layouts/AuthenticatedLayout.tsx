@@ -25,7 +25,7 @@ export default function Authenticated({
 }: AuthLayoutProps) {
     const {
         url,
-        props: { auth },
+        props: { auth, stats },
     } = usePage();
 
     const gotoWallet = () => {
@@ -128,9 +128,11 @@ export default function Authenticated({
                             <span className="whitespace-nowrap text-sm">
                                 Open Bets
                             </span>
-                            <Badge className="bg-gradient absolute left-[58%] top-1 flex size-5 items-center justify-center rounded-full border-none">
-                                2
-                            </Badge>
+                            {stats.open_bets && (
+                                <Badge className="bg-gradient absolute left-[58%] top-1 flex size-5 items-center justify-center rounded-full border-none">
+                                    {stats.open_bets}
+                                </Badge>
+                            )}
                         </Link>
 
                         <Link
