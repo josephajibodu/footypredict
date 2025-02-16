@@ -1,11 +1,10 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import { Input } from '@/Components/ui/input';
+import { PageProps } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import {PageProps} from "@/types";
 
 interface User {
     first_name: string;
@@ -18,10 +17,10 @@ interface User {
 }
 
 export default function UpdateProfileInformation({
-     mustVerifyEmail,
-     status,
-     className = '',
- }: {
+    mustVerifyEmail,
+    status,
+    className = '',
+}: {
     mustVerifyEmail: boolean;
     status?: string;
     className?: string;
@@ -126,7 +125,8 @@ export default function UpdateProfileInformation({
 
                         {status === 'verification-link-sent' && (
                             <div className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
-                                A new verification link has been sent to your email address.
+                                A new verification link has been sent to your
+                                email address.
                             </div>
                         )}
                     </div>

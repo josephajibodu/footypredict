@@ -2,13 +2,13 @@ import '../css/app.css';
 import './bootstrap';
 import './main';
 
+import { Toaster as SoonerToast } from '@/Components/ui/sonner';
+import { Toaster } from '@/Components/ui/toaster';
+import { store } from '@/store';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot, hydrateRoot } from 'react-dom/client';
-import {Provider} from "react-redux";
-import {store} from "@/store";
-import {Toaster} from "@/Components/ui/toaster";
-import {Toaster as SoonerToast} from "@/Components/ui/sonner";
+import { Provider } from 'react-redux';
 
 const appName = import.meta.env.VITE_APP_NAME || 'FootyPredict';
 

@@ -1,10 +1,12 @@
-import PrimaryButton from '@/Components/PrimaryButton';
+import { Button } from '@/Components/ui/button';
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+} from '@/Components/ui/input-otp';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import React, { FormEventHandler } from 'react';
-import Register from "@/Pages/Auth/Register";
-import {Button} from "@/Components/ui/button";
-import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/Components/ui/input-otp";
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { post, processing } = useForm({});
@@ -25,20 +27,20 @@ export default function VerifyEmail({ status }: { status?: string }) {
         <>
             <Head title="Email Verification" />
 
-            <div className="pb-8 pt-8 px-4 flex flex-col h-full">
+            <div className="flex h-full flex-col px-4 pb-8 pt-8">
                 <div className="flex-1 text-center">
-                    <h3 className="text-lg mb-4">Verification Code</h3>
+                    <h3 className="mb-4 text-lg">Verification Code</h3>
                     <div className="mb-4 text-sm text-gray-200">
-                        Thanks for signing up! Before getting started, could you verify
-                        your email address by providing the One Time Password sent to your email
-                        address? If you didn't receive the email, we will gladly send you
-                        another.
+                        Thanks for signing up! Before getting started, could you
+                        verify your email address by providing the One Time
+                        Password sent to your email address? If you didn't
+                        receive the email, we will gladly send you another.
                     </div>
 
                     {status === 'verification-link-sent' && (
                         <div className="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-                            A new verification link has been sent to the email address
-                            you provided during registration.
+                            A new verification link has been sent to the email
+                            address you provided during registration.
                         </div>
                     )}
 
@@ -58,7 +60,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
                             Verify OTP
                         </Button>
                     </form>
-
                 </div>
 
                 <form onSubmit={submit}>
@@ -82,4 +83,6 @@ export default function VerifyEmail({ status }: { status?: string }) {
     );
 }
 
-VerifyEmail.layout = (page: React.ReactNode) => <GuestLayout>{page}</GuestLayout>;
+VerifyEmail.layout = (page: React.ReactNode) => (
+    <GuestLayout>{page}</GuestLayout>
+);

@@ -1,14 +1,14 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import Stepper from '@/Components/Stepper';
+import { Button } from '@/Components/ui/button';
+import { Checkbox } from '@/Components/ui/checkbox';
+import { Input } from '@/Components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
-import {Head, Link, useForm} from '@inertiajs/react';
-import React, {FormEvent, useState} from 'react';
-import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
-import {cn, extractErrorMessage} from "@/lib/utils";
-import Stepper from "@/Components/Stepper";
-import {toast} from "sonner";
-import {Checkbox} from "@/Components/ui/checkbox";
+import { cn, extractErrorMessage } from '@/lib/utils';
+import { Head, Link, useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -22,7 +22,7 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         terms: false,
-        account_email: false
+        account_email: false,
     });
 
     const [step, setStep] = useState(1);
@@ -35,15 +35,15 @@ export default function Register() {
 
         post(route('register.store'), {
             onSuccess: () => {
-                reset('password', 'password_confirmation')
+                reset('password', 'password_confirmation');
 
-                toast.success("Account created successfully")
+                toast.success('Account created successfully');
             },
-            onError: error => {
-                const errorMessage = extractErrorMessage(error)
+            onError: (error) => {
+                const errorMessage = extractErrorMessage(error);
 
-                toast.error(errorMessage ?? "Registration failed")
-            }
+                toast.error(errorMessage ?? 'Registration failed');
+            },
         });
     };
 
@@ -58,20 +58,23 @@ export default function Register() {
     return (
         <>
             <Head title="Register" />
-            <div className="flex flex-col h-full px-8 pt-6 pb-6">
-
-                <h4 className="font-medium text-lg">{steps[step-1].label}</h4>
+            <div className="flex h-full flex-col px-8 pb-6 pt-6">
+                <h4 className="text-lg font-medium">{steps[step - 1].label}</h4>
                 {/* Step Progress Bar */}
                 <Stepper steps={steps} currentStep={step} />
 
                 {/* Note */}
                 <div className="mb-8 text-sm text-gray-300">
-                    Please ensure all information provided is accurate, as it cannot be modified later.
+                    Please ensure all information provided is accurate, as it
+                    cannot be modified later.
                 </div>
 
                 {/* Form */}
-                <div className="flex-1 flex flex-col items-center">
-                    <form onSubmit={submit} className="w-full flex flex-col flex-1">
+                <div className="flex flex-1 flex-col items-center">
+                    <form
+                        onSubmit={submit}
+                        className="flex w-full flex-1 flex-col"
+                    >
                         {step === 1 && (
                             <div className="flex-1">
                                 <div>
@@ -79,12 +82,20 @@ export default function Register() {
                                         id="first_name"
                                         name="first_name"
                                         value={data.first_name}
-                                        onChange={(e) => setData('first_name', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'first_name',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="First Name"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.first_name} className="mt-2" />
+                                    <InputError
+                                        message={errors.first_name}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -92,12 +103,17 @@ export default function Register() {
                                         id="last_name"
                                         name="last_name"
                                         value={data.last_name}
-                                        onChange={(e) => setData('last_name', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('last_name', e.target.value)
+                                        }
                                         placeholder="Last Name"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.last_name} className="mt-2" />
+                                    <InputError
+                                        message={errors.last_name}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -105,12 +121,17 @@ export default function Register() {
                                         id="username"
                                         name="username"
                                         value={data.username}
-                                        onChange={(e) => setData('username', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('username', e.target.value)
+                                        }
                                         placeholder="Username"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.username} className="mt-2" />
+                                    <InputError
+                                        message={errors.username}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -119,12 +140,17 @@ export default function Register() {
                                         type="email"
                                         name="email"
                                         value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('email', e.target.value)
+                                        }
                                         placeholder="Email"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.email} className="mt-2" />
+                                    <InputError
+                                        message={errors.email}
+                                        className="mt-2"
+                                    />
                                 </div>
                             </div>
                         )}
@@ -136,13 +162,21 @@ export default function Register() {
                                         id="mobile_number"
                                         name="mobile_number"
                                         value={data.mobile_number}
-                                        onChange={(e) => setData('mobile_number', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'mobile_number',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Mobile Number"
                                         autoComplete="mobile tel"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.mobile_number} className="mt-2" />
+                                    <InputError
+                                        message={errors.mobile_number}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -150,35 +184,54 @@ export default function Register() {
                                         id="nationality"
                                         name="nationality"
                                         value={data.nationality}
-                                        onChange={(e) => setData('nationality', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'nationality',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Nationality"
                                         disabled
                                         autoComplete="country"
                                         className="mt-1 block w-full"
                                     />
-                                    <InputError message={errors.nationality} className="mt-2" />
+                                    <InputError
+                                        message={errors.nationality}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
-                                    <InputLabel htmlFor="date_of_birth" value="Date of Birth" />
+                                    <InputLabel
+                                        htmlFor="date_of_birth"
+                                        value="Date of Birth"
+                                    />
                                     <Input
                                         id="date_of_birth"
                                         name="date_of_birth"
                                         type="date"
                                         value={data.date_of_birth}
-                                        onChange={(e) => setData('date_of_birth', e.target.value)}
+                                        onChange={(e) =>
+                                            setData(
+                                                'date_of_birth',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Date of Birth"
                                         autoComplete="bday-day"
                                         className={cn(
-                                            "mt-1 block w-full",
-                                            "[&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-70 hover:[&::-webkit-calendar-picker-indicator]:opacity-100",
-                                            "[&::-webkit-calendar-picker-indicator]:p-1 [&::-webkit-calendar-picker-indicator]:rounded",
-                                            "[&::-webkit-calendar-picker-indicator]:hover:cursor-pointer",
-                                            "[color-scheme:light]"
+                                            'mt-1 block w-full',
+                                            '[&::-webkit-calendar-picker-indicator]:opacity-70 [&::-webkit-calendar-picker-indicator]:invert hover:[&::-webkit-calendar-picker-indicator]:opacity-100',
+                                            '[&::-webkit-calendar-picker-indicator]:rounded [&::-webkit-calendar-picker-indicator]:p-1',
+                                            '[&::-webkit-calendar-picker-indicator]:hover:cursor-pointer',
+                                            '[color-scheme:light]',
                                         )}
                                         required
                                     />
-                                    <InputError message={errors.date_of_birth} className="mt-2" />
+                                    <InputError
+                                        message={errors.date_of_birth}
+                                        className="mt-2"
+                                    />
                                 </div>
                             </div>
                         )}
@@ -191,12 +244,17 @@ export default function Register() {
                                         type="password"
                                         name="password"
                                         value={data.password}
-                                        onChange={(e) => setData('password', e.target.value)}
+                                        onChange={(e) =>
+                                            setData('password', e.target.value)
+                                        }
                                         placeholder="Password"
                                         className="mt-1 block w-full"
                                         required
                                     />
-                                    <InputError message={errors.password} className="mt-2" />
+                                    <InputError
+                                        message={errors.password}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -206,7 +264,10 @@ export default function Register() {
                                         name="password_confirmation"
                                         value={data.password_confirmation}
                                         onChange={(e) =>
-                                            setData('password_confirmation', e.target.value)
+                                            setData(
+                                                'password_confirmation',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="Confirm Password"
                                         className="mt-1 block w-full"
@@ -218,24 +279,28 @@ export default function Register() {
                                     />
                                 </div>
 
-                                <div className="flex items-center space-x-2 mt-4">
+                                <div className="mt-4 flex items-center space-x-2">
                                     <Checkbox
                                         id="account_email"
                                         value={data.password_confirmation}
                                         defaultChecked={data.account_email}
                                         onCheckedChange={(state) =>
-                                            setData('account_email', state as boolean)
+                                            setData(
+                                                'account_email',
+                                                state as boolean,
+                                            )
                                         }
                                     />
                                     <label
                                         htmlFor="account_email"
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
-                                        I agree to receive account-related emails
+                                        I agree to receive account-related
+                                        emails
                                     </label>
                                 </div>
 
-                                <div className="flex items-center space-x-2 mt-4">
+                                <div className="mt-4 flex items-center space-x-2">
                                     <Checkbox
                                         id="terms"
                                         required
@@ -257,26 +322,41 @@ export default function Register() {
                         {/* Navigation Buttons */}
                         <div className="mt-8 flex justify-between">
                             {step > 1 && (
-                                <Button size="lg" onClick={handleBack} type="button" variant="outline">
+                                <Button
+                                    size="lg"
+                                    onClick={handleBack}
+                                    type="button"
+                                    variant="outline"
+                                >
                                     Back
                                 </Button>
                             )}
                             {!isLastStep ? (
-                                <Button size="lg" onClick={handleNext} type="button">
+                                <Button
+                                    size="lg"
+                                    onClick={handleNext}
+                                    type="button"
+                                >
                                     Next
                                 </Button>
                             ) : (
-                                <Button size="lg" type="submit" disabled={processing}>
+                                <Button
+                                    size="lg"
+                                    type="submit"
+                                    disabled={processing}
+                                >
                                     Register
                                 </Button>
                             )}
-
                         </div>
                     </form>
                 </div>
 
                 <div className="pt-4 text-center text-sm">
-                    Already have an account? <Link className="underline" href={route('login')}>Login</Link>
+                    Already have an account?{' '}
+                    <Link className="underline" href={route('login')}>
+                        Login
+                    </Link>
                 </div>
             </div>
         </>

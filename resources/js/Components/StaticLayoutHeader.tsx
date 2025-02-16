@@ -1,9 +1,9 @@
-import {Link, usePage} from "@inertiajs/react";
-import { Button } from "@/Components/ui/button";
-import { useState, useEffect } from "react";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { motion } from "framer-motion";
-import ApplicationLogo from "@/Components/ApplicationLogo";
+import ApplicationLogo from '@/Components/ApplicationLogo';
+import { Button } from '@/Components/ui/button';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { Link, usePage } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function StaticLayoutHeader() {
     const { auth } = usePage().props;
@@ -12,13 +12,13 @@ export default function StaticLayoutHeader() {
 
     useEffect(() => {
         if (menuOpen) {
-            document.body.style.overflow = "hidden";
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = "auto";
+            document.body.style.overflow = 'auto';
         }
 
         return () => {
-            document.body.style.overflow = "auto";
+            document.body.style.overflow = 'auto';
         };
     }, [menuOpen]);
 
@@ -30,9 +30,9 @@ export default function StaticLayoutHeader() {
     }, [isSmallScreen]);
 
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "How to Play", href: route('how-to-play') },
-        { name: "FAQs", href: route('faq') },
+        { name: 'Home', href: '/' },
+        { name: 'How to Play', href: route('how-to-play') },
+        { name: 'FAQs', href: route('faq') },
     ];
 
     const menuVariants = {
@@ -57,8 +57,8 @@ export default function StaticLayoutHeader() {
     };
 
     return (
-        <header className="py-6 bg-primary/50 flex px-4 lg:px-12">
-            <nav className="flex flex-1 justify-between items-center max-w-screen-xl mx-auto">
+        <header className="flex bg-primary/50 px-4 py-6 lg:px-12">
+            <nav className="mx-auto flex max-w-screen-xl flex-1 items-center justify-between">
                 {/* Logo */}
                 <div>
                     <Link href={route('landing')}>
@@ -67,10 +67,13 @@ export default function StaticLayoutHeader() {
                 </div>
 
                 {/* Desktop Menu */}
-                <ul className="hidden md:flex flex-1 justify-center gap-8">
+                <ul className="hidden flex-1 justify-center gap-8 md:flex">
                     {navLinks.map((link) => (
                         <li key={link.name}>
-                            <Link className="hover:text-secondary" href={link.href}>
+                            <Link
+                                className="hover:text-secondary"
+                                href={link.href}
+                            >
                                 {link.name}
                             </Link>
                         </li>
@@ -81,14 +84,14 @@ export default function StaticLayoutHeader() {
                     {!auth.user && (
                         <>
                             <Button
-                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                className="hidden bg-gradient-to-r from-secondary to-accent text-base md:flex"
                                 asChild
                             >
                                 <Link href={route('login')}>Sign In</Link>
                             </Button>
 
                             <Button
-                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                className="hidden bg-gradient-to-r from-secondary to-accent text-base md:flex"
                                 asChild
                             >
                                 <Link href={route('register')}>Register</Link>
@@ -99,12 +102,19 @@ export default function StaticLayoutHeader() {
                     {auth.user && (
                         <>
                             <Button
-                                className="hidden md:flex bg-gradient-to-r from-secondary to-accent text-base"
+                                className="hidden bg-gradient-to-r from-secondary to-accent text-base md:flex"
                                 asChild
                             >
-                                <Link href={auth ? route('settings') : route('login')}>View Events</Link>
+                                <Link
+                                    href={
+                                        auth
+                                            ? route('settings')
+                                            : route('login')
+                                    }
+                                >
+                                    View Events
+                                </Link>
                             </Button>
-
                         </>
                     )}
                 </div>
@@ -112,7 +122,7 @@ export default function StaticLayoutHeader() {
                 {/* Mobile Menu */}
                 {menuOpen && (
                     <motion.div
-                        className="fixed inset-0 top-[80px] bg-card z-50 flex flex-col items-center justify-center"
+                        className="fixed inset-0 top-[80px] z-50 flex flex-col items-center justify-center bg-card"
                         initial="hidden"
                         animate="visible"
                         exit="exit"
@@ -121,7 +131,10 @@ export default function StaticLayoutHeader() {
                         <ul className="space-y-6 text-center">
                             {navLinks.map((link) => (
                                 <li key={link.name}>
-                                    <Link className="hover:text-secondary text-white text-lg" href={link.href}>
+                                    <Link
+                                        className="text-lg text-white hover:text-secondary"
+                                        href={link.href}
+                                    >
                                         {link.name}
                                     </Link>
                                 </li>
@@ -129,7 +142,7 @@ export default function StaticLayoutHeader() {
                         </ul>
                         <Button
                             size="lg"
-                            className="bg-gradient-to-r from-secondary to-accent text-base mt-6"
+                            className="mt-6 bg-gradient-to-r from-secondary to-accent text-base"
                             asChild
                         >
                             <Link href={route('login')}>Sign In</Link>
@@ -139,17 +152,17 @@ export default function StaticLayoutHeader() {
 
                 {/* Hamburger Menu */}
                 <div
-                    className="md:hidden flex flex-col justify-center items-center h-8 w-8 cursor-pointer relative"
+                    className="relative flex h-8 w-8 cursor-pointer flex-col items-center justify-center md:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                 >
                     <div
-                        className={`h-[3px] w-full bg-gradient-to-r from-secondary to-accent absolute transition-transform origin-center duration-300 ${
-                            menuOpen ? "rotate-45" : "translate-y-[-6px]"
+                        className={`absolute h-[3px] w-full origin-center bg-gradient-to-r from-secondary to-accent transition-transform duration-300 ${
+                            menuOpen ? 'rotate-45' : 'translate-y-[-6px]'
                         }`}
                     ></div>
                     <div
-                        className={`h-[3px] w-full bg-gradient-to-r from-secondary to-accent absolute transition-transform origin-center duration-300 ${
-                            menuOpen ? "-rotate-45" : "translate-y-[6px]"
+                        className={`absolute h-[3px] w-full origin-center bg-gradient-to-r from-secondary to-accent transition-transform duration-300 ${
+                            menuOpen ? '-rotate-45' : 'translate-y-[6px]'
                         }`}
                     ></div>
                 </div>

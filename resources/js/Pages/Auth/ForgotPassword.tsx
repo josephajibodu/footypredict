@@ -1,9 +1,9 @@
 import InputError from '@/Components/InputError';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
-import {Head, Link, useForm} from '@inertiajs/react';
-import {FormEventHandler, ReactNode} from 'react';
-import {Input} from "@/Components/ui/input";
-import {Button} from "@/Components/ui/button";
+import { Head, Link, useForm } from '@inertiajs/react';
+import { FormEventHandler, ReactNode } from 'react';
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -20,15 +20,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
         <>
             <Head title="Forgot Password" />
 
-
-            <div className="flex flex-col h-full px-8 pt-6 pb-6">
-
-                <div className="flex-1 flex flex-col items-center">
-
+            <div className="flex h-full flex-col px-8 pb-6 pt-6">
+                <div className="flex flex-1 flex-col items-center">
                     <div className="mb-4 text-sm text-gray-300">
-                        Forgot your password? No problem. Just let us know your email
-                        address and we will email you a password reset link that will
-                        allow you to choose a new one.
+                        Forgot your password? No problem. Just let us know your
+                        email address and we will email you a password reset
+                        link that will allow you to choose a new one.
                     </div>
 
                     {status && (
@@ -58,14 +55,13 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </div>
 
                 <div className="py-4 text-center">
-                    <Button asChild className="w-full" variant='outline'>
+                    <Button asChild className="w-full" variant="outline">
                         <Link href={route('login')}>Login</Link>
                     </Button>
                 </div>
             </div>
-
         </>
     );
 }
 
-ForgotPassword.layout = (page: ReactNode) => <GuestLayout>{page}</GuestLayout>
+ForgotPassword.layout = (page: ReactNode) => <GuestLayout>{page}</GuestLayout>;

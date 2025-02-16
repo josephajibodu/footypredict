@@ -3,10 +3,10 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
-import {useForm} from '@inertiajs/react';
-import {FormEventHandler, useRef, useState} from 'react';
-import {Button} from "@/Components/ui/button";
-import {Input} from "@/Components/ui/input";
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { useForm } from '@inertiajs/react';
+import { FormEventHandler, useRef, useState } from 'react';
 
 export default function DeleteUserForm({
     className = '',

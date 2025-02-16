@@ -1,42 +1,56 @@
 import Betslip from '@/Components/Betslip';
+import { EventsLoader } from '@/Components/Loaders/EventsLoader';
 import SingleEvent from '@/Components/SingleEvent';
+import { MatchOptionEnum } from '@/enums/MatchOptionEnum';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import {Deferred, Head, usePage} from '@inertiajs/react';
-import {ReactNode, useEffect, useMemo} from 'react';
-import {PageProps, SelectedSportEvent, SportEvent} from "@/types";
-import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {deselectSportEvent, selectSportEvent} from "@/store/eventSlice";
-import {MatchOptionEnum} from "@/enums/MatchOptionEnum";
-import dayjs from "dayjs";
-import {EventsLoader} from "@/Components/Loaders/EventsLoader";
-import {toast} from "sonner";
+import { deselectSportEvent, selectSportEvent } from '@/store/eventSlice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { PageProps, SportEvent } from '@/types';
+import { Deferred, Head } from '@inertiajs/react';
+import dayjs from 'dayjs';
+import { ReactNode, useMemo } from 'react';
+import { toast } from 'sonner';
 
 interface EventPageProps extends PageProps {
-    events: SportEvent[]
+    events: SportEvent[];
 }
 
 export default function SportEvents({ events, settings }: EventPageProps) {
-    const selectedEvents = useAppSelector((state) => state.event.selectedEvents);
+    const selectedEvents = useAppSelector(
+        (state) => state.event.selectedEvents,
+    );
     const dispatch = useAppDispatch();
 
-    const handleGameSelection = (event: SportEvent, value: MatchOptionEnum | null) => {
-        const isSelected = selectedEvents.some((selectedEvent) => selectedEvent.id === event.id);
+    const handleGameSelection = (
+        event: SportEvent,
+        value: MatchOptionEnum | null,
+    ) => {
+        const isSelected = selectedEvents.some(
+            (selectedEvent) => selectedEvent.id === event.id,
+        );
 
-        if (! value) {
-            dispatch(deselectSportEvent(event.id))
+        if (!value) {
+            dispatch(deselectSportEvent(event.id));
             return;
         }
 
-        if (!isSelected && selectedEvents.length === settings.bet.max_selection) {
-            toast.error(`You cannot select more than ${settings.bet.max_selection} matches`)
+        if (
+            !isSelected &&
+            selectedEvents.length === settings.bet.max_selection
+        ) {
+            toast.error(
+                `You cannot select more than ${settings.bet.max_selection} matches`,
+            );
             return;
         }
 
-        dispatch(selectSportEvent({
-            ...event,
-            betOption: value
-        }))
-    }
+        dispatch(
+            selectSportEvent({
+                ...event,
+                betOption: value,
+            }),
+        );
+    };
 
     const isEventSelected = (eventId: number) => {
         return selectedEvents.some((event) => event.id === eventId);
@@ -44,7 +58,9 @@ export default function SportEvents({ events, settings }: EventPageProps) {
 
     const getSelectedOption = useMemo(() => {
         return (eventId: number): MatchOptionEnum | undefined => {
-            const selectedEvent = selectedEvents.find((event) => event.id === eventId);
+            const selectedEvent = selectedEvents.find(
+                (event) => event.id === eventId,
+            );
             return selectedEvent ? selectedEvent.betOption : undefined;
         };
     }, [selectedEvents]);
@@ -54,14 +70,14 @@ export default function SportEvents({ events, settings }: EventPageProps) {
             <Head title="Events" />
 
             <div className="relative h-full">
-                <div className="flex items-center justify-between py-2 border-b">
+                <div className="flex items-center justify-between border-b py-2">
                     <div className="flex items-center">
                         <span className="w-8 font-bold"></span>
                         <div className="flex flex-col">
                             <span className="font-bold">Events</span>
                         </div>
                     </div>
-                    <div className="flex justify-end w-48 gap-1 text-sm py-2 pe-4 font-bold">
+                    <div className="flex w-48 justify-end gap-1 py-2 pe-4 text-sm font-bold">
                         <span className="w-14 text-center">Home</span>
                         <span className="w-14 text-center">Draw</span>
                         <span className="w-14 text-center">Away</span>
@@ -69,12 +85,12 @@ export default function SportEvents({ events, settings }: EventPageProps) {
                 </div>
 
                 <Deferred fallback={<EventsLoader />} data="events">
-                    <div className="px-4 flex-1">
+                    <div className="flex-1 px-4">
                         {/* Empty State */}
-                        {(events && events.length === 0) && (
+                        {events && events.length === 0 && (
                             <div className="flex flex-col items-center justify-center py-16 text-center">
                                 <svg
-                                    className="w-16 h-16 text-gray-200"
+                                    className="h-16 w-16 text-gray-200"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -87,27 +103,35 @@ export default function SportEvents({ events, settings }: EventPageProps) {
                                         d="M9 17v-2a4 4 0 01.879-2.57l.87-.87a4 4 0 015.682 0l.87.87A4 4 0 0115 15v2M12 7v.01M12 12h.01"
                                     />
                                 </svg>
-                                <p className="mt-4 text-lg font-bold text-gray-200">No Events Available</p>
-                                <p className="mt-2 text-sm text-gray-300">Currently, there are no events to display. Please check back later.</p>
+                                <p className="mt-4 text-lg font-bold text-gray-200">
+                                    No Events Available
+                                </p>
+                                <p className="mt-2 text-sm text-gray-300">
+                                    Currently, there are no events to display.
+                                    Please check back later.
+                                </p>
                             </div>
                         )}
 
-                        {(events && events.length > 0) && (
+                        {events &&
+                            events.length > 0 &&
                             /* Event List */
                             events.map((event, index) => (
                                 <SingleEvent
                                     key={index}
                                     event={event}
                                     sn={index + 1}
-                                    onChange={(value) => handleGameSelection(event, value)}
+                                    onChange={(value) =>
+                                        handleGameSelection(event, value)
+                                    }
                                     betOption={getSelectedOption(event.id)}
-                                    disabled={dayjs().isAfter(dayjs(event.kickoff_time))}
+                                    disabled={dayjs().isAfter(
+                                        dayjs(event.kickoff_time),
+                                    )}
                                 />
-                            ))
-                        )}
+                            ))}
                     </div>
                 </Deferred>
-
             </div>
 
             <Betslip />

@@ -1,20 +1,23 @@
-import { Skeleton } from "@/Components/ui/skeleton";
+import { Skeleton } from '@/Components/ui/skeleton';
 
 export function EventsLoader() {
     return (
         <section className="px-4">
             <div className="flex flex-col">
                 {Array.from({ length: 10 }).map((_, index) => (
-                    <div key={index} className="flex items-center justify-between py-2 border-b">
+                    <div
+                        key={index}
+                        className="flex items-center justify-between border-b py-2"
+                    >
                         {/* Left Side: Event Details */}
                         <div className="flex items-center">
                             {/* Serial Number */}
-                            <Skeleton className="w-8 h-6 font-bold" />
-                            <div className="flex flex-col ml-2">
+                            <Skeleton className="h-6 w-8 font-bold" />
+                            <div className="ml-2 flex flex-col">
                                 {/* Date */}
-                                <Skeleton className="h-4 w-32 mb-1" />
+                                <Skeleton className="mb-1 h-4 w-32" />
                                 {/* Teams */}
-                                <Skeleton className="h-4 w-28 mb-1" />
+                                <Skeleton className="mb-1 h-4 w-28" />
                                 <Skeleton className="h-4 w-24" />
                             </div>
                         </div>

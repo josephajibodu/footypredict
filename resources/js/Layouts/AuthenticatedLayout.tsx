@@ -1,6 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import InstallPWADialog from '@/Components/PWA/InstallPWADialog';
-import PushNotificationHandler from '@/Components/PWA/PushNotificationHandler';
 import { Button } from '@/Components/ui/button';
 import { cn, toMoney } from '@/lib/utils';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -159,7 +158,7 @@ export default function Authenticated({
                 </div>
             )}
 
-            <PushNotificationHandler />
+            {/* <PushNotificationHandler /> */}
             <InstallPWADialog enableLogging />
         </div>
     );

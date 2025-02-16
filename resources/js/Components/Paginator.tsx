@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Pagination,
     PaginationContent,
@@ -7,8 +6,9 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/Components/ui/pagination";
-import {calculatePagination} from "@/lib/utils";
+} from '@/Components/ui/pagination';
+import { calculatePagination } from '@/lib/utils';
+import React from 'react';
 
 interface PaginatorProps {
     meta: {
@@ -31,22 +31,27 @@ interface PaginatorProps {
         prev: string | null;
         next: string | null;
     };
-    variant?: "simple" | "default";
+    variant?: 'simple' | 'default';
     onPageChange?: (page: number | null) => void;
 }
 
-const Paginator: React.FC<PaginatorProps> = ({ meta, links, variant = "default", onPageChange }) => {
+const Paginator: React.FC<PaginatorProps> = ({
+    meta,
+    links,
+    variant = 'default',
+    onPageChange,
+}) => {
     const constructLink = (page: number | null) => {
-        if (!page) return "#";
+        if (!page) return '#';
 
         const link = links.next || links.prev || links.first;
 
-        if (!link) return "#";
+        if (!link) return '#';
 
         const url = new URL(link);
         const params = new URLSearchParams(url.search);
 
-        params.set("page", page.toString());
+        params.set('page', page.toString());
 
         return `${url.origin}${url.pathname}?${params.toString()}`;
     };
@@ -55,26 +60,31 @@ const Paginator: React.FC<PaginatorProps> = ({ meta, links, variant = "default",
         if (page && onPageChange) onPageChange(page);
     };
 
-    const paginationPages = calculatePagination(meta.current_page, meta.last_page)
+    const paginationPages = calculatePagination(
+        meta.current_page,
+        meta.last_page,
+    );
 
-    if (variant === "simple") {
-        return <Pagination>
-            <PaginationContent>
-                <PaginationItem>
-                    <PaginationPrevious
-                        href={links.prev || "#"}
-                        hideLabel={false}
-                    />
-                </PaginationItem>
+    if (variant === 'simple') {
+        return (
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            href={links.prev || '#'}
+                            hideLabel={false}
+                        />
+                    </PaginationItem>
 
-                <PaginationItem>
-                    <PaginationNext
-                        href={links.next || "#"}
-                        hideLabel={false}
-                    />
-                </PaginationItem>
-            </PaginationContent>
-        </Pagination>
+                    <PaginationItem>
+                        <PaginationNext
+                            href={links.next || '#'}
+                            hideLabel={false}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        );
     }
 
     return (
@@ -83,11 +93,13 @@ const Paginator: React.FC<PaginatorProps> = ({ meta, links, variant = "default",
                 <PaginationItem>
                     <PaginationPrevious
                         href={constructLink(Math.max(1, meta.current_page - 1))}
-                        onClick={() => handlePageChange(Math.max(1, meta.current_page - 1))}
+                        onClick={() =>
+                            handlePageChange(Math.max(1, meta.current_page - 1))
+                        }
                     />
                 </PaginationItem>
 
-                {variant === "default" &&
+                {variant === 'default' &&
                     paginationPages.map((page, index) => {
                         if (typeof page === 'string') {
                             return (
@@ -102,16 +114,23 @@ const Paginator: React.FC<PaginatorProps> = ({ meta, links, variant = "default",
                                     href={constructLink(page)}
                                     isActive={page === meta.current_page}
                                     onClick={() => handlePageChange(page)}
-                                >{page}</PaginationLink>
-
+                                >
+                                    {page}
+                                </PaginationLink>
                             </PaginationItem>
                         );
                     })}
 
                 <PaginationItem>
                     <PaginationNext
-                        href={constructLink(Math.min(meta.last_page, meta.current_page + 1))}
-                        onClick={() => handlePageChange(Math.min(meta.last_page, meta.current_page + 1))}
+                        href={constructLink(
+                            Math.min(meta.last_page, meta.current_page + 1),
+                        )}
+                        onClick={() =>
+                            handlePageChange(
+                                Math.min(meta.last_page, meta.current_page + 1),
+                            )
+                        }
                     />
                 </PaginationItem>
             </PaginationContent>

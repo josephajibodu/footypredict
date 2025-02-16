@@ -19,10 +19,6 @@ use Illuminate\Support\Str;
 
 class PlaceBet
 {
-    public const START_BET_CODE = 100_000;
-
-    public const BET_CODE_CACHE_KEY = 'last_bet_id';
-
     public function __construct(public BetSetting $betSetting) {}
 
     public function __invoke(User $user, float $amount, array $sportEvents, bool $isFlexed): Bet
@@ -69,12 +65,9 @@ class PlaceBet
                 'currency' => Currency::NGN,
             ]);
 
-            $lastBetId = Cache::remember(self::BET_CODE_CACHE_KEY, now()->addMinutes(60), function () {
-                return Bet::query()->max('code') ?? self::START_BET_CODE;
-            });
-
-            $newBetCode = $lastBetId + 1;
-            Cache::put(self::BET_CODE_CACHE_KEY, $newBetCode);
+            do {
+                $newBetCode = Str::upper(Str::random(7));
+            } while (Bet::query()->where('code', $newBetCode)->exists());
 
             $bet = Bet::query()->create([
                 'code' => $newBetCode,

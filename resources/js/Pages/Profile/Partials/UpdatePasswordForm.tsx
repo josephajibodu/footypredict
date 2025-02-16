@@ -1,10 +1,10 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import {Transition} from '@headlessui/react';
-import {useForm} from '@inertiajs/react';
-import {FormEventHandler, useRef} from 'react';
-import {Input} from "@/Components/ui/input";
-import {Button} from "@/Components/ui/button";
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Transition } from '@headlessui/react';
+import { useForm } from '@inertiajs/react';
+import { FormEventHandler, useRef } from 'react';
 
 export default function UpdatePasswordForm({
     className = '',
@@ -126,7 +126,12 @@ export default function UpdatePasswordForm({
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <Button className="bg-gradient-to-r from-secondary to-accent" disabled={processing}>Save</Button>
+                    <Button
+                        className="bg-gradient-to-r from-secondary to-accent"
+                        disabled={processing}
+                    >
+                        Save
+                    </Button>
 
                     <Transition
                         show={recentlySuccessful}
@@ -135,9 +140,7 @@ export default function UpdatePasswordForm({
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-300">
-                            Saved.
-                        </p>
+                        <p className="text-sm text-gray-300">Saved.</p>
                     </Transition>
                 </div>
             </form>

@@ -1,8 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types';
 import { Head } from '@inertiajs/react';
+import { ReactNode } from 'react';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
-import {ReactNode} from "react";
 
 export default function Edit({
     mustVerifyEmail,
@@ -13,8 +13,8 @@ export default function Edit({
             <Head title="Profile" />
 
             <div className="py-12">
-                <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
-                    <div className="p-4 bg-card text-card-foreground sm:rounded-lg sm:p-8">
+                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    <div className="bg-card p-4 text-card-foreground sm:rounded-lg sm:p-8">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
@@ -31,10 +31,12 @@ export default function Edit({
     );
 }
 
-Edit.layout = (page: ReactNode) => <AuthenticatedLayout
-    backUrl={route('settings')}
-    showHeader={false}
-    title="Profile Information"
->
-    {page}
-</AuthenticatedLayout>
+Edit.layout = (page: ReactNode) => (
+    <AuthenticatedLayout
+        backUrl={route('settings')}
+        showHeader={false}
+        title="Profile Information"
+    >
+        {page}
+    </AuthenticatedLayout>
+);

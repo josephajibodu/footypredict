@@ -1,11 +1,9 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
-import {Head, useForm} from '@inertiajs/react';
-import {FormEventHandler, ReactNode} from 'react';
-import {Input} from "@/Components/ui/input";
-import {Button} from "@/Components/ui/button";
+import { Head, useForm } from '@inertiajs/react';
+import { FormEventHandler, ReactNode } from 'react';
 
 export default function ResetPassword({
     token,
@@ -33,8 +31,8 @@ export default function ResetPassword({
         <>
             <Head title="Reset Password" />
 
-            <div className="flex flex-col px-4 py-6 h-full">
-                <form onSubmit={submit} className="flex flex-col flex-1">
+            <div className="flex h-full flex-col px-4 py-6">
+                <form onSubmit={submit} className="flex flex-1 flex-col">
                     <div className="flex-1">
                         <div>
                             <Input
@@ -44,11 +42,16 @@ export default function ResetPassword({
                                 value={data.email}
                                 className="mt-1 block w-full"
                                 autoComplete="username"
-                                onChange={(e) => setData('email', e.target.value)}
+                                onChange={(e) =>
+                                    setData('email', e.target.value)
+                                }
                                 placeholder="Email Address"
                             />
 
-                            <InputError message={errors.email} className="mt-2" />
+                            <InputError
+                                message={errors.email}
+                                className="mt-2"
+                            />
                         </div>
 
                         <div className="mt-4">
@@ -60,11 +63,16 @@ export default function ResetPassword({
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 autoFocus={true}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
                                 placeholder="New Password"
                             />
 
-                            <InputError message={errors.password} className="mt-2" />
+                            <InputError
+                                message={errors.password}
+                                className="mt-2"
+                            />
                         </div>
 
                         <div className="mt-4">
@@ -75,7 +83,10 @@ export default function ResetPassword({
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 onChange={(e) =>
-                                    setData('password_confirmation', e.target.value)
+                                    setData(
+                                        'password_confirmation',
+                                        e.target.value,
+                                    )
                                 }
                                 placeholder="Confirm New Password"
                             />
@@ -88,7 +99,11 @@ export default function ResetPassword({
                     </div>
 
                     <div className="mt-4 flex items-center justify-end">
-                        <Button size="lg" className="ms-4 w-full" disabled={processing}>
+                        <Button
+                            size="lg"
+                            className="ms-4 w-full"
+                            disabled={processing}
+                        >
                             Reset Password
                         </Button>
                     </div>
@@ -98,4 +113,4 @@ export default function ResetPassword({
     );
 }
 
-ResetPassword.layout = (page: ReactNode) => <GuestLayout>{page}</GuestLayout>
+ResetPassword.layout = (page: ReactNode) => <GuestLayout>{page}</GuestLayout>;
