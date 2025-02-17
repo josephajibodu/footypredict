@@ -1,18 +1,28 @@
 import { MatchOptionEnum, MatchOptionLabels } from '@/enums/MatchOptionEnum';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { cn, toMoney } from '@/lib/utils';
 import { Bet, PageProps } from '@/types';
 import { BetStatus, SportEventStatus } from '@/types/enums';
 import { Head, Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
-import { CheckCircle, CircleOff, XCircle } from 'lucide-react';
+import { CheckCircle, CircleOff, Copy, XCircle } from 'lucide-react';
 import { ReactNode } from 'react';
+import { toast } from 'sonner';
 
 interface BetDetailsProps extends PageProps {
     bet: Bet;
 }
 
 export default function BetDetails({ bet }: BetDetailsProps) {
+    const [, copy] = useCopyToClipboard();
+    async function handleCopyBookingCode() {
+        await copy(bet.code);
+        toast.success('Booking code copied to clipboard.', {
+            duration: 2000,
+        });
+    }
+
     return (
         <>
             <Head title="Bet Details" />
@@ -42,6 +52,16 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 {/* Ticket Info */}
                 <div className="bg-card p-4 text-white">
                     <div className="space-y-4">
+                        <div className="flex justify-between">
+                            <span>Booking Code</span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-bold">{bet.code}</span>
+                                <Copy
+                                    className="size-4 cursor-pointer"
+                                    onClick={handleCopyBookingCode}
+                                />
+                            </div>
+                        </div>
                         <div className="flex justify-between">
                             <span>Expected Multiplier</span>
                             <span className="font-bold">

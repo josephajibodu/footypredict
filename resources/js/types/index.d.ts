@@ -45,6 +45,13 @@ export interface SportEvent {
     is_correct?: boolean;
 }
 
+export interface BetSportEvent {
+    selected_option: MatchOption;
+    outcome_option: MatchOption;
+    is_correct: boolean;
+    sport_event: SportEvent;
+}
+
 export interface SelectedSportEvent extends SportEvent {
     betOption: MatchOptionEnum;
 }
@@ -86,7 +93,7 @@ export interface Bet {
     id: number;
 
     reference: string;
-    code: number;
+    code: string;
 
     user_id: number;
     transaction_id: number;

@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/view-bets/{bet:reference}', ViewBetSlipController::class)->name('bets.share');
 
     Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
+
     Route::resource('/bets', BetController::class)
         ->only(['index', 'store', 'show'])
         ->parameters(['bets' => 'bet:reference'])

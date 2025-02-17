@@ -1,4 +1,5 @@
 import Checkbox from '@/Components/Checkbox';
+import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
 import { DrawerFooter } from '@/Components/ui/drawer';
 import { Input } from '@/Components/ui/input';
@@ -7,6 +8,7 @@ import { cn, toMoney } from '@/lib/utils';
 import { deselectSportEvent } from '@/store/eventSlice';
 import { useAppDispatch } from '@/store/hooks';
 import type { BetMultiplier, BetSetting, SelectedSportEvent } from '@/types';
+import dayjs from 'dayjs';
 import { Loader, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -72,8 +74,17 @@ export default function MainState({
                     {MatchOptionLabels[event.betOption]}
                 </span>
                 <span className="line-clamp-1">
-                    {event.team1.name} vs {event.team2.name}
+                    {event.team1.name} <i>vs</i>
                 </span>
+                <div className="line-clamp-1 flex items-center gap-2">
+                    <span>{event.team2.name}</span>
+                    {dayjs(event.kickoff_time).isValid() &&
+                        dayjs(event.kickoff_time).isBefore(dayjs()) && (
+                            <Badge className="w-fit rounded bg-gray-300 px-1 py-0.5 text-[10px] leading-3 text-gray-400">
+                                Unavailable
+                            </Badge>
+                        )}
+                </div>
             </div>
             <Button
                 onClick={() => handleRemoveEvent(event.id)}
@@ -160,7 +171,7 @@ export default function MainState({
                             value={stake}
                             onChange={(e) => setStake(e.target.value)}
                             required
-                            placeholder={betSettings.default_amount.toString()}
+                            placeholder={betSettings.min_stake.toString()}
                             aria-label="Enter stake amount"
                             className={
                                 'w-fit rounded-none focus-visible:ring-1 focus-visible:ring-offset-0'

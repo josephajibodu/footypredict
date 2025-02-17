@@ -18,11 +18,17 @@ class ApiBetSportEventResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
         return [
-            'selected_option' => ApiOptionResource::make($this->whenLoaded('selectedOption')),
-            'outcome_option' => ApiOptionResource::make($this->whenLoaded('outcomeOption')),
-            'is_correct' => $this->is_correct,
+            'selected_option' => $this->relationLoaded('selectedOption')
+                ? new ApiOptionResource($this->selectedOption)
+                : null,
+            'outcome_option' => $this->relationLoaded('outcomeOption')
+                ? new ApiOptionResource($this->outcomeOption)
+                : null,
+            'is_correct' => (bool) $this->is_correct,
+            'sport_event' => $this->relationLoaded('sportEvent')
+                ? new ApiSportEventResource($this->sportEvent)
+                : null,
         ];
     }
 }

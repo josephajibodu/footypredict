@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+
 use function Filament\authorize;
 
 class BetController extends Controller
@@ -35,7 +36,7 @@ class BetController extends Controller
         $bets = $betsQuery->latest()->paginate()->withQueryString();
 
         return Inertia::render('Bets/BetHistory', [
-            'bets' => Inertia::defer(fn() => ApiBetSummaryResource::collection($bets)),
+            'bets' => Inertia::defer(fn () => ApiBetSummaryResource::collection($bets)),
         ]);
     }
 
@@ -70,14 +71,16 @@ class BetController extends Controller
         if (count($data['events']) > $betSetting->max_selection) {
             return back()->withErrors("You can only select up to {$betSetting->max_selection} matches");
         }
-        
+
         if (floatval($data['amount']) < $betSetting->min_stake) {
-            $maxStake = to_money($betSetting->max_stake);
-            return back()->withErrors("Minimum stake allowed is $maxStake");
+            $minStake = to_money($betSetting->min_stake);
+
+            return back()->withErrors("Minimum stake allowed is $minStake");
         }
 
         if (floatval($data['amount']) > $betSetting->max_stake) {
             $maxStake = to_money($betSetting->max_stake);
+
             return back()->withErrors("Maximum stake allowed is $maxStake");
         }
 
@@ -95,7 +98,7 @@ class BetController extends Controller
                 'trace' => $ex->getTraceAsString(),
             ]);
 
-            return back()->withErrors("An error occurred while placing your bet. Please try again later.");
+            return back()->withErrors('An error occurred while placing your bet. Please try again later.');
         }
     }
 }

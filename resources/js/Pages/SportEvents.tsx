@@ -1,4 +1,4 @@
-import Betslip from '@/Components/Betslip';
+import Betslip from '@/Components/Betslip/Index';
 import { EventsLoader } from '@/Components/Loaders/EventsLoader';
 import SingleEvent from '@/Components/SingleEvent';
 import { MatchOptionEnum } from '@/enums/MatchOptionEnum';
@@ -50,10 +50,6 @@ export default function SportEvents({ events, settings }: EventPageProps) {
                 betOption: value,
             }),
         );
-    };
-
-    const isEventSelected = (eventId: number) => {
-        return selectedEvents.some((event) => event.id === eventId);
     };
 
     const getSelectedOption = useMemo(() => {
