@@ -129,7 +129,7 @@ export default function Authenticated({
                             <span className="whitespace-nowrap text-sm">
                                 Open Bets
                             </span>
-                            {stats.open_bets && (
+                            {stats.open_bets > 0 && (
                                 <Badge className="bg-gradient absolute left-[58%] top-1 flex size-5 items-center justify-center rounded-full border-none">
                                     {stats.open_bets}
                                 </Badge>
