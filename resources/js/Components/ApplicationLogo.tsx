@@ -4,7 +4,7 @@ import { SVGAttributes } from 'react';
 export default function ApplicationLogo(props: SVGAttributes<SVGElement>) {
     return (
         <svg
-            className={cn('h-12 w-fit fill-white', props.className)}
+            className={cn('h-12 fill-white', props.className)}
             version="1.2"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1240 260"

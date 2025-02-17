@@ -8,7 +8,7 @@ export default function Guest({ children }: PropsWithChildren) {
             <div className="mx-auto flex h-full w-full max-w-md flex-col bg-background">
                 <div className="flex h-40 items-center justify-center">
                     <Link href={route('events')}>
-                        <ApplicationLogo />
+                        <ApplicationLogo className="w-[250px]" />
                     </Link>
                 </div>
 
