@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-    getMessaging,
-    getToken,
-    isSupported,
-    onMessage,
-} from 'firebase/messaging';
+import { getMessaging, getToken, isSupported } from 'firebase/messaging';
 import { toast } from 'sonner';
 
 export const firebaseConfig = {
@@ -17,7 +12,14 @@ export const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
+
+// 🔴 Avoid initializing getMessaging globally
+let messaging: ReturnType<typeof getMessaging> | null = null;
+(async () => {
+    if (await isSupported()) {
+        messaging = getMessaging(app);
+    }
+})();
 
 export const VAPID = import.meta.env.VITE_FIREBASE_VAPID_PUBLIC_KEY;
 
@@ -35,6 +37,11 @@ export const requestNotificationPermission = async () => {
                 'Notification permission granted! You will receive updates.',
             );
 
+            if (!messaging) {
+                console.error('Messaging is not initialized.');
+                return null;
+            }
+
             return await getToken(messaging, {
                 vapidKey: VAPID,
             });
@@ -46,12 +53,4 @@ export const requestNotificationPermission = async () => {
     } catch (error) {
         toast.error('Failed to enable notifications. Please try again.');
     }
-};
-
-export const onMessageListener = () => {
-    return new Promise((resolve) => {
-        onMessage(messaging, (payload) => {
-            resolve(payload);
-        });
-    });
 };
