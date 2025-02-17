@@ -35,12 +35,14 @@ export default function PushNotificationHandler() {
 
         const now = Date.now();
         const threeHours = 3 * 60 * 60 * 1000;
-        // const shouldShow = permission !== 'granted' &&
-        //     now - lastShownTime > threeHours &&
-        //     isPWA;
         const shouldShow =
-            auth.user.email === 'josephajibodu@gmail.com' ||
-            auth.user.email === 'joseph@footypredict.test';
+            permission === 'default' &&
+            now - lastShownTime > threeHours &&
+            isPWA;
+
+        // const shouldShow =
+        //     auth.user.email === 'josephajibodu@gmail.com' ||
+        //     auth.user.email === 'joseph@footypredict.test';
 
         if (shouldShow) {
             setIsDialogOpen(true);
@@ -54,7 +56,6 @@ export default function PushNotificationHandler() {
             try {
                 const token = await requestNotificationPermission();
                 if (token) {
-                    alert(`Notification Token: ${token}`);
                     setLastShownTime(Date.now());
                 }
             } catch (error) {

@@ -48,7 +48,7 @@ export default function Authenticated({
 
                 {showHeader && (
                     <header className="flex h-full items-center justify-between border-b bg-primary px-2 py-2">
-                        <ApplicationLogo className="h-8 w-fit" />
+                        <ApplicationLogo className="h-8 w-[150px] w-fit" />
                         <div className="flex gap-2">
                             {auth.user && (
                                 <div
