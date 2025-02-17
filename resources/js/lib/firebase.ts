@@ -6,7 +6,6 @@ import {
     onMessage,
 } from 'firebase/messaging';
 import { toast } from 'sonner';
-import isSupported = firebase.remoteConfig.isSupported;
 
 export const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
