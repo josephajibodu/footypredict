@@ -92,7 +92,7 @@ export default function Login({
                                 Log in
                             </Button>
                             <div className="flex w-full justify-between">
-                                <p className="text-center text-sm">
+                                <p className="text-start text-sm">
                                     Don't have an account?{' '}
                                     <Link
                                         className="underline"
@@ -104,7 +104,7 @@ export default function Login({
                                 {canResetPassword && (
                                     <Link
                                         href={route('password.request')}
-                                        className="rounded-md text-sm text-gray-200 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                                        className="rounded-md text-end text-sm text-gray-200 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                                     >
                                         Forgot password?
                                     </Link>

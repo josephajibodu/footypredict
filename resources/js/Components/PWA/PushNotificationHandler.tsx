@@ -22,9 +22,17 @@ export default function PushNotificationHandler() {
     );
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const isPWA = useIsPWA();
-    const permission = Notification.permission;
+    const permission =
+        typeof Notification !== 'undefined'
+            ? Notification.permission
+            : 'default';
 
     useEffect(() => {
+        if (typeof Notification === 'undefined') {
+            console.log('Notification is not available');
+            return;
+        }
+
         const now = Date.now();
         const threeHours = 3 * 60 * 60 * 1000;
         // const shouldShow = permission !== 'granted' &&
@@ -41,9 +49,20 @@ export default function PushNotificationHandler() {
 
     const handleEnableNotifications = async () => {
         setIsDialogOpen(false);
-        const token = await requestNotificationPermission();
-        alert(token);
-        setLastShownTime(Date.now());
+
+        if (typeof window !== 'undefined' && 'Notification' in window) {
+            try {
+                const token = await requestNotificationPermission();
+                if (token) {
+                    alert(`Notification Token: ${token}`);
+                    setLastShownTime(Date.now());
+                }
+            } catch (error) {
+                console.error('Failed to enable notifications:', error);
+            }
+        } else {
+            console.warn('This browser does not support notifications.');
+        }
     };
 
     const handleDismiss = () => {

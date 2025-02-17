@@ -1,5 +1,6 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import InstallPWADialog from '@/Components/PWA/InstallPWADialog';
+import PushNotificationHandler from '@/Components/PWA/PushNotificationHandler';
 import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
 import { cn, toMoney } from '@/lib/utils';
@@ -164,7 +165,7 @@ export default function Authenticated({
                 </div>
             )}
 
-            {/* <PushNotificationHandler /> */}
+            <PushNotificationHandler />
             <InstallPWADialog enableLogging />
         </div>
     );
