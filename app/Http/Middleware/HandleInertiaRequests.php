@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user() ? ApiUserResource::make($request->user()) : null,
             ],
             'stats' => [
-                'open_bets' => fn() => $request->user() ? Bet::query()->where('status', BetStatus::Pending)->count() : null,
+                'open_bets' => fn() => $request->user() ? request()->user()->bets()->where('status', BetStatus::Pending)->count() : null,
             ],
             'flash' => [
                 'info' => fn () => $request->session()->get('info'),
