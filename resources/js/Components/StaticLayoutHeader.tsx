@@ -62,7 +62,7 @@ export default function StaticLayoutHeader() {
                 {/* Logo */}
                 <div>
                     <Link href={route('landing')}>
-                        <ApplicationLogo className="w-fit" />
+                        <ApplicationLogo className="w-[200px]" />
                     </Link>
                 </div>
 

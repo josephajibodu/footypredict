@@ -25,7 +25,7 @@ export default function StaticLayout({
                     <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-12">
                         <div className="col-span-full flex flex-col items-center sm:col-span-2 lg:col-span-6 lg:items-start">
                             <h4 className="relative mb-8 pb-2 text-2xl font-bold after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:bg-primary after:content-[''] lg:after:w-16">
-                                <ApplicationLogo className="w-fit" />
+                                <ApplicationLogo className="w-[200px]" />
                             </h4>
                             <p className="mb-6 max-w-md text-center lg:text-start">
                                 Footy Predict is a Jackpot-style predict-to-win
