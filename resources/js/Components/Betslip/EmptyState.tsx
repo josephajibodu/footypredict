@@ -8,12 +8,16 @@ import { selectMultipleSportEvents } from '@/store/eventSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { BetSportEvent } from '@/types';
 import { Loader } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 
-export default function EmptyState() {
+export default function EmptyState({
+    bookingCode: code,
+}: {
+    bookingCode?: string | null;
+}) {
     const dispatch = useAppDispatch();
-    const [bookingCode, setBookingCode] = useState('');
+    const [bookingCode, setBookingCode] = useState(code ?? '');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleAddBookingCode = async () => {
@@ -37,11 +41,17 @@ export default function EmptyState() {
                 throw new Error('Invalid booking code');
             }
         } catch (error) {
-            toast.error('Invalid booking code');
+            setErrorMessage('Invalid booking code');
         } finally {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (bookingCode) {
+            handleAddBookingCode();
+        }
+    }, []);
 
     return (
         <>
@@ -58,15 +68,32 @@ export default function EmptyState() {
 
             <DrawerFooter className="border-t px-0 pb-0">
                 <div className="space-y-2 px-4">
-                    <div className={'flex w-full items-center justify-between'}>
+                    <div
+                        className={
+                            'flex w-full flex-col items-center justify-between'
+                        }
+                    >
                         <Input
-                            type="text"
+                            type="search"
                             value={bookingCode}
-                            onChange={(e) => setBookingCode(e.target.value)}
+                            onChange={(e) => {
+                                setBookingCode(e.target.value);
+                                if (!e.target.value) {
+                                    setErrorMessage('');
+                                }
+                            }}
                             placeholder="Enter booking code"
                             aria-label="Enter booking code"
                             className={'w-full'}
                         />
+
+                        <div className="flex h-8 flex-col">
+                            {errorMessage && (
+                                <span className="mt-2 text-red-500">
+                                    {errorMessage}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
 

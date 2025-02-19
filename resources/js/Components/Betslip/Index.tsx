@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Link, router, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Info, Trash } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Index() {
@@ -28,6 +28,7 @@ export default function Index() {
     const [processing, setProcessing] = useState(false);
     const [isFlexed, setIsFlexed] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
+    const [bookingCode, setBookingCode] = useState<string | null>(null);
 
     const infoVariants = {
         hidden: { x: '100%', opacity: 0 },
@@ -81,9 +82,20 @@ export default function Index() {
                         'There was an issue placing your bet. Try again or contact support.',
                 });
             },
-            onFinish: () => setProcessing(false),
+            onFinish: () => {
+                setProcessing(false);
+            },
         });
     };
+
+    useEffect(() => {
+        const bookingCode = route().queryParams?.code;
+
+        if (bookingCode) {
+            setOpen(true);
+            setBookingCode(bookingCode);
+        }
+    }, []);
 
     return (
         <>
@@ -136,15 +148,17 @@ export default function Index() {
                     <DrawerHeader className={'flex flex-col justify-start'}>
                         <div className="flex w-full items-center justify-between">
                             <DrawerTitle>Bet Slip</DrawerTitle>
-                            <Button
-                                variant="link"
-                                onClick={handleClearAllEvents}
-                                aria-label="Remove all events"
-                                className="flex items-center gap-1 text-red-500 hover:bg-red-100"
-                            >
-                                <Trash className="h-4 w-4" />
-                                <span>Clear All</span>
-                            </Button>
+                            {events.length > 0 && (
+                                <Button
+                                    variant="link"
+                                    onClick={handleClearAllEvents}
+                                    aria-label="Remove all events"
+                                    className="flex items-center gap-1 text-red-500 hover:bg-red-100"
+                                >
+                                    <Trash className="h-4 w-4" />
+                                    <span>Clear All</span>
+                                </Button>
+                            )}
                         </div>
                     </DrawerHeader>
 
@@ -160,7 +174,7 @@ export default function Index() {
                             betSettings={betSettings}
                         />
                     ) : (
-                        <EmptyState />
+                        <EmptyState bookingCode={bookingCode} />
                     )}
                 </DrawerContent>
             </Drawer>

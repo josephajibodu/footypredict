@@ -7,6 +7,7 @@ use App\Http\Controllers\OpenBetController;
 use App\Http\Controllers\PasswordUpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ShareBetController;
 use App\Http\Controllers\SportEventController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\SwervPayWebhookController;
@@ -32,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/view-bets/{bet:reference}', ViewBetSlipController::class)->name('bets.share');
 
     Route::get('/bets/open-bets', OpenBetController::class)->name('bets.open-bets');
+
+    Route::get('/bets/share/{code}', [ShareBetController::class, 'show'])->name('bets-slip.share');
 
     Route::resource('/bets', BetController::class)
         ->only(['index', 'store', 'show'])

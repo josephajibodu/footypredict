@@ -6,10 +6,8 @@ use App\Models\Bet;
 
 class ShareBetController extends Controller
 {
-    public function show(Bet $bet)
+    public function show(string $code)
     {
-        // returns the user to the events page
-        // then load the events to the betslip
-        return $bet;
+        return redirect()->route('events', ['code' => $code]);
     }
 }
