@@ -40,7 +40,9 @@ export default function Index() {
         visible: { x: 0, opacity: 1 },
     };
 
-    const handleClearAllEvents = () => dispatch(clearSelectedSportEvents());
+    const handleClearAllEvents = () => {
+        dispatch(clearSelectedSportEvents());
+    };
 
     const handlePlaceBet = () => {
         if (!auth.user) {
@@ -174,7 +176,10 @@ export default function Index() {
                             betSettings={betSettings}
                         />
                     ) : (
-                        <EmptyState bookingCode={bookingCode} />
+                        <EmptyState
+                            bookingCode={bookingCode}
+                            onLoaded={() => setBookingCode(null)}
+                        />
                     )}
                 </DrawerContent>
             </Drawer>

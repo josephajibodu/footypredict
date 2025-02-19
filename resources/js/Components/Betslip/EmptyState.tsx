@@ -12,15 +12,17 @@ import { useEffect, useState } from 'react';
 
 export default function EmptyState({
     bookingCode: code,
+    onLoaded,
 }: {
     bookingCode?: string | null;
+    onLoaded?: () => void;
 }) {
     const dispatch = useAppDispatch();
-    const [bookingCode, setBookingCode] = useState(code ?? '');
+    const [bookingCode, setBookingCode] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleAddBookingCode = async () => {
+    const handleAddBookingCode = async (bookingCode: string) => {
         setIsLoading(true);
         try {
             const response = await apiClient.get<{
@@ -48,8 +50,9 @@ export default function EmptyState({
     };
 
     useEffect(() => {
-        if (bookingCode) {
-            handleAddBookingCode();
+        if (code) {
+            setBookingCode(code);
+            handleAddBookingCode(code).then(() => onLoaded && onLoaded());
         }
     }, []);
 
@@ -98,7 +101,7 @@ export default function EmptyState({
                 </div>
 
                 <Button
-                    onClick={handleAddBookingCode}
+                    onClick={() => handleAddBookingCode(bookingCode)}
                     aria-label="Add booking code"
                     className={'h-16 w-full rounded-none text-lg'}
                     disabled={!bookingCode || isLoading}

@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
 
             DB::commit();
 
-            return redirect(route('events', absolute: false));
+            return redirect()->intended(route('events', absolute: false));
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error('User registration failed', [
