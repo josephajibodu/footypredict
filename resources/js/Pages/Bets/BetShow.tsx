@@ -1,25 +1,115 @@
+import {
+    Drawer,
+    DrawerContent,
+    DrawerHeader,
+    DrawerTitle,
+} from '@/Components/ui/drawer';
 import { MatchOptionEnum, MatchOptionLabels } from '@/enums/MatchOptionEnum';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import FacebookIcon from '@/Images/facebook.svg';
+import TelegramIcon from '@/Images/telegram.svg';
+import TwitterIcon from '@/Images/twitter.svg';
+import WhatsappIcon from '@/Images/whatsapp.svg';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
 import { cn, toMoney } from '@/lib/utils';
 import { Bet, PageProps } from '@/types';
 import { BetStatus, SportEventStatus } from '@/types/enums';
 import { Head, Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
-import { CheckCircle, CircleOff, Copy, XCircle } from 'lucide-react';
-import { ReactNode } from 'react';
+import {
+    CheckCircle,
+    CircleOff,
+    Copy,
+    LinkIcon,
+    Share2Icon,
+    XCircle,
+} from 'lucide-react';
+import { ReactNode, useState } from 'react';
 import { toast } from 'sonner';
+
+const socialPlatforms = [
+    {
+        key: 'facebook',
+        label: 'Facebook',
+        image: FacebookIcon,
+    },
+    {
+        key: 'whatsapp',
+        label: 'Whatsapp',
+        image: WhatsappIcon,
+    },
+    {
+        key: 'telegram',
+        label: 'Telegram',
+        image: TelegramIcon,
+    },
+    {
+        key: 'twitter',
+        label: 'Twitter',
+        image: TwitterIcon,
+    },
+];
 
 interface BetDetailsProps extends PageProps {
     bet: Bet;
 }
 
 export default function BetDetails({ bet }: BetDetailsProps) {
+    const [openShareDialog, setOpenShareDialog] = useState(false);
     const [, copy] = useCopyToClipboard();
     async function handleCopyBookingCode() {
         await copy(bet.code);
         toast.success('Booking code copied to clipboard.', {
             duration: 2000,
+        });
+    }
+
+    function handleShare(platform: string) {
+        const shareUrl = route('bets-slip.share', { code: bet.code });
+        const shareText = `Check out my bet on Footypredict with booking code: ${bet.code}`;
+
+        switch (platform) {
+            case 'facebook':
+                window.open(
+                    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+                    '_blank',
+                );
+                break;
+            case 'twitter':
+                window.open(
+                    `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+                    '_blank',
+                );
+                break;
+            case 'telegram':
+                window.open(
+                    `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`,
+                    '_blank',
+                );
+                break;
+            case 'whatsapp':
+                window.open(
+                    `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
+                    '_blank',
+                );
+                break;
+            default:
+                break;
+        }
+    }
+
+    function handleSaveImage() {
+        // Implement logic to save the bet details as an image
+        toast.success('Image saved successfully.', {
+            duration: 2000,
+        });
+    }
+
+    async function handleCopyBookingLink() {
+        await copy(route('bets-slip.share', { code: bet.code }));
+        toast.success('Booking link copied to clipboard.', {
+            duration: 2000,
+            position: 'bottom-center',
         });
     }
 
@@ -52,8 +142,14 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                 {/* Ticket Info */}
                 <div className="bg-card p-4 text-white">
                     <div className="space-y-4">
-                        <div className="flex justify-between">
-                            <span>Booking Code</span>
+                        <div className="flex justify-between border-b pb-4">
+                            <div className="flex items-center gap-2">
+                                <span>Booking Code</span>
+                                <Share2Icon
+                                    className="size-4 cursor-pointer"
+                                    onClick={() => setOpenShareDialog(true)}
+                                />
+                            </div>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold">{bet.code}</span>
                                 <Copy
@@ -215,6 +311,60 @@ export default function BetDetails({ bet }: BetDetailsProps) {
                     {/*{bet.ip_address} | {bet.device}*/}
                 </p>
             </div>
+
+            <Drawer open={openShareDialog} onOpenChange={setOpenShareDialog}>
+                <DrawerContent className="bg-card">
+                    <DrawerHeader className={'flex flex-col justify-start'}>
+                        <div className="flex w-full items-center justify-between">
+                            <DrawerTitle className="text-3xl">
+                                Booking Code
+                            </DrawerTitle>
+
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl font-bold">
+                                    {bet.code}
+                                </span>
+                                <Copy
+                                    className="size-4 cursor-pointer"
+                                    onClick={handleCopyBookingCode}
+                                />
+                            </div>
+                        </div>
+                    </DrawerHeader>
+                    <div className="min-h-[200px] p-4">
+                        <div className="flex flex-wrap justify-center gap-4">
+                            <div
+                                className="flex flex-col items-center"
+                                role="button"
+                                aria-label="copy link"
+                                onClick={handleCopyBookingLink}
+                            >
+                                <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-gray-300">
+                                    <LinkIcon className="text-primary" />
+                                </div>
+                                <span>Copy Link</span>
+                            </div>
+
+                            {socialPlatforms.map((platform) => (
+                                <div
+                                    key={platform.key}
+                                    className="flex flex-col items-center"
+                                    role="button"
+                                    aria-label={platform.label}
+                                    onClick={() => handleShare(platform.key)}
+                                >
+                                    <img
+                                        className="mb-2 w-12"
+                                        src={platform.image}
+                                        alt={platform.label}
+                                    />
+                                    <span>{platform.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </DrawerContent>
+            </Drawer>
         </>
     );
 }
