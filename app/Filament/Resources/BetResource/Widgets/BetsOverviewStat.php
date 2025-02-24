@@ -15,11 +15,11 @@ class BetsOverviewStat extends BaseWidget
             ->sum('potential_winnings');
 
         $totalStake = Bet::query()->where('status', '!=', BetStatus::Voided)
-            ->whereDay('created_at', today())
+            ->whereDate('created_at', today())
             ->sum('stake');
 
         $totalPayout = Bet::query()->where('status', BetStatus::Won)
-            ->whereDay('created_at', today())
+            ->whereDate('created_at', today())
             ->sum('stake');
 
         return [
