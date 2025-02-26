@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\UserResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -13,6 +14,8 @@ class ListUsers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\ExportAction::make()
+                ->exporter(UserExporter::class),
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus'),
         ];
