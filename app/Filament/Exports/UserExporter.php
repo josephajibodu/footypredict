@@ -4,6 +4,7 @@ namespace App\Filament\Exports;
 
 use App\Enums\UserGender;
 use App\Models\User;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
@@ -46,5 +47,17 @@ class UserExporter extends Exporter
         }
 
         return $body;
+    }
+
+    public function getFormats(): array
+    {
+        return [
+            ExportFormat::Csv
+        ];
+    }
+
+    public function getFileName(Export $export): string
+    {
+        return "users-list-{$export->getKey()}.csv";
     }
 }
