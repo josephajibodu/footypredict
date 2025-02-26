@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\UserGender;
+use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\TransactionsRelationManager;
 use App\Models\User;
@@ -142,6 +143,8 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ExportBulkAction::make()
+                        ->exporter(UserExporter::class)
                 ]),
             ]);
     }

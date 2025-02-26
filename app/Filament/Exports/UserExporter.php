@@ -16,8 +16,6 @@ class UserExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id')
-                ->label('ID'),
             ExportColumn::make('first_name'),
             ExportColumn::make('last_name'),
             ExportColumn::make('username'),
