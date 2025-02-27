@@ -12,7 +12,9 @@ set('remote_user', 'josephajibodu');
 
 add('shared_files', []);
 add('shared_dirs', []);
-add('writable_dirs', []);
+add('writable_dirs', [
+    'storage/app/private'
+]);
 
 // Hosts
 
