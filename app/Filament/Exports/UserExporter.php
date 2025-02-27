@@ -56,6 +56,6 @@ class UserExporter extends Exporter
 
     public function getFileName(Export $export): string
     {
-        return "users-list-{$export->getKey()}.csv";
+        return "users-list-{$export->getKey()}";
     }
 }
